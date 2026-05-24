@@ -26,7 +26,6 @@ justify-content:center;
 align-items:center;
 }
 
-/* container */
 .chat-container{
 width:100%;
 max-width:450px;
@@ -36,7 +35,6 @@ overflow:hidden;
 position:relative;
 }
 
-/* header */
 .header{
 height:80px;
 background:#202c33;
@@ -62,7 +60,6 @@ text-align:center;
 margin-right:15px;
 }
 
-/* chat */
 .chat-box{
 height:calc(100vh - 80px);
 overflow-y:auto;
@@ -87,7 +84,6 @@ color:white;
 .left .bubble{background:#202c33;}
 .right .bubble{background:#005c4b;}
 
-/* options */
 .options{
 display:flex;
 gap:10px;
@@ -109,7 +105,6 @@ transition:0.2s;
 background:#25D366;
 }
 
-/* step */
 .step{
 position:fixed;
 bottom:15px;
@@ -118,53 +113,6 @@ background:rgba(0,0,0,0.5);
 color:white;
 padding:10px;
 border-radius:20px;
-}
-
-/* typing */
-.typing{
-display:flex;
-gap:5px;
-padding:14px 18px;
-background:#202c33;
-border-radius:20px;
-width:fit-content;
-}
-
-.dot{
-width:6px;
-height:6px;
-background:#aaa;
-border-radius:50%;
-animation:bounce 1s infinite;
-}
-
-.dot:nth-child(2){animation-delay:0.2s;}
-.dot:nth-child(3){animation-delay:0.4s;}
-
-@keyframes bounce{
-0%,100%{transform:translateY(0);}
-50%{transform:translateY(-5px);}
-}
-
-/* toast */
-.toast{
-position:fixed;
-top:20px;
-left:50%;
-transform:translateX(-50%);
-background:#ff3b3b;
-color:white;
-padding:12px 18px;
-border-radius:20px;
-font-weight:bold;
-opacity:0;
-transition:0.3s;
-z-index:99999;
-}
-
-.toast.show{
-opacity:1;
-transform:translateX(-50%) translateY(10px);
 }
 
 /* shake */
@@ -204,7 +152,6 @@ animation:flash 0.3s;
 100%{opacity:0;}
 }
 
-/* confetti */
 @keyframes fall{
 to{
 transform:translateY(120vh) rotate(360deg);
@@ -232,20 +179,12 @@ Eid Chat
 
 <script>
 
-/* flash */
+/* FLASH */
 const flash=document.createElement("div");
 flash.className="flash";
 document.body.appendChild(flash);
 
-/* music */
-const bgMusic=new Audio("https://files.catbox.moe/sauxt7.mp3");
-bgMusic.loop=true;
-bgMusic.volume=0.35;
-
-window.addEventListener("load",()=>bgMusic.play().catch(()=>{}));
-document.body.addEventListener("click",()=>bgMusic.play().catch(()=>{}),{once:true});
-
-/* vars */
+/* ELEMENTS */
 const chatBox=document.getElementById("chatBox");
 const step=document.getElementById("step");
 
@@ -253,7 +192,7 @@ let tkGrow=1;
 let tkInterval;
 let tkBtn;
 
-/* msg */
+/* MESSAGE */
 function msg(text,side){
 const r=document.createElement("div");
 r.className=`message-row ${side}`;
@@ -265,31 +204,7 @@ chatBox.appendChild(r);
 chatBox.scrollTop=chatBox.scrollHeight;
 }
 
-/* toast */
-function showToast(text){
-let t=document.createElement("div");
-t.className="toast";
-t.innerText=text;
-document.body.appendChild(t);
-
-setTimeout(()=>t.classList.add("show"),50);
-setTimeout(()=>{
-t.classList.remove("show");
-setTimeout(()=>t.remove(),300);
-},1500);
-}
-
-/* fx */
-function wrongFX(){
-document.body.classList.add("shake");
-setTimeout(()=>document.body.classList.remove("shake"),250);
-
-flash.classList.remove("active");
-void flash.offsetWidth;
-flash.classList.add("active");
-}
-
-/* buttons */
+/* BUTTON */
 function btn(text,fn){
 const b=document.createElement("button");
 b.className="option-btn";
@@ -298,7 +213,7 @@ b.onclick=fn;
 return b;
 }
 
-/* options */
+/* OPTIONS */
 function addOptions(arr){
 const w=document.createElement("div");
 w.className="options";
@@ -306,12 +221,12 @@ arr.forEach(b=>w.appendChild(b));
 chatBox.appendChild(w);
 }
 
-/* clear options */
+/* CLEAR */
 function clearOptions(){
 document.querySelectorAll(".options").forEach(o=>o.remove());
 }
 
-/* runaway */
+/* RUNAWAY (FIXED SAFE ZONE) */
 function runAway(btn,success){
 
 btn.style.position="absolute";
@@ -320,8 +235,18 @@ btn.onmouseenter=move;
 btn.ontouchstart=move;
 
 function move(){
-btn.style.left=Math.random()*220+"px";
-btn.style.top=Math.random()*120+"px";
+
+let x,y;
+let tries=0;
+
+do{
+x=Math.random()*240;
+y=Math.random()*120;
+tries++;
+}while(tries<8 && x<120 && y<80);
+
+btn.style.left=x+"px";
+btn.style.top=y+"px";
 }
 
 btn.onclick=success;
@@ -376,13 +301,14 @@ b1.style.background="#ff6b6b";
 b2.style.background="#4d96ff";
 b3.style.background="#6bff95";
 
+/* runaway */
 makeRunaway(b1);
 makeRunaway(b2);
 
 addOptions([b1,b2,b3]);
 }
 
-/* runaway engine */
+/* STEP 2 RUNAWAY */
 function makeRunaway(btn){
 
 btn.onmouseenter=()=>{
@@ -406,9 +332,12 @@ const bNo=btn("No salami❌👎",wrong);
 const b500=btn("500 TK 😡",()=>{
 clearInterval(tkInterval);
 msg("500 TK 😡","right");
-confetti();
+confettiBurst();
 finalScreen();
 });
+
+b500.style.background="#ff2e63";
+b500.style.color="white";
 
 tkBtn=b500;
 tkGrow=1;
@@ -418,76 +347,111 @@ addOptions([b10,b50,bNo,b500]);
 startGrow();
 
 function wrong(){
-wrongFX();
-showToast("Wrong option😡");
+flashFX();
 tkGrow+=0.7;
 startGrow();
 }
 }
 
-/* growth */
+/* GROW (SLOW FIXED) */
 function startGrow(){
 
 clearInterval(tkInterval);
 
 tkInterval=setInterval(()=>{
 
-tkGrow+=0.04;
+tkGrow+=0.02;
 
 tkBtn.style.transform=`scale(${tkGrow})`;
 tkBtn.style.zIndex=999;
 
 document.querySelectorAll(".option-btn").forEach(b=>{
 if(b!==tkBtn){
-b.style.opacity=Math.max(0.1,1-tkGrow/4);
-b.style.transform="scale(0.7)";
+b.style.opacity=Math.max(0.15,1-tkGrow/5);
+b.style.transform="scale(0.75)";
 }
 });
 
-},300);
+},400);
 
 }
 
-/* confetti */
-function confetti(){
+/* FLASH + SHAKE */
+function flashFX(){
+document.body.classList.add("shake");
+setTimeout(()=>document.body.classList.remove("shake"),250);
 
-for(let i=0;i<60;i++){
+flash.classList.remove("active");
+void flash.offsetWidth;
+flash.classList.add("active");
+}
+
+/* CONFETTI SIDE → CENTER */
+function confettiBurst(){
+
+for(let i=0;i<80;i++){
 
 const c=document.createElement("div");
 c.innerText="🎉";
+
 c.style.position="fixed";
-c.style.left=Math.random()*100+"vw";
-c.style.top="-20px";
-c.style.fontSize="20px";
+c.style.left=(Math.random()<0.5?-20:window.innerWidth+20)+"px";
+c.style.top=Math.random()*window.innerHeight+"px";
+
+c.style.fontSize="18px";
 c.style.zIndex=99999;
-c.style.animation="fall 2s linear";
+
 document.body.appendChild(c);
 
-setTimeout(()=>c.remove(),3000);
+setTimeout(()=>{
+
+c.style.transition="2s ease";
+c.style.left="50%";
+c.style.top="40%";
+c.style.opacity="0";
+
+},50);
+
+setTimeout(()=>c.remove(),2500);
 
 }
 
 }
 
-/* final screen */
+/* FINAL SCREEN */
 function finalScreen(){
 
 setTimeout(()=>{
 
-chatBox.innerHTML+=`
-<div class="message-row left">
-<div class="bubble">
-Dhonnobad Dhonnobad 😭<br><br>
-DM e number dicchi 👍
+document.body.innerHTML=`
+<div style="
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:#0b141a;
+color:white;
+text-align:center;
+font-size:28px;
+padding:20px;
+">
+
+<div style="font-size:60px;">🥰</div>
+
+<div>
+Dhonnobad Dhonnobad<br>
+DM e Number dicchi 🥰👍
 </div>
+
 </div>
 `;
 
-},500);
+},700);
 
 }
 
-/* start */
+/* START */
 step1();
 
 </script>
