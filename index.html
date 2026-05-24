@@ -67,21 +67,30 @@ padding:20px 10px 120px;
 
 .message-row{
 display:flex;
+flex-direction:column;
 margin:12px 0;
 }
 
-.left{justify-content:flex-start;}
-.right{justify-content:flex-end;}
+.left{align-items:flex-start;}
+.right{align-items:flex-end;}
 
 .bubble{
 padding:14px 18px;
 border-radius:20px;
 max-width:75%;
 color:white;
+position:relative;
 }
 
 .left .bubble{background:#202c33;}
 .right .bubble{background:#005c4b;}
+
+.time{
+font-size:10px;
+opacity:0.6;
+margin-top:4px;
+text-align:right;
+}
 
 .options{
 display:flex;
@@ -124,26 +133,6 @@ border-radius:20px;
 100%{transform:translate(0,0);}
 }
 
-.flash{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:red;
-opacity:0;
-pointer-events:none;
-z-index:9999;
-}
-
-.flash.active{animation:flash 0.3s;}
-
-@keyframes flash{
-0%{opacity:0;}
-50%{opacity:0.4;}
-100%{opacity:0;}
-}
-
 .end{
 position:fixed;
 inset:0;
@@ -180,19 +169,16 @@ Eid Chat
 
 <script>
 
-/* SONG */
-const bg=new Audio("https://files.catbox.moe/sauxt7.mp3");
-bg.loop=true;
-bg.volume=0.35;
+/* ================= TIME ================= */
+function now(){
+const d=new Date();
+return d.toLocaleTimeString([],{
+hour:"2-digit",
+minute:"2-digit"
+});
+}
 
-window.addEventListener("load",()=>bg.play().catch(()=>{}));
-document.body.addEventListener("click",()=>bg.play().catch(()=>{}),{once:true});
-
-/* ELEMENTS */
-const chatBox=document.getElementById("chatBox");
-const step=document.getElementById("step");
-
-/* AUDIO ENGINE */
+/* ================= SOUND ================= */
 const ctx=new (window.AudioContext||window.webkitAudioContext)();
 
 function sound(t){
@@ -205,34 +191,22 @@ if(t==="woosh") o.frequency.value=300;
 if(t==="buzz") o.frequency.value=120;
 
 g.gain.value=0.05;
-
 o.start();
 o.stop(ctx.currentTime+0.12);
 }
 
-/* VIBRATION */
+/* ================= VIBRATION ================= */
 function vibrate(t){
 if(!navigator.vibrate) return;
 if(t==="light") navigator.vibrate(15);
 if(t==="strong") navigator.vibrate([50,80,50]);
 }
 
-/* TOAST */
-function toast(t){
-const d=document.createElement("div");
-d.innerText=t;
-d.style.cssText=`
-position:fixed;top:20px;left:50%;
-transform:translateX(-50%);
-background:#ff3b3b;color:white;
-padding:10px 16px;border-radius:20px;
-z-index:99999;font-weight:bold;
-`;
-document.body.appendChild(d);
-setTimeout(()=>d.remove(),1200);
-}
+/* ================= ELEMENTS ================= */
+const chatBox=document.getElementById("chatBox");
+const step=document.getElementById("step");
 
-/* MESSAGE */
+/* ================= MESSAGE ================= */
 function msg(text,side){
 
 const r=document.createElement("div");
@@ -242,11 +216,17 @@ const b=document.createElement("div");
 b.className="bubble";
 
 if(side==="right"){
-b.innerHTML=text+"<br><span style='color:#53bdeb;font-size:12px'>✓✓</span>";
+b.innerHTML=`
+${text}
+<div class="time">${now()} ✓✓</div>
+`;
 sound("woosh");
 vibrate("light");
 }else{
-b.innerText=text;
+b.innerHTML=`
+${text}
+<div class="time">${now()}</div>
+`;
 sound("ding");
 }
 
@@ -255,7 +235,7 @@ chatBox.appendChild(r);
 chatBox.scrollTop=chatBox.scrollHeight;
 }
 
-/* BUTTON */
+/* ================= BUTTON ================= */
 function btn(t,f){
 const b=document.createElement("button");
 b.className="option-btn";
@@ -264,7 +244,7 @@ b.onclick=f;
 return b;
 }
 
-/* OPTIONS */
+/* ================= OPTIONS ================= */
 function add(o){
 const w=document.createElement("div");
 w.className="options";
@@ -272,12 +252,11 @@ o.forEach(x=>w.appendChild(x));
 chatBox.appendChild(w);
 }
 
-/* CLEAR */
 function clear(){
 document.querySelectorAll(".options").forEach(e=>e.remove());
 }
 
-/* SAFE RUNAWAY */
+/* ================= SAFE RUNAWAY STEP 1 ================= */
 function runaway(btn,fn){
 
 btn.style.position="absolute";
@@ -288,11 +267,17 @@ btn.ontouchstart=move;
 
 function move(){
 
+const safeX=170;
+const safeY=110;
+
 let x,y;
+let tries=0;
+
 do{
-x=Math.random()*280;
-y=Math.random()*150;
-}while(x<150 && y<100);
+x=Math.random()*300;
+y=Math.random()*160;
+tries++;
+}while(tries<15 && x<safeX && y<safeY);
 
 btn.style.left=x+"px";
 btn.style.top=y+"px";
@@ -303,36 +288,7 @@ vibrate("light");
 
 }
 
-/* STEP 1 */
-function step1(){
-
-step.innerText="Step 1/4";
-
-msg("Assalamu alaikum Eid Mubarak","left");
-
-const a=btn("Eid Mubarak",()=>next1());
-a.style.background="#4d96ff";
-
-const b=btn("Same to you",()=>runaway(b,next1));
-b.style.background="#ff6b6b";
-
-add([a,b]);
-}
-
-/* STEP 1 NEXT (typing) */
-function next1(){
-
-msg("Eid Mubarak 😌","right");
-clear();
-
-typing(()=>{
-msg("Dhonnobad Dhonnobad. Ta Salami ta? 💁‍♂️","left");
-step2();
-});
-
-}
-
-/* TYPING */
+/* ================= TYPING ================= */
 function typing(cb){
 
 const d=document.createElement("div");
@@ -347,7 +303,36 @@ cb();
 
 }
 
-/* STEP 2 */
+/* ================= STEP 1 ================= */
+function step1(){
+
+step.innerText="Step 1/4";
+
+msg("Assalamu alaikum Eid Mubarak","left");
+
+const a=btn("Eid Mubarak",()=>step1Next());
+a.style.background="#4d96ff";
+
+const b=btn("Same to you",()=>runaway(b,step1Next));
+b.style.background="#ff6b6b";
+
+add([a,b]);
+}
+
+/* ================= STEP 1 NEXT ================= */
+function step1Next(){
+
+msg("Eid Mubarak 😌","right");
+clear();
+
+typing(()=>{
+msg("Dhonnobad Dhonnobad. Ta Salami ta? 💁‍♂️","left");
+step2();
+});
+
+}
+
+/* ================= STEP 2 ================= */
 function step2(){
 
 step.innerText="Step 2/4";
@@ -364,19 +349,20 @@ a.style.background="#ff6b6b";
 b.style.background="#4d96ff";
 c.style.background="#6bff95";
 
-runaway2(a);
-runaway2(b);
+makeRunaway(a);
+makeRunaway(b);
 
 add([a,b,c]);
 }
 
-function runaway2(b){
+function makeRunaway(b){
 b.onmouseenter=()=>{
 b.style.transform=`translate(${(Math.random()-0.5)*160}px,${(Math.random()-0.5)*100}px)`;
+sound("woosh");
 };
 }
 
-/* STEP 3 */
+/* ================= STEP 3 ================= */
 function step3(){
 
 step.innerText="Step 3/4";
@@ -407,24 +393,28 @@ let growInt;
 
 function grow(b){
 
+clearInterval(growInt);
+
 growVal=1;
+
 growInt=setInterval(()=>{
 
-growVal+=0.01;
+growVal += 0.012;
 
 b.style.transform=`scale(${growVal})`;
 
 document.querySelectorAll(".option-btn").forEach(x=>{
 if(x!==b){
 x.style.opacity=Math.max(0.2,1-growVal/6);
-x.style.transform="scale(0.85)";
+x.style.transform="scale(0.8)";
 }
 });
 
-},500);
+},450);
 
 }
 
+/* ================= WRONG ================= */
 function wrong(){
 toast("Wrong option 😡");
 flash();
@@ -432,13 +422,13 @@ vibrate("strong");
 sound("buzz");
 }
 
-/* FLASH */
+/* ================= FLASH ================= */
 function flash(){
 document.body.classList.add("shake");
 setTimeout(()=>document.body.classList.remove("shake"),250);
 }
 
-/* CONFETTI */
+/* ================= CONFETTI ================= */
 function confetti(){
 
 const cx=innerWidth/2;
@@ -448,6 +438,7 @@ for(let i=0;i<90;i++){
 
 const d=document.createElement("div");
 d.innerText=["🎉","✨","🎊"][Math.random()*3|0];
+
 d.style.position="fixed";
 d.style.left=cx+"px";
 d.style.top=cy+"px";
@@ -468,7 +459,7 @@ setTimeout(()=>d.remove(),2000);
 
 }
 
-/* END */
+/* ================= END SCREEN ================= */
 function end(){
 
 setTimeout(()=>{
@@ -478,6 +469,9 @@ document.body.innerHTML=`
 <div style="font-size:70px">🥰</div>
 <h1>Dhonnobad Dhonnobad</h1>
 <p>DM e Number dicchi 🥰👍</p>
+<p style="margin-top:10px;font-size:18px;opacity:0.8">
+(You received dua 🥰)
+</p>
 </div>
 `;
 
@@ -485,7 +479,7 @@ document.body.innerHTML=`
 
 }
 
-/* START */
+/* ================= START ================= */
 step1();
 
 </script>
