@@ -24,7 +24,7 @@ justify-content:center;
 align-items:center;
 }
 
-/* main container */
+/* main */
 
 .chat-container{
 width:100%;
@@ -41,7 +41,7 @@ overflow:hidden;
 position:absolute;
 color:white;
 animation:float 6s linear infinite;
-opacity:0.4;
+opacity:0.35;
 pointer-events:none;
 }
 
@@ -53,7 +53,7 @@ opacity:0;
 }
 
 50%{
-opacity:0.6;
+opacity:0.5;
 }
 
 100%{
@@ -72,7 +72,7 @@ display:flex;
 align-items:center;
 padding:15px;
 color:white;
-font-size:24px;
+font-size:22px;
 font-weight:bold;
 box-shadow:0 2px 10px rgba(0,0,0,0.4);
 }
@@ -81,9 +81,15 @@ box-shadow:0 2px 10px rgba(0,0,0,0.4);
 width:50px;
 height:50px;
 border-radius:50%;
-background:url('https://i.imgur.com/Z6XbK0a.jpeg');
-background-size:cover;
-background-position:center;
+background:linear-gradient(135deg,#ff8ad8,#ffd166);
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+font-size:8px;
+font-weight:bold;
+color:black;
+padding:4px;
 margin-right:15px;
 }
 
@@ -114,7 +120,7 @@ justify-content:flex-end;
 padding:14px 18px;
 max-width:75%;
 border-radius:20px;
-font-size:19px;
+font-size:18px;
 line-height:1.3;
 word-wrap:break-word;
 }
@@ -140,7 +146,7 @@ justify-content:center;
 flex-wrap:wrap;
 margin-top:20px;
 position:relative;
-min-height:160px;
+min-height:180px;
 }
 
 .option-btn{
@@ -226,30 +232,35 @@ transform:translate(-50%, -50%);
 background:#25D366;
 color:black;
 
-font-size:28px;
+font-size:32px;
 font-weight:bold;
 
-width:220px;
-height:100px;
+width:260px;
+height:120px;
 
 display:flex;
 justify-content:center;
 align-items:center;
 
-border-radius:20px;
+border-radius:25px;
 
 z-index:9999;
-transition:all 5s linear;
+
+transition:all 6s ease;
 }
 
 #salamiOverlay.full{
+
 width:100vw;
 height:100vh;
+
 border-radius:0;
-font-size:65px;
+
+font-size:70px;
+
 }
 
-/* final screen */
+/* final */
 
 .final-screen{
 height:100%;
@@ -293,7 +304,11 @@ padding:12px 16px;
 }
 
 .header{
-font-size:22px;
+font-size:20px;
+}
+
+#salamiOverlay.full{
+font-size:52px;
 }
 
 }
@@ -306,7 +321,9 @@ font-size:22px;
 <div class="chat-container">
 
 <div class="header">
-<div class="profile"></div>
+<div class="profile">
+Oneek<br>shundor<br>chele🥰
+</div>
 Eid Special Chat
 </div>
 
@@ -323,9 +340,29 @@ Step 1/4
 const chatBox=document.getElementById('chatBox');
 const stepIndicator=document.getElementById('stepIndicator');
 
-/* ================= HELPERS ================= */
+/* ================= MUSIC ================= */
 
-/* vibration */
+const bgMusic = new Audio(
+'https://files.catbox.moe/sauxt7.mp3'
+);
+
+bgMusic.loop = true;
+
+bgMusic.volume = 0.35;
+
+document.body.addEventListener('click', () => {
+
+bgMusic.play();
+
+}, { once:true });
+
+document.body.addEventListener('touchstart', () => {
+
+bgMusic.play();
+
+}, { once:true });
+
+/* ================= HELPERS ================= */
 
 function vibrate(ms=80){
 
@@ -437,7 +474,7 @@ document.querySelector('.chat-container').appendChild(star);
 
 addStars();
 
-/* add message */
+/* messages */
 
 function addMessage(text,side){
 
@@ -456,11 +493,22 @@ avatar.style.height='35px';
 avatar.style.borderRadius='50%';
 avatar.style.marginRight='8px';
 
-avatar.style.backgroundImage=
-"url('https://i.imgur.com/Z6XbK0a.jpeg')";
+avatar.style.background=
+'linear-gradient(135deg,#ff8ad8,#ffd166)';
 
-avatar.style.backgroundSize='cover';
-avatar.style.backgroundPosition='center';
+avatar.style.display='flex';
+avatar.style.justifyContent='center';
+avatar.style.alignItems='center';
+
+avatar.style.textAlign='center';
+
+avatar.style.fontSize='6px';
+
+avatar.style.fontWeight='bold';
+
+avatar.style.color='black';
+
+avatar.innerHTML='Oneek<br>shundor<br>chele🥰';
 
 row.appendChild(avatar);
 
@@ -480,7 +528,7 @@ chatBox.scrollTop=chatBox.scrollHeight;
 
 }
 
-/* add options */
+/* options */
 
 function addOptions(options){
 
@@ -522,7 +570,7 @@ clickFn();
 
 btn.addEventListener('touchstart',()=>{
 
-vibrate(50);
+vibrate(40);
 
 });
 
@@ -530,7 +578,7 @@ return btn;
 
 }
 
-/* remove options */
+/* remove */
 
 function removeOptions(){
 
@@ -678,7 +726,7 @@ btn3.style.top='90px';
 const wrap=
 addOptions([btn1,btn2,btn3]);
 
-/* runaway buttons */
+/* runaway */
 
 function runAway(btn){
 
@@ -756,8 +804,6 @@ addMessage(
 'right'
 );
 
-/* overlay */
-
 const overlay=
 document.createElement('div');
 
@@ -768,8 +814,10 @@ overlay.innerText='500 TK 😡';
 document.body.appendChild(overlay);
 
 setTimeout(()=>{
+
 overlay.classList.add('full');
-},50);
+
+},300);
 
 overlay.onclick=()=>{
 
@@ -777,10 +825,10 @@ ding();
 
 vibrate(120);
 
-overlay.style.transition='0.2s';
+overlay.style.transition='0.3s';
 
 overlay.style.transform=
-'translate(-50%, -50%) scale(0.9)';
+'translate(-50%, -50%) scale(0.95)';
 
 setTimeout(()=>{
 
@@ -802,7 +850,7 @@ ding();
 
 startStep4();
 
-},5000);
+},6000);
 
 }
 );
@@ -810,11 +858,11 @@ startStep4();
 const wrap=
 addOptions([btn10,btn50,btn500]);
 
-/* growing effect */
+/* smooth animation */
 
-btn10.style.transition='all 5s linear';
-btn50.style.transition='all 5s linear';
-btn500.style.transition='all 5s linear';
+btn10.style.transition='all 6s ease';
+btn50.style.transition='all 6s ease';
+btn500.style.transition='all 6s ease';
 
 setTimeout(()=>{
 
@@ -822,22 +870,26 @@ btn500.style.position='fixed';
 
 btn500.style.left='50%';
 
-btn500.style.top='50%';
+btn500.style.top='55%';
 
 btn500.style.transform=
-'translate(-50%, -50%) scale(12)';
+'translate(-50%, -50%) scale(4.5)';
 
 btn500.style.zIndex='999';
 
-btn500.style.fontSize='50px';
+btn500.style.fontSize='28px';
 
-btn10.style.transform='scale(0.1)';
-btn10.style.opacity='0';
+btn500.style.padding='25px 40px';
 
-btn50.style.transform='scale(0.1)';
-btn50.style.opacity='0';
+btn500.style.borderRadius='35px';
 
-},100);
+btn10.style.transform='scale(0.3)';
+btn10.style.opacity='0.15';
+
+btn50.style.transform='scale(0.3)';
+btn50.style.opacity='0.15';
+
+},300);
 
 }
 
