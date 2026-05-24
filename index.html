@@ -24,8 +24,6 @@ justify-content:center;
 align-items:center;
 }
 
-/* main */
-
 .chat-container{
 width:100%;
 max-width:450px;
@@ -40,8 +38,8 @@ overflow:hidden;
 .star{
 position:absolute;
 color:white;
-animation:float 6s linear infinite;
-opacity:0.35;
+animation:float 7s linear infinite;
+opacity:0.3;
 pointer-events:none;
 }
 
@@ -74,7 +72,6 @@ padding:15px;
 color:white;
 font-size:22px;
 font-weight:bold;
-box-shadow:0 2px 10px rgba(0,0,0,0.4);
 }
 
 .profile{
@@ -146,7 +143,7 @@ justify-content:center;
 flex-wrap:wrap;
 margin-top:20px;
 position:relative;
-min-height:180px;
+min-height:220px;
 }
 
 .option-btn{
@@ -228,36 +225,25 @@ position:fixed;
 top:50%;
 left:50%;
 transform:translate(-50%, -50%);
-
 background:#25D366;
 color:black;
-
 font-size:32px;
 font-weight:bold;
-
 width:260px;
 height:120px;
-
 display:flex;
 justify-content:center;
 align-items:center;
-
 border-radius:25px;
-
 z-index:9999;
-
-transition:all 6s ease;
+transition:all 8s ease;
 }
 
 #salamiOverlay.full{
-
 width:100vw;
 height:100vh;
-
 border-radius:0;
-
-font-size:70px;
-
+font-size:65px;
 }
 
 /* final */
@@ -290,29 +276,6 @@ transform:scale(1);
 
 }
 
-/* mobile */
-
-@media(max-width:500px){
-
-.bubble{
-font-size:17px;
-}
-
-.option-btn{
-font-size:16px;
-padding:12px 16px;
-}
-
-.header{
-font-size:20px;
-}
-
-#salamiOverlay.full{
-font-size:52px;
-}
-
-}
-
 </style>
 </head>
 
@@ -340,29 +303,30 @@ Step 1/4
 const chatBox=document.getElementById('chatBox');
 const stepIndicator=document.getElementById('stepIndicator');
 
-/* ================= MUSIC ================= */
+/* MUSIC */
 
 const bgMusic = new Audio(
 'https://files.catbox.moe/sauxt7.mp3'
 );
 
-bgMusic.loop = true;
+bgMusic.loop=true;
+bgMusic.volume=0.35;
 
-bgMusic.volume = 0.35;
+/* try autoplay immediately */
 
-document.body.addEventListener('click', () => {
+bgMusic.play().catch(()=>{
 
+document.body.addEventListener('click',()=>{
 bgMusic.play();
+},{once:true});
 
-}, { once:true });
-
-document.body.addEventListener('touchstart', () => {
-
+document.body.addEventListener('touchstart',()=>{
 bgMusic.play();
+},{once:true});
 
-}, { once:true });
+});
 
-/* ================= HELPERS ================= */
+/* vibration */
 
 function vibrate(ms=80){
 
@@ -474,7 +438,7 @@ document.querySelector('.chat-container').appendChild(star);
 
 addStars();
 
-/* messages */
+/* add messages */
 
 function addMessage(text,side){
 
@@ -501,12 +465,8 @@ avatar.style.justifyContent='center';
 avatar.style.alignItems='center';
 
 avatar.style.textAlign='center';
-
 avatar.style.fontSize='6px';
-
 avatar.style.fontWeight='bold';
-
-avatar.style.color='black';
 
 avatar.innerHTML='Oneek<br>shundor<br>chele🥰';
 
@@ -528,7 +488,7 @@ chatBox.scrollTop=chatBox.scrollHeight;
 
 }
 
-/* options */
+/* add options */
 
 function addOptions(options){
 
@@ -548,7 +508,7 @@ return wrap;
 
 }
 
-/* buttons */
+/* button */
 
 function createButton(text,clickFn){
 
@@ -569,9 +529,7 @@ clickFn();
 };
 
 btn.addEventListener('touchstart',()=>{
-
 vibrate(40);
-
 });
 
 return btn;
@@ -582,19 +540,16 @@ return btn;
 
 function removeOptions(){
 
-const options=document.querySelectorAll('.options');
-
-options.forEach(o=>o.remove());
+document.querySelectorAll('.options')
+.forEach(o=>o.remove());
 
 }
 
-/* ================= STEP 1 ================= */
+/* STEP 1 */
 
 function startStep1(){
 
 stepIndicator.innerText='Step 1/4';
-
-ding();
 
 setTimeout(()=>{
 
@@ -621,8 +576,7 @@ step1Reply('Same to you');
 }
 );
 
-const optionsWrap=
-addOptions([btn1,btn2]);
+const wrap=addOptions([btn1,btn2]);
 
 const cursor=document.createElement('div');
 
@@ -634,7 +588,7 @@ cursor.style.top='-30px';
 
 cursor.style.left='40%';
 
-optionsWrap.appendChild(cursor);
+wrap.appendChild(cursor);
 
 },700);
 
@@ -648,8 +602,6 @@ addMessage(text,'right');
 
 setTimeout(()=>{
 
-ding();
-
 addMessage(
 'yeah same to u 😌\nEid Mubarak, Salami ta?',
 'left'
@@ -661,13 +613,11 @@ startStep2();
 
 }
 
-/* ================= STEP 2 ================= */
+/* STEP 2 */
 
 function startStep2(){
 
 stepIndicator.innerText='Step 2/4';
-
-ding();
 
 const btn1=createButton(
 'Kisher Salami?',
@@ -715,13 +665,13 @@ btn2.style.position='absolute';
 btn3.style.position='absolute';
 
 btn1.style.left='5%';
-btn1.style.top='30px';
+btn1.style.top='20px';
 
-btn2.style.left='50%';
-btn2.style.top='30px';
+btn2.style.left='52%';
+btn2.style.top='20px';
 
-btn3.style.left='30%';
-btn3.style.top='90px';
+btn3.style.left='28%';
+btn3.style.top='140px';
 
 const wrap=
 addOptions([btn1,btn2,btn3]);
@@ -746,12 +696,12 @@ ding();
 
 vibrate(40);
 
-const x=Math.random()*220;
+/* avoid bottom zone */
 
-const y=Math.random()*90;
+let x=Math.random()*220;
+let y=Math.random()*70;
 
 btn.style.left=x+'px';
-
 btn.style.top=y+'px';
 
 }
@@ -759,41 +709,30 @@ btn.style.top=y+'px';
 }
 
 runAway(btn1);
-
 runAway(btn2);
 
 }
 
-/* ================= STEP 3 ================= */
+/* STEP 3 */
 
 function startStep3(){
 
 stepIndicator.innerText='Step 3/4';
-
-ding();
 
 addMessage(
 'Tahole kotto salami? 😌',
 'left'
 );
 
-const btn10=createButton(
-'10 TK',
-()=>{}
-);
+const btn10=createButton('10 TK',()=>{});
 
-const btn50=createButton(
-'50 TK',
-()=>{}
-);
+const btn50=createButton('50 TK',()=>{});
 
 const btn500=createButton(
 '500 TK 😡',
 ()=>{
 
 vibrate([100,50,100]);
-
-ding();
 
 launchConfetti();
 
@@ -814,27 +753,21 @@ overlay.innerText='500 TK 😡';
 document.body.appendChild(overlay);
 
 setTimeout(()=>{
-
 overlay.classList.add('full');
-
-},300);
+},400);
 
 overlay.onclick=()=>{
-
-ding();
 
 vibrate(120);
 
 overlay.style.transition='0.3s';
 
 overlay.style.transform=
-'translate(-50%, -50%) scale(0.95)';
+'translate(-50%, -50%) scale(0.96)';
 
 setTimeout(()=>{
 
 overlay.remove();
-
-ding();
 
 startStep4();
 
@@ -846,23 +779,20 @@ setTimeout(()=>{
 
 overlay.remove();
 
-ding();
-
 startStep4();
 
-},6000);
+},8000);
 
 }
 );
 
-const wrap=
 addOptions([btn10,btn50,btn500]);
 
-/* smooth animation */
+/* MUCH smoother growth */
 
-btn10.style.transition='all 6s ease';
-btn50.style.transition='all 6s ease';
-btn500.style.transition='all 6s ease';
+btn10.style.transition='all 8s ease';
+btn50.style.transition='all 8s ease';
+btn500.style.transition='all 8s ease';
 
 setTimeout(()=>{
 
@@ -873,33 +803,33 @@ btn500.style.left='50%';
 btn500.style.top='55%';
 
 btn500.style.transform=
-'translate(-50%, -50%) scale(4.5)';
+'translate(-50%, -50%) scale(2.8)';
 
 btn500.style.zIndex='999';
 
-btn500.style.fontSize='28px';
+btn500.style.fontSize='26px';
 
-btn500.style.padding='25px 40px';
+btn500.style.padding='22px 38px';
 
 btn500.style.borderRadius='35px';
 
-btn10.style.transform='scale(0.3)';
-btn10.style.opacity='0.15';
+/* shrink others slowly */
 
-btn50.style.transform='scale(0.3)';
-btn50.style.opacity='0.15';
+btn10.style.transform='scale(0.45)';
+btn10.style.opacity='0.12';
 
-},300);
+btn50.style.transform='scale(0.45)';
+btn50.style.opacity='0.12';
+
+},400);
 
 }
 
-/* ================= STEP 4 ================= */
+/* STEP 4 */
 
 function startStep4(){
 
 stepIndicator.innerText='Step 4/4';
-
-ding();
 
 chatBox.innerHTML=`
 
