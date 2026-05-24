@@ -204,6 +204,14 @@ animation:flash 0.3s;
 100%{opacity:0;}
 }
 
+/* confetti */
+@keyframes fall{
+to{
+transform:translateY(120vh) rotate(360deg);
+opacity:0;
+}
+}
+
 </style>
 </head>
 
@@ -224,25 +232,20 @@ Eid Chat
 
 <script>
 
-/* FLASH */
+/* flash */
 const flash=document.createElement("div");
 flash.className="flash";
 document.body.appendChild(flash);
 
-/* MUSIC */
+/* music */
 const bgMusic=new Audio("https://files.catbox.moe/sauxt7.mp3");
 bgMusic.loop=true;
 bgMusic.volume=0.35;
 
-window.addEventListener("load",()=>{
-bgMusic.play().catch(()=>{});
-});
+window.addEventListener("load",()=>bgMusic.play().catch(()=>{}));
+document.body.addEventListener("click",()=>bgMusic.play().catch(()=>{}),{once:true});
 
-document.body.addEventListener("click",()=>{
-bgMusic.play().catch(()=>{});
-},{once:true});
-
-/* ELEMENTS */
+/* vars */
 const chatBox=document.getElementById("chatBox");
 const step=document.getElementById("step");
 
@@ -250,7 +253,7 @@ let tkGrow=1;
 let tkInterval;
 let tkBtn;
 
-/* MESSAGE */
+/* msg */
 function msg(text,side){
 const r=document.createElement("div");
 r.className=`message-row ${side}`;
@@ -262,7 +265,7 @@ chatBox.appendChild(r);
 chatBox.scrollTop=chatBox.scrollHeight;
 }
 
-/* TOAST */
+/* toast */
 function showToast(text){
 let t=document.createElement("div");
 t.className="toast";
@@ -276,7 +279,7 @@ setTimeout(()=>t.remove(),300);
 },1500);
 }
 
-/* FX */
+/* fx */
 function wrongFX(){
 document.body.classList.add("shake");
 setTimeout(()=>document.body.classList.remove("shake"),250);
@@ -286,7 +289,7 @@ void flash.offsetWidth;
 flash.classList.add("active");
 }
 
-/* BUTTON */
+/* buttons */
 function btn(text,fn){
 const b=document.createElement("button");
 b.className="option-btn";
@@ -295,7 +298,7 @@ b.onclick=fn;
 return b;
 }
 
-/* OPTIONS */
+/* options */
 function addOptions(arr){
 const w=document.createElement("div");
 w.className="options";
@@ -303,7 +306,12 @@ arr.forEach(b=>w.appendChild(b));
 chatBox.appendChild(w);
 }
 
-/* RUNAWAY */
+/* clear options */
+function clearOptions(){
+document.querySelectorAll(".options").forEach(o=>o.remove());
+}
+
+/* runaway */
 function runAway(btn,success){
 
 btn.style.position="absolute";
@@ -329,11 +337,9 @@ msg("Assalamu alaikum Eid Mubarak","left");
 const b1=btn("Eid Mubarak",()=>{
 step1Reply("Eid Mubarak");
 });
-
 b1.style.background="#4d96ff";
 
 const b2=btn("Same to you",()=>runAway(b2));
-
 b2.style.background="#ff6b6b";
 
 addOptions([b1,b2]);
@@ -345,10 +351,9 @@ function step1Reply(t){
 msg(t,"right");
 
 setTimeout(()=>{
-
 msg("Dhonnobad Dhonnobad. Ta Salami ta? 💁‍♂️","left");
+clearOptions();
 step2();
-
 },800);
 }
 
@@ -357,10 +362,13 @@ function step2(){
 
 step.innerText="Step 2/4";
 
+clearOptions();
+
 const b1=btn("Kisher Salami?",()=>{});
 const b2=btn("Tumi Amare Diba",()=>{});
 const b3=btn("Accha Dicchi 😊👍",()=>{
 msg("Accha Dicchi 😊👍","right");
+clearOptions();
 setTimeout(step3,700);
 });
 
@@ -368,7 +376,20 @@ b1.style.background="#ff6b6b";
 b2.style.background="#4d96ff";
 b3.style.background="#6bff95";
 
+makeRunaway(b1);
+makeRunaway(b2);
+
 addOptions([b1,b2,b3]);
+}
+
+/* runaway engine */
+function makeRunaway(btn){
+
+btn.onmouseenter=()=>{
+btn.style.transform=`translate(${(Math.random()-0.5)*200}px, ${(Math.random()-0.5)*120}px)`;
+};
+
+btn.ontouchstart=btn.onmouseenter;
 }
 
 /* STEP 3 */
@@ -385,7 +406,8 @@ const bNo=btn("No salami❌👎",wrong);
 const b500=btn("500 TK 😡",()=>{
 clearInterval(tkInterval);
 msg("500 TK 😡","right");
-alertBox();
+confetti();
+finalScreen();
 });
 
 tkBtn=b500;
@@ -403,7 +425,7 @@ startGrow();
 }
 }
 
-/* GROW */
+/* growth */
 function startGrow(){
 
 clearInterval(tkInterval);
@@ -426,27 +448,46 @@ b.style.transform="scale(0.7)";
 
 }
 
-/* FINAL */
-function alertBox(){
+/* confetti */
+function confetti(){
 
-const d=document.createElement("div");
-d.innerText="500 TK 😡";
+for(let i=0;i<60;i++){
 
-d.style.position="fixed";
-d.style.top="50%";
-d.style.left="50%";
-d.style.transform="translate(-50%,-50%)";
-d.style.background="#25D366";
-d.style.padding="30px";
-d.style.borderRadius="20px";
-d.style.fontSize="40px";
-d.style.zIndex="99999";
+const c=document.createElement("div");
+c.innerText="🎉";
+c.style.position="fixed";
+c.style.left=Math.random()*100+"vw";
+c.style.top="-20px";
+c.style.fontSize="20px";
+c.style.zIndex=99999;
+c.style.animation="fall 2s linear";
+document.body.appendChild(c);
 
-document.body.appendChild(d);
+setTimeout(()=>c.remove(),3000);
 
-setTimeout(()=>d.remove(),3000);
 }
 
+}
+
+/* final screen */
+function finalScreen(){
+
+setTimeout(()=>{
+
+chatBox.innerHTML+=`
+<div class="message-row left">
+<div class="bubble">
+Dhonnobad Dhonnobad 😭<br><br>
+DM e number dicchi 👍
+</div>
+</div>
+`;
+
+},500);
+
+}
+
+/* start */
 step1();
 
 </script>
