@@ -100,7 +100,6 @@ border:none;
 border-radius:30px;
 font-weight:bold;
 font-size:18px;
-background:#25D366;
 cursor:pointer;
 transition:0.2s;
 }
@@ -137,29 +136,6 @@ Eid Chat
 
 const chatBox=document.getElementById("chatBox");
 const step=document.getElementById("step");
-
-/* ================= MUSIC ================= */
-
-const bgMusic = new Audio(
-'https://files.catbox.moe/sauxt7.mp3'
-);
-
-bgMusic.loop = true;
-bgMusic.volume = 0.35;
-
-/* try autoplay immediately */
-window.addEventListener("load",()=>{
-bgMusic.play().catch(()=>{});
-});
-
-/* fallback unlock */
-document.body.addEventListener("click",()=>{
-bgMusic.play().catch(()=>{});
-},{once:true});
-
-document.body.addEventListener("touchstart",()=>{
-bgMusic.play().catch(()=>{});
-},{once:true});
 
 /* ================= CHAT ================= */
 
@@ -201,30 +177,38 @@ const b1=btn("Eid Mubarak",()=>{
 step1Reply("Eid Mubarak");
 });
 
+/* DIFFERENT COLOR */
+b1.style.background="#4d96ff";
+b1.style.color="white";
+
 const b2=btn("Same to you",()=>{
-runAwayForever(b2);
+runAway(b2);
 });
+
+/* DIFFERENT COLOR */
+b2.style.background="#ff6b6b";
+b2.style.color="white";
 
 addOptions([b1,b2]);
 }
 
-/* runaway logic */
-function runAwayForever(button){
+/* runaway ONLY */
+function runAway(button){
 
 button.style.position="absolute";
 
-function move(){
-
-button.style.left=Math.random()*200+"px";
-button.style.top=Math.random()*120+"px";
-}
+button.onclick=null;
 
 button.onmouseenter=move;
 button.ontouchstart=move;
-button.onclick=move; // NEVER progresses
+
+function move(){
+button.style.left=Math.random()*220+"px";
+button.style.top=Math.random()*120+"px";
+}
 }
 
-/* ONLY Eid Mubarak continues */
+/* ONLY Eid Mubarak progresses */
 function step1Reply(t){
 
 msg(t,"right");
