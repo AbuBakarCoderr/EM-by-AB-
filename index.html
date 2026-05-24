@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Eid Mubarak Chat</title>
 
 <style>
@@ -15,14 +15,16 @@ font-family:Arial, Helvetica, sans-serif;
 }
 
 body{
-background:#0b141a;
-background-image:url('https://www.transparenttextures.com/patterns/arabesque.png');
+background-color:#0b141a;
+background-image:url("https://www.transparenttextures.com/patterns/doodles.png");
 height:100vh;
 overflow:hidden;
 display:flex;
 justify-content:center;
 align-items:center;
 }
+
+/* main container */
 
 .chat-container{
 width:100%;
@@ -33,17 +35,18 @@ position:relative;
 overflow:hidden;
 }
 
-/* floating stars */
+/* stars */
 
 .star{
 position:absolute;
 color:white;
 animation:float 6s linear infinite;
-opacity:0.5;
+opacity:0.4;
 pointer-events:none;
 }
 
 @keyframes float{
+
 0%{
 transform:translateY(100vh) scale(0.5);
 opacity:0;
@@ -57,6 +60,7 @@ opacity:0.6;
 transform:translateY(-100px) scale(1.2);
 opacity:0;
 }
+
 }
 
 /* header */
@@ -136,7 +140,7 @@ justify-content:center;
 flex-wrap:wrap;
 margin-top:20px;
 position:relative;
-min-height:140px;
+min-height:160px;
 }
 
 .option-btn{
@@ -148,7 +152,7 @@ border-radius:30px;
 font-size:18px;
 font-weight:bold;
 cursor:pointer;
-transition:0.2s;
+transition:all 0.3s ease;
 position:relative;
 }
 
@@ -156,7 +160,7 @@ position:relative;
 transform:scale(1.05);
 }
 
-/* step indicator */
+/* step */
 
 .step-indicator{
 position:fixed;
@@ -170,7 +174,7 @@ font-size:16px;
 z-index:999;
 }
 
-/* cursor guide */
+/* cursor */
 
 .cursor-guide{
 position:absolute;
@@ -180,12 +184,69 @@ pointer-events:none;
 }
 
 @keyframes bounce{
+
 0%,100%{
 transform:translateY(0px);
 }
+
 50%{
 transform:translateY(10px);
 }
+
+}
+
+/* confetti */
+
+.confetti{
+position:fixed;
+width:8px;
+height:8px;
+top:-10px;
+z-index:99999;
+animation:fall 2s linear forwards;
+}
+
+@keyframes fall{
+
+to{
+transform:translateY(100vh) rotate(720deg);
+opacity:0;
+}
+
+}
+
+/* overlay */
+
+#salamiOverlay{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%, -50%);
+
+background:#25D366;
+color:black;
+
+font-size:28px;
+font-weight:bold;
+
+width:220px;
+height:100px;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+border-radius:20px;
+
+z-index:9999;
+transition:all 5s linear;
+}
+
+#salamiOverlay.full{
+width:100vw;
+height:100vh;
+border-radius:0;
+font-size:65px;
 }
 
 /* final screen */
@@ -205,6 +266,7 @@ animation:fadeIn 1s ease;
 }
 
 @keyframes fadeIn{
+
 from{
 opacity:0;
 transform:scale(0.9);
@@ -214,60 +276,7 @@ to{
 opacity:1;
 transform:scale(1);
 }
-}
 
-/* confetti */
-
-.confetti{
-position:fixed;
-width:8px;
-height:8px;
-top:-10px;
-z-index:99999;
-animation:fall 2s linear forwards;
-}
-
-@keyframes fall{
-to{
-transform:translateY(100vh) rotate(720deg);
-opacity:0;
-}
-}
-
-/* full screen overlay */
-
-#salamiOverlay{
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%, -50%);
-
-background:#25D366;
-color:black;
-
-font-size:28px;
-font-weight:bold;
-
-width:220px;
-padding:25px;
-text-align:center;
-
-border-radius:20px;
-
-z-index:9999;
-transition:all 4s linear;
-}
-
-#salamiOverlay.full{
-width:100vw;
-height:100vh;
-border-radius:0;
-
-font-size:60px;
-
-display:flex;
-justify-content:center;
-align-items:center;
 }
 
 /* mobile */
@@ -311,48 +320,61 @@ Step 1/4
 
 <script>
 
-const chatBox = document.getElementById('chatBox');
-const stepIndicator = document.getElementById('stepIndicator');
+const chatBox=document.getElementById('chatBox');
+const stepIndicator=document.getElementById('stepIndicator');
 
 /* ================= HELPERS ================= */
 
 /* vibration */
 
-function vibrate(ms = 80){
+function vibrate(ms=80){
+
 if(navigator.vibrate){
 navigator.vibrate(ms);
 }
+
 }
 
-/* ding sound */
+/* ding */
 
 function ding(){
+
 try{
-const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-const osc = ctx.createOscillator();
-const gain = ctx.createGain();
+const ctx=new(window.AudioContext||window.webkitAudioContext)();
 
-osc.type = "sine";
-osc.frequency.value = 880;
+const osc=ctx.createOscillator();
 
-gain.gain.setValueAtTime(0.1, ctx.currentTime);
-gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.2);
+const gain=ctx.createGain();
+
+osc.type="sine";
+
+osc.frequency.value=880;
+
+gain.gain.setValueAtTime(0.1,ctx.currentTime);
+
+gain.gain.exponentialRampToValueAtTime(
+0.0001,
+ctx.currentTime+0.2
+);
 
 osc.connect(gain);
+
 gain.connect(ctx.destination);
 
 osc.start();
-osc.stop(ctx.currentTime + 0.2);
+
+osc.stop(ctx.currentTime+0.2);
 
 }catch(e){}
+
 }
 
 /* confetti */
 
 function launchConfetti(){
 
-const colors = [
+const colors=[
 '#ff4d4d',
 '#ffd93d',
 '#6bff6b',
@@ -362,7 +384,7 @@ const colors = [
 
 for(let i=0;i<60;i++){
 
-const c = document.createElement('div');
+const c=document.createElement('div');
 
 c.className='confetti';
 
@@ -384,7 +406,7 @@ c.remove();
 
 }
 
-/* floating stars */
+/* stars */
 
 function addStars(){
 
@@ -393,6 +415,7 @@ for(let i=0;i<25;i++){
 const star=document.createElement('div');
 
 star.className='star';
+
 star.innerHTML='✦';
 
 star.style.left=Math.random()*100+'%';
@@ -421,9 +444,8 @@ function addMessage(text,side){
 ding();
 
 const row=document.createElement('div');
-row.className=`message-row ${side}`;
 
-/* sender avatar */
+row.className=`message-row ${side}`;
 
 if(side==='left'){
 
@@ -447,6 +469,7 @@ row.appendChild(avatar);
 const bubble=document.createElement('div');
 
 bubble.className='bubble';
+
 bubble.innerText=text;
 
 row.appendChild(bubble);
@@ -462,6 +485,7 @@ chatBox.scrollTop=chatBox.scrollHeight;
 function addOptions(options){
 
 const wrap=document.createElement('div');
+
 wrap.className='options';
 
 options.forEach(opt=>{
@@ -476,23 +500,31 @@ return wrap;
 
 }
 
-/* create button */
+/* buttons */
 
 function createButton(text,clickFn){
 
 const btn=document.createElement('button');
 
 btn.className='option-btn';
+
 btn.innerText=text;
 
 btn.onclick=()=>{
 
-ding();
 vibrate(80);
+
+ding();
 
 clickFn();
 
 };
+
+btn.addEventListener('touchstart',()=>{
+
+vibrate(50);
+
+});
 
 return btn;
 
@@ -514,30 +546,44 @@ function startStep1(){
 
 stepIndicator.innerText='Step 1/4';
 
+ding();
+
 setTimeout(()=>{
 
-addMessage('Assalamu alaikum Eid Mubarak','left');
+addMessage(
+'Assalamu alaikum Eid Mubarak',
+'left'
+);
 
-const btn1=createButton('Eid Mubarak',()=>{
+const btn1=createButton(
+'Eid Mubarak',
+()=>{
 
 step1Reply('Eid Mubarak');
 
-});
+}
+);
 
-const btn2=createButton('Same to you',()=>{
+const btn2=createButton(
+'Same to you',
+()=>{
 
 step1Reply('Same to you');
 
-});
+}
+);
 
-const optionsWrap=addOptions([btn1,btn2]);
+const optionsWrap=
+addOptions([btn1,btn2]);
 
 const cursor=document.createElement('div');
 
 cursor.className='cursor-guide';
+
 cursor.innerHTML='👇';
 
 cursor.style.top='-30px';
+
 cursor.style.left='40%';
 
 optionsWrap.appendChild(cursor);
@@ -553,6 +599,8 @@ removeOptions();
 addMessage(text,'right');
 
 setTimeout(()=>{
+
+ding();
 
 addMessage(
 'yeah same to u 😌\nEid Mubarak, Salami ta?',
@@ -571,21 +619,48 @@ function startStep2(){
 
 stepIndicator.innerText='Step 2/4';
 
-const btn1=createButton('Kisher Salami?',()=>{});
+ding();
 
-const btn2=createButton('Tumi Amare Diba',()=>{});
+const btn1=createButton(
+'Kisher Salami?',
+()=>{}
+);
 
-const btn3=createButton('Accha Dicchi',()=>{
+const btn2=createButton(
+'Tumi Amare Diba',
+()=>{}
+);
+
+const btn3=createButton(
+'Accha Dicchi 😊👍',
+()=>{
 
 removeOptions();
 
-addMessage('Accha Dicchi','right');
+addMessage(
+'Accha Dicchi 😊👍',
+'right'
+);
 
 setTimeout(()=>{
 startStep3();
 },700);
 
-});
+}
+);
+
+/* colors */
+
+btn1.style.background='#ff6b6b';
+btn1.style.color='white';
+
+btn2.style.background='#4d96ff';
+btn2.style.color='white';
+
+btn3.style.background='#6bff95';
+btn3.style.color='black';
+
+/* positions */
 
 btn1.style.position='absolute';
 btn2.style.position='absolute';
@@ -600,20 +675,35 @@ btn2.style.top='30px';
 btn3.style.left='30%';
 btn3.style.top='90px';
 
-const wrap=addOptions([btn1,btn2,btn3]);
+const wrap=
+addOptions([btn1,btn2,btn3]);
+
+/* runaway buttons */
 
 function runAway(btn){
 
-btn.addEventListener('mousemove',moveButton);
+btn.addEventListener(
+'mousemove',
+moveButton
+);
 
-btn.addEventListener('touchstart',moveButton);
+btn.addEventListener(
+'touchstart',
+moveButton
+);
 
 function moveButton(){
 
+ding();
+
+vibrate(40);
+
 const x=Math.random()*220;
+
 const y=Math.random()*90;
 
 btn.style.left=x+'px';
+
 btn.style.top=y+'px';
 
 }
@@ -621,6 +711,7 @@ btn.style.top=y+'px';
 }
 
 runAway(btn1);
+
 runAway(btn2);
 
 }
@@ -631,25 +722,44 @@ function startStep3(){
 
 stepIndicator.innerText='Step 3/4';
 
-addMessage('Tahole kotto salami? 😌','left');
+ding();
 
-const btn10=createButton('10 TK',()=>{});
+addMessage(
+'Tahole kotto salami? 😌',
+'left'
+);
 
-const btn50=createButton('50 TK',()=>{});
+const btn10=createButton(
+'10 TK',
+()=>{}
+);
 
-const btn500=createButton('500 TK 😡',()=>{
+const btn50=createButton(
+'50 TK',
+()=>{}
+);
 
-vibrate(150);
+const btn500=createButton(
+'500 TK 😡',
+()=>{
+
+vibrate([100,50,100]);
+
+ding();
 
 launchConfetti();
 
 removeOptions();
 
-addMessage('500 TK 😡','right');
+addMessage(
+'500 TK 😡',
+'right'
+);
 
-/* full screen overlay */
+/* overlay */
 
-const overlay=document.createElement('div');
+const overlay=
+document.createElement('div');
 
 overlay.id='salamiOverlay';
 
@@ -659,11 +769,13 @@ document.body.appendChild(overlay);
 
 setTimeout(()=>{
 overlay.classList.add('full');
-},200);
-
-/* click overlay */
+},50);
 
 overlay.onclick=()=>{
+
+ding();
+
+vibrate(120);
 
 overlay.style.transition='0.2s';
 
@@ -674,29 +786,58 @@ setTimeout(()=>{
 
 overlay.remove();
 
+ding();
+
 startStep4();
 
 },300);
 
 };
 
-/* auto expand */
-
-setTimeout(()=>{
-overlay.classList.add('full');
-},1200);
-
 setTimeout(()=>{
 
 overlay.remove();
+
+ding();
 
 startStep4();
 
 },5000);
 
-});
+}
+);
 
-const wrap=addOptions([btn10,btn50,btn500]);
+const wrap=
+addOptions([btn10,btn50,btn500]);
+
+/* growing effect */
+
+btn10.style.transition='all 5s linear';
+btn50.style.transition='all 5s linear';
+btn500.style.transition='all 5s linear';
+
+setTimeout(()=>{
+
+btn500.style.position='fixed';
+
+btn500.style.left='50%';
+
+btn500.style.top='50%';
+
+btn500.style.transform=
+'translate(-50%, -50%) scale(12)';
+
+btn500.style.zIndex='999';
+
+btn500.style.fontSize='50px';
+
+btn10.style.transform='scale(0.1)';
+btn10.style.opacity='0';
+
+btn50.style.transform='scale(0.1)';
+btn50.style.opacity='0';
+
+},100);
 
 }
 
@@ -706,13 +847,16 @@ function startStep4(){
 
 stepIndicator.innerText='Step 4/4';
 
+ding();
+
 chatBox.innerHTML=`
 
 <div class="final-screen">
 
 <div>
 
-Dhonnobad Dhonnobad 😭<br><br>
+Dhonnobad Dhonnobad 😭
+<br><br>
 
 DM e number dicchi 👍
 
