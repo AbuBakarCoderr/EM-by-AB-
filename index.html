@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eid Chat</title>
+<title>Eid Chat Game</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -16,13 +17,13 @@ font-family:Arial;
 body{
 background:#0b141a;
 background-image:url("https://i.imgur.com/7v5ASc8.png");
-background-repeat:repeat;
-background-size:420px;
-height:100vh;
+background-size:400px;
 overflow:hidden;
+height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
+transition:0.2s;
 }
 
 .chat-container{
@@ -41,7 +42,7 @@ display:flex;
 align-items:center;
 padding:15px;
 color:white;
-font-size:22px;
+font-size:20px;
 font-weight:bold;
 }
 
@@ -49,10 +50,10 @@ font-weight:bold;
 width:50px;
 height:50px;
 border-radius:50%;
-background:url("https://i.imgur.com/Z6XbK0a.jpeg");
+background:url("https://drive.google.com/uc?export=view&id=1yTQLNM23xkL37yNq-Bb8eqliGfcaaCt_");
 background-size:cover;
 background-position:center;
-margin-right:15px;
+margin-right:12px;
 }
 
 .chat-box{
@@ -64,18 +65,19 @@ padding:20px 10px 120px;
 .message-row{
 display:flex;
 flex-direction:column;
-margin:12px 0;
+margin:10px 0;
 }
 
 .left{align-items:flex-start;}
 .right{align-items:flex-end;}
 
 .bubble{
-padding:14px 18px;
-border-radius:20px;
+padding:12px 16px;
+border-radius:18px;
 max-width:75%;
 color:white;
 position:relative;
+font-size:15px;
 }
 
 .left .bubble{background:#202c33;}
@@ -90,22 +92,24 @@ text-align:right;
 
 .options{
 display:flex;
-gap:10px;
 flex-wrap:wrap;
+gap:10px;
 justify-content:center;
-margin-top:20px;
-min-height:220px;
+margin-top:15px;
+min-height:200px;
 position:relative;
 }
 
 .option-btn{
-padding:14px 20px;
+padding:12px 18px;
 border:none;
-border-radius:30px;
+border-radius:25px;
+font-size:16px;
 font-weight:bold;
-font-size:18px;
 cursor:pointer;
 background:#25D366;
+transition:0.2s;
+color:white;
 }
 
 .step{
@@ -114,7 +118,7 @@ bottom:15px;
 right:15px;
 background:rgba(0,0,0,0.5);
 color:white;
-padding:10px;
+padding:8px 12px;
 border-radius:20px;
 }
 
@@ -138,21 +142,22 @@ background:#ff3b3b;
 color:white;
 padding:10px 16px;
 border-radius:20px;
-z-index:99999;
 font-weight:bold;
-animation:fade 1.2s ease forwards;
+z-index:9999;
+animation:fade 1.2s ease;
 }
 
 @keyframes fade{
-0%{opacity:0; transform:translate(-50%,-10px);}
-15%{opacity:1;}
-100%{opacity:0; transform:translate(-50%,-20px);}
+0%{opacity:0;transform:translate(-50%,-10px);}
+20%{opacity:1;}
+100%{opacity:0;transform:translate(-50%,-30px);}
 }
 
+/* end */
 .end{
 position:fixed;
 inset:0;
-background:linear-gradient(135deg,#0b141a,#111b21);
+background:#111b21;
 display:flex;
 flex-direction:column;
 justify-content:center;
@@ -168,6 +173,7 @@ z-index:99999;
 <body>
 
 <div class="chat-container">
+
 <div class="header">
 <div class="profile"></div>
 Eid Chat
@@ -175,6 +181,7 @@ Eid Chat
 
 <div class="chat-box" id="chatBox"></div>
 <div class="step" id="step">Step 1/4</div>
+
 </div>
 
 <script>
@@ -187,17 +194,17 @@ bg.volume=0.35;
 window.addEventListener("load",()=>bg.play().catch(()=>{}));
 document.body.addEventListener("click",()=>bg.play().catch(()=>{}),{once:true});
 
-/* ================= AUDIO ENGINE ================= */
+/* ================= AUDIO ================= */
 const ctx=new (window.AudioContext||window.webkitAudioContext)();
 
-function sound(type){
+function sound(t){
 const o=ctx.createOscillator();
 const g=ctx.createGain();
 o.connect(g); g.connect(ctx.destination);
 
-if(type==="ding") o.frequency.value=800;
-if(type==="woosh") o.frequency.value=300;
-if(type==="buzz") o.frequency.value=120;
+if(t==="ding") o.frequency.value=800;
+if(t==="woosh") o.frequency.value=300;
+if(t==="buzz") o.frequency.value=120;
 
 g.gain.value=0.05;
 o.start();
@@ -207,8 +214,8 @@ o.stop(ctx.currentTime+0.12);
 /* ================= VIBRATION ================= */
 function vibrate(type){
 if(!navigator.vibrate) return;
-if(type==="light") navigator.vibrate(15);
-if(type==="strong") navigator.vibrate([60,90,60]);
+if(type==="correct") navigator.vibrate(20);
+if(type==="wrong") navigator.vibrate([80,120,80]);
 }
 
 /* ================= ELEMENTS ================= */
@@ -217,10 +224,7 @@ const step=document.getElementById("step");
 
 /* ================= TIME ================= */
 function now(){
-return new Date().toLocaleTimeString([],{
-hour:"2-digit",
-minute:"2-digit"
-});
+return new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
 }
 
 /* ================= MESSAGE ================= */
@@ -233,17 +237,11 @@ const b=document.createElement("div");
 b.className="bubble";
 
 if(side==="right"){
-b.innerHTML=`
-${text}
-<div class="time">${now()} ✓✓</div>
-`;
+b.innerHTML=`${text}<div class="time">${now()} ✓✓</div>`;
 sound("woosh");
-vibrate("light");
+vibrate("correct");
 }else{
-b.innerHTML=`
-${text}
-<div class="time">${now()}</div>
-`;
+b.innerHTML=`${text}<div class="time">${now()}</div>`;
 sound("ding");
 }
 
@@ -273,31 +271,29 @@ function clear(){
 document.querySelectorAll(".options").forEach(e=>e.remove());
 }
 
-/* ================= TOAST (FIXED) ================= */
-function toast(msg){
-const t=document.createElement("div");
-t.className="toast";
-t.innerText=msg;
-document.body.appendChild(t);
-setTimeout(()=>t.remove(),1200);
+/* ================= TOAST ================= */
+function toast(t){
+const d=document.createElement("div");
+d.className="toast";
+d.innerText=t;
+document.body.appendChild(d);
+setTimeout(()=>d.remove(),1200);
 }
 
-/* ================= STEP 1 RUNAWAY SAFE ================= */
+/* ================= STEP 1 RUNAWAY ================= */
 function runaway(btn,fn){
 
 btn.style.position="absolute";
-btn.onclick=fn;
-
 btn.onmouseenter=move;
 btn.ontouchstart=move;
+btn.onclick=fn;
 
 function move(){
 
-const SAFE_X=170;
-const SAFE_Y=110;
+const SAFE_X=180;
+const SAFE_Y=120;
 
 let x,y;
-
 do{
 x=Math.random()*320;
 y=Math.random()*180;
@@ -307,7 +303,7 @@ btn.style.left=x+"px";
 btn.style.top=y+"px";
 
 sound("woosh");
-vibrate("light");
+vibrate("correct");
 }
 }
 
@@ -348,24 +344,21 @@ d.className="message-row left";
 d.innerHTML=`<div class="bubble">typing... ●●●</div>`;
 chatBox.appendChild(d);
 
-setTimeout(()=>{
-d.remove();
-cb();
-},900);
+setTimeout(()=>{d.remove();cb();},900);
 }
 
-/* ================= STEP 2 ================= */
+/* ================= STEP 2 (FIXED) ================= */
 function step2(){
 
 step.innerText="Step 2/4";
 
 const a=btn("Kisher Salami?",()=>{});
 const b=btn("Tumi Amare Diba",()=>{});
+
 const c=btn("Accha Dicchi 😊👍",()=>{
 
 msg("Accha Dicchi 😊👍","right");
 clear();
-
 typing(()=>step3());
 
 });
@@ -374,7 +367,18 @@ a.style.background="#ff6b6b";
 b.style.background="#4d96ff";
 c.style.background="#6bff95";
 
+/* ONLY TWO RUN AWAY */
+makeRunaway(a);
+makeRunaway(b);
+
 add([a,b,c]);
+}
+
+function makeRunaway(b){
+b.onmouseenter=()=>{
+b.style.transform=`translate(${(Math.random()-0.5)*160}px,${(Math.random()-0.5)*100}px)`;
+sound("woosh");
+};
 }
 
 /* ================= STEP 3 ================= */
@@ -405,7 +409,7 @@ add([a,b,c,big]);
 grow(big);
 }
 
-/* ================= GROW (slightly faster) ================= */
+/* ================= GROW ================= */
 let growVal=1;
 let growInt;
 
@@ -422,7 +426,7 @@ b.style.transform=`scale(${growVal})`;
 
 document.querySelectorAll(".option-btn").forEach(x=>{
 if(x!==b){
-x.style.opacity=Math.max(0.25,1-growVal/6);
+x.style.opacity=Math.max(0.3,1-growVal/6);
 x.style.transform="scale(0.8)";
 }
 });
@@ -433,65 +437,54 @@ x.style.transform="scale(0.8)";
 /* ================= WRONG ================= */
 function wrong(){
 toast("Wrong option 😡");
-flash();
-vibrate("strong");
-sound("buzz");
-}
-
-/* ================= FLASH ================= */
-function flash(){
 document.body.classList.add("shake");
-setTimeout(()=>document.body.classList.remove("shake"),250);
+setTimeout(()=>document.body.classList.remove("shake"),300);
+vibrate("wrong");
+sound("buzz");
 }
 
 /* ================= CONFETTI ================= */
 function confetti(){
 
-const cx=innerWidth/2;
-const cy=innerHeight/2;
-
-for(let i=0;i<90;i++){
+for(let i=0;i<100;i++){
 
 const d=document.createElement("div");
 d.innerText=["🎉","✨","🎊"][Math.random()*3|0];
 
 d.style.position="fixed";
-d.style.left=cx+"px";
-d.style.top=cy+"px";
+d.style.left="50%";
+d.style.top="50%";
 d.style.fontSize="18px";
 document.body.appendChild(d);
 
 const a=Math.random()*Math.PI*2;
-const r=240+Math.random()*200;
+const r=250+Math.random()*250;
 
 setTimeout(()=>{
-d.style.transition="1.3s ease-out";
+d.style.transition="1.4s ease-out";
 d.style.transform=`translate(${Math.cos(a)*r}px,${Math.sin(a)*r}px)`;
 d.style.opacity="0";
-},30);
+},20);
 
 setTimeout(()=>d.remove(),1800);
 }
 
 }
 
-/* ================= END SCREEN ================= */
+/* ================= END ================= */
 function end(){
 
 setTimeout(()=>{
 
 document.body.innerHTML=`
 <div class="end">
-<div style="font-size:70px">🥰</div>
-<h1>Dhonnobad Dhonnobad</h1>
+<h1>🥰 Dhonnobad Dhonnobad</h1>
 <p>DM e Number dicchi 🥰👍</p>
-<p style="margin-top:10px;font-size:18px;opacity:0.8">
-(You received dua 🥰)
-</p>
+<p style="opacity:0.7">(You received dua)</p>
 </div>
 `;
 
-},800);
+},900);
 
 }
 
