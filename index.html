@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eid Mubarak Chat</title>
+<title>Eid Chat</title>
 
 <style>
 
@@ -31,8 +31,8 @@ width:100%;
 max-width:450px;
 height:100vh;
 background:linear-gradient(#111b21,#0b141a);
-position:relative;
 overflow:hidden;
+position:relative;
 }
 
 .header{
@@ -52,8 +52,8 @@ height:50px;
 border-radius:50%;
 background:linear-gradient(135deg,#ff8ad8,#ffd166);
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 font-size:8px;
 font-weight:bold;
 text-align:center;
@@ -90,7 +90,7 @@ gap:10px;
 flex-wrap:wrap;
 justify-content:center;
 margin-top:20px;
-min-height:220px;
+min-height:200px;
 position:relative;
 }
 
@@ -100,9 +100,9 @@ border:none;
 border-radius:30px;
 font-weight:bold;
 font-size:18px;
-cursor:pointer;
-transition:0.3s;
 background:#25D366;
+cursor:pointer;
+transition:0.2s;
 }
 
 .step{
@@ -138,10 +138,31 @@ Eid Chat
 const chatBox=document.getElementById("chatBox");
 const step=document.getElementById("step");
 
-let runawayBtn=null;
-let growInterval=null;
+/* ================= MUSIC ================= */
 
-/* message */
+const bgMusic = new Audio(
+'https://files.catbox.moe/sauxt7.mp3'
+);
+
+bgMusic.loop = true;
+bgMusic.volume = 0.35;
+
+/* try autoplay immediately */
+window.addEventListener("load",()=>{
+bgMusic.play().catch(()=>{});
+});
+
+/* fallback unlock */
+document.body.addEventListener("click",()=>{
+bgMusic.play().catch(()=>{});
+},{once:true});
+
+document.body.addEventListener("touchstart",()=>{
+bgMusic.play().catch(()=>{});
+},{once:true});
+
+/* ================= CHAT ================= */
+
 function msg(text,side){
 const r=document.createElement("div");
 r.className=`message-row ${side}`;
@@ -153,17 +174,23 @@ chatBox.appendChild(r);
 chatBox.scrollTop=chatBox.scrollHeight;
 }
 
-/* button */
 function btn(text,fn){
 const b=document.createElement("button");
 b.className="option-btn";
 b.innerText=text;
-
 b.onclick=fn;
 return b;
 }
 
-/* STEP 1 */
+function addOptions(arr){
+const w=document.createElement("div");
+w.className="options";
+arr.forEach(b=>w.appendChild(b));
+chatBox.appendChild(w);
+}
+
+/* ================= STEP 1 ================= */
+
 function step1(){
 
 step.innerText="Step 1/4";
@@ -175,38 +202,31 @@ step1Reply("Eid Mubarak");
 });
 
 const b2=btn("Same to you",()=>{
-runAway(b2,()=>step1Reply("Same to you"));
+runAwayForever(b2);
 });
 
 addOptions([b1,b2]);
 }
 
-function runAway(button,successFn){
+/* runaway logic */
+function runAwayForever(button){
 
-runawayBtn=button;
-
-button.onmousemove=move;
-button.ontouchstart=move;
+button.style.position="absolute";
 
 function move(){
 
-const x=Math.random()*220;
-const y=Math.random()*120;
-
-button.style.position="absolute";
-button.style.left=x+"px";
-button.style.top=y+"px";
+button.style.left=Math.random()*200+"px";
+button.style.top=Math.random()*120+"px";
 }
 
-button.onclick=()=>{
-clearInterval(runawayBtn);
-successFn();
-};
-
+button.onmouseenter=move;
+button.ontouchstart=move;
+button.onclick=move; // NEVER progresses
 }
 
-/* step1 reply */
+/* ONLY Eid Mubarak continues */
 function step1Reply(t){
+
 msg(t,"right");
 
 setTimeout(()=>{
@@ -215,7 +235,8 @@ step2();
 },800);
 }
 
-/* STEP 2 */
+/* ================= STEP 2 ================= */
+
 function step2(){
 
 step.innerText="Step 2/4";
@@ -234,9 +255,11 @@ b3.style.background="#6bff95";
 addOptions([b1,b2,b3]);
 }
 
-/* STEP 3 */
+/* ================= STEP 3 ================= */
+
 let growth=1;
 let speed=1;
+let interval;
 
 function step3(){
 
@@ -244,48 +267,48 @@ step.innerText="Step 3/4";
 
 msg("Tahole kotto salami? 😌","left");
 
-const b10=btn("10 TK",wrongClick);
-const b50=btn("50 TK",wrongClick);
-const bNo=btn("No salami❌👎",wrongClick);
+const b10=btn("10 TK",wrong);
+const b50=btn("50 TK",wrong);
+const bNo=btn("No salami❌👎",wrong);
 
 const b500=btn("500 TK 😡",()=>{
-clearInterval(growInterval);
+clearInterval(interval);
 msg("500 TK 😡","right");
 alertBox();
 });
 
-b500.style.transition="all 0.5s ease";
-
 addOptions([b10,b50,bNo,b500]);
 
-function wrongClick(){
+function wrong(){
 speed+=0.6;
-startGrowing(b500,b10,b50,bNo);
+startGrow(b500,[b10,b50,bNo]);
 }
 
-startGrowing(b500,b10,b50,bNo);
+startGrow(b500,[b10,b50,bNo]);
 }
 
-function startGrowing(big,...others){
+/* smooth growth */
+function startGrow(big,others){
 
-clearInterval(growInterval);
+clearInterval(interval);
 
-growInterval=setInterval(()=>{
+interval=setInterval(()=>{
 
-growth+=0.08*speed;
+growth+=0.05*speed;
 
 big.style.transform=`scale(${growth})`;
 big.style.zIndex=999;
 
 others.forEach(o=>{
 o.style.opacity=Math.max(0.1,1-growth/4);
-o.style.transform="scale(0.6)";
+o.style.transform="scale(0.7)";
 });
 
 },300);
 }
 
-/* overlay */
+/* ================= FINAL ================= */
+
 function alertBox(){
 
 const d=document.createElement("div");
@@ -297,9 +320,9 @@ d.style.top="50%";
 d.style.left="50%";
 d.style.transform="translate(-50%,-50%)";
 d.style.background="#25D366";
-d.style.fontSize="40px";
 d.style.padding="30px";
 d.style.borderRadius="20px";
+d.style.fontSize="40px";
 d.style.zIndex="9999";
 
 document.body.appendChild(d);
@@ -307,15 +330,7 @@ document.body.appendChild(d);
 setTimeout(()=>d.remove(),3000);
 }
 
-/* add options */
-function addOptions(arr){
-const w=document.createElement("div");
-w.className="options";
-arr.forEach(b=>w.appendChild(b));
-chatBox.appendChild(w);
-return w;
-}
-
+/* start */
 step1();
 
 </script>
