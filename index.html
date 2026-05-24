@@ -6,6 +6,7 @@
 <title>Eid Mubarak Chat</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -14,7 +15,8 @@ font-family:Arial, Helvetica, sans-serif;
 }
 
 body{
-background:#12002b;
+background:#0b141a;
+background-image:url('https://www.transparenttextures.com/patterns/arabesque.png');
 height:100vh;
 overflow:hidden;
 display:flex;
@@ -26,17 +28,19 @@ align-items:center;
 width:100%;
 max-width:450px;
 height:100vh;
-background:linear-gradient(to bottom,#3d1272,#1a0044);
+background:linear-gradient(to bottom,#111b21,#0b141a);
 position:relative;
 overflow:hidden;
 }
 
-/* background stars */
+/* floating stars */
+
 .star{
 position:absolute;
 color:white;
 animation:float 6s linear infinite;
-opacity:0.6;
+opacity:0.5;
+pointer-events:none;
 }
 
 @keyframes float{
@@ -44,23 +48,27 @@ opacity:0.6;
 transform:translateY(100vh) scale(0.5);
 opacity:0;
 }
+
 50%{
-opacity:0.7;
+opacity:0.6;
 }
+
 100%{
 transform:translateY(-100px) scale(1.2);
 opacity:0;
 }
 }
 
+/* header */
+
 .header{
 height:80px;
-background:#4f228d;
+background:#202c33;
 display:flex;
 align-items:center;
 padding:15px;
 color:white;
-font-size:28px;
+font-size:24px;
 font-weight:bold;
 box-shadow:0 2px 10px rgba(0,0,0,0.4);
 }
@@ -71,8 +79,11 @@ height:50px;
 border-radius:50%;
 background:url('https://i.imgur.com/Z6XbK0a.jpeg');
 background-size:cover;
+background-position:center;
 margin-right:15px;
 }
+
+/* chat */
 
 .chat-box{
 height:calc(100vh - 80px);
@@ -98,23 +109,25 @@ justify-content:flex-end;
 .bubble{
 padding:14px 18px;
 max-width:75%;
-border-radius:25px;
-font-size:20px;
+border-radius:20px;
+font-size:19px;
 line-height:1.3;
 word-wrap:break-word;
 }
 
 .left .bubble{
-background:#5a4a8f;
+background:#202c33;
 color:white;
-border-bottom-left-radius:8px;
+border-bottom-left-radius:5px;
 }
 
 .right .bubble{
-background:#d96cff;
+background:#005c4b;
 color:white;
-border-bottom-right-radius:8px;
+border-bottom-right-radius:5px;
 }
+
+/* options */
 
 .options{
 display:flex;
@@ -127,12 +140,13 @@ min-height:140px;
 }
 
 .option-btn{
-background:#d96cff;
-color:white;
+background:#25D366;
+color:black;
 border:none;
 padding:14px 20px;
 border-radius:30px;
 font-size:18px;
+font-weight:bold;
 cursor:pointer;
 transition:0.2s;
 position:relative;
@@ -142,17 +156,21 @@ position:relative;
 transform:scale(1.05);
 }
 
+/* step indicator */
+
 .step-indicator{
 position:fixed;
 right:15px;
 bottom:15px;
-background:rgba(0,0,0,0.4);
+background:rgba(0,0,0,0.5);
 color:white;
 padding:10px 16px;
 border-radius:20px;
-font-size:18px;
+font-size:16px;
 z-index:999;
 }
+
+/* cursor guide */
 
 .cursor-guide{
 position:absolute;
@@ -169,6 +187,8 @@ transform:translateY(0px);
 transform:translateY(10px);
 }
 }
+
+/* final screen */
 
 .final-screen{
 height:100%;
@@ -196,17 +216,66 @@ transform:scale(1);
 }
 }
 
-.grow{
-transition:all 1s linear;
+/* confetti */
+
+.confetti{
+position:fixed;
+width:8px;
+height:8px;
+top:-10px;
+z-index:99999;
+animation:fall 2s linear forwards;
 }
 
-.shrink{
-transition:all 1s linear;
+@keyframes fall{
+to{
+transform:translateY(100vh) rotate(720deg);
+opacity:0;
 }
+}
+
+/* full screen overlay */
+
+#salamiOverlay{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%, -50%);
+
+background:#25D366;
+color:black;
+
+font-size:28px;
+font-weight:bold;
+
+width:220px;
+padding:25px;
+text-align:center;
+
+border-radius:20px;
+
+z-index:9999;
+transition:all 4s linear;
+}
+
+#salamiOverlay.full{
+width:100vw;
+height:100vh;
+border-radius:0;
+
+font-size:60px;
+
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* mobile */
 
 @media(max-width:500px){
+
 .bubble{
-font-size:18px;
+font-size:17px;
 }
 
 .option-btn{
@@ -215,12 +284,14 @@ padding:12px 16px;
 }
 
 .header{
-font-size:24px;
+font-size:22px;
 }
+
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="chat-container">
@@ -230,8 +301,7 @@ font-size:24px;
 Eid Special Chat
 </div>
 
-<div class="chat-box" id="chatBox">
-</div>
+<div class="chat-box" id="chatBox"></div>
 
 <div class="step-indicator" id="stepIndicator">
 Step 1/4
@@ -244,36 +314,153 @@ Step 1/4
 const chatBox = document.getElementById('chatBox');
 const stepIndicator = document.getElementById('stepIndicator');
 
+/* ================= HELPERS ================= */
+
+/* vibration */
+
+function vibrate(ms = 80){
+if(navigator.vibrate){
+navigator.vibrate(ms);
+}
+}
+
+/* ding sound */
+
+function ding(){
+try{
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+const osc = ctx.createOscillator();
+const gain = ctx.createGain();
+
+osc.type = "sine";
+osc.frequency.value = 880;
+
+gain.gain.setValueAtTime(0.1, ctx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.2);
+
+osc.connect(gain);
+gain.connect(ctx.destination);
+
+osc.start();
+osc.stop(ctx.currentTime + 0.2);
+
+}catch(e){}
+}
+
+/* confetti */
+
+function launchConfetti(){
+
+const colors = [
+'#ff4d4d',
+'#ffd93d',
+'#6bff6b',
+'#4dd2ff',
+'#ff7bff'
+];
+
+for(let i=0;i<60;i++){
+
+const c = document.createElement('div');
+
+c.className='confetti';
+
+c.style.left=Math.random()*100+'vw';
+
+c.style.background=
+colors[Math.floor(Math.random()*colors.length)];
+
+c.style.animationDuration=
+(Math.random()*1.5+1.5)+'s';
+
+document.body.appendChild(c);
+
+setTimeout(()=>{
+c.remove();
+},3000);
+
+}
+
+}
+
+/* floating stars */
+
 function addStars(){
+
 for(let i=0;i<25;i++){
-const star = document.createElement('div');
+
+const star=document.createElement('div');
+
 star.className='star';
 star.innerHTML='✦';
+
 star.style.left=Math.random()*100+'%';
-star.style.animationDuration=(Math.random()*5+4)+'s';
-star.style.fontSize=(Math.random()*18+10)+'px';
-star.style.animationDelay=Math.random()*5+'s';
+
+star.style.animationDuration=
+(Math.random()*5+4)+'s';
+
+star.style.fontSize=
+(Math.random()*18+10)+'px';
+
+star.style.animationDelay=
+Math.random()*5+'s';
+
 document.querySelector('.chat-container').appendChild(star);
+
 }
+
 }
 
 addStars();
 
+/* add message */
+
 function addMessage(text,side){
+
+ding();
+
 const row=document.createElement('div');
 row.className=`message-row ${side}`;
 
+/* sender avatar */
+
+if(side==='left'){
+
+const avatar=document.createElement('div');
+
+avatar.style.width='35px';
+avatar.style.height='35px';
+avatar.style.borderRadius='50%';
+avatar.style.marginRight='8px';
+
+avatar.style.backgroundImage=
+"url('https://i.imgur.com/Z6XbK0a.jpeg')";
+
+avatar.style.backgroundSize='cover';
+avatar.style.backgroundPosition='center';
+
+row.appendChild(avatar);
+
+}
+
 const bubble=document.createElement('div');
+
 bubble.className='bubble';
 bubble.innerText=text;
 
 row.appendChild(bubble);
+
 chatBox.appendChild(row);
 
 chatBox.scrollTop=chatBox.scrollHeight;
+
 }
 
+/* add options */
+
 function addOptions(options){
+
 const wrap=document.createElement('div');
 wrap.className='options';
 
@@ -282,75 +469,122 @@ wrap.appendChild(opt);
 });
 
 chatBox.appendChild(wrap);
+
 chatBox.scrollTop=chatBox.scrollHeight;
 
 return wrap;
+
 }
+
+/* create button */
 
 function createButton(text,clickFn){
+
 const btn=document.createElement('button');
+
 btn.className='option-btn';
 btn.innerText=text;
-btn.onclick=clickFn;
+
+btn.onclick=()=>{
+
+ding();
+vibrate(80);
+
+clickFn();
+
+};
+
 return btn;
+
 }
 
-/* STEP 1 */
+/* remove options */
+
+function removeOptions(){
+
+const options=document.querySelectorAll('.options');
+
+options.forEach(o=>o.remove());
+
+}
+
+/* ================= STEP 1 ================= */
 
 function startStep1(){
+
 stepIndicator.innerText='Step 1/4';
-trackEvent('reached_step_1');
 
 setTimeout(()=>{
+
 addMessage('Assalamu alaikum Eid Mubarak','left');
 
 const btn1=createButton('Eid Mubarak',()=>{
-trackEvent('clicked_reply','Eid Mubarak');
+
 step1Reply('Eid Mubarak');
+
 });
 
 const btn2=createButton('Same to you',()=>{
-trackEvent('clicked_reply','Same to you');
+
 step1Reply('Same to you');
+
 });
 
 const optionsWrap=addOptions([btn1,btn2]);
 
 const cursor=document.createElement('div');
+
 cursor.className='cursor-guide';
 cursor.innerHTML='👇';
+
 cursor.style.top='-30px';
 cursor.style.left='40%';
+
 optionsWrap.appendChild(cursor);
 
 },700);
+
 }
 
 function step1Reply(text){
+
 removeOptions();
+
 addMessage(text,'right');
 
 setTimeout(()=>{
-addMessage('yeah same to u 😌\nEid Mubarak, Salami ta?','left');
+
+addMessage(
+'yeah same to u 😌\nEid Mubarak, Salami ta?',
+'left'
+);
+
 startStep2();
+
 },800);
+
 }
 
-/* STEP 2 */
+/* ================= STEP 2 ================= */
 
 function startStep2(){
+
 stepIndicator.innerText='Step 2/4';
-trackEvent('reached_step_2');
 
 const btn1=createButton('Kisher Salami?',()=>{});
+
 const btn2=createButton('Tumi Amare Diba',()=>{});
+
 const btn3=createButton('Accha Dicchi',()=>{
+
 removeOptions();
+
 addMessage('Accha Dicchi','right');
 
 setTimeout(()=>{
 startStep3();
 },700);
+
 });
 
 btn1.style.position='absolute';
@@ -369,119 +603,128 @@ btn3.style.top='90px';
 const wrap=addOptions([btn1,btn2,btn3]);
 
 function runAway(btn){
+
 btn.addEventListener('mousemove',moveButton);
+
 btn.addEventListener('touchstart',moveButton);
 
 function moveButton(){
+
 const x=Math.random()*220;
 const y=Math.random()*90;
+
 btn.style.left=x+'px';
 btn.style.top=y+'px';
+
 }
+
 }
 
 runAway(btn1);
 runAway(btn2);
+
 }
 
-/* STEP 3 */
+/* ================= STEP 3 ================= */
 
 function startStep3(){
+
 stepIndicator.innerText='Step 3/4';
-trackEvent('reached_step_3');
 
 addMessage('Tahole kotto salami? 😌','left');
 
-const btn10=createButton('10 tk',()=>{});
-const btn50=createButton('50 tk',()=>{});
-const btn500=createButton('500 tk',()=>{
-trackEvent('selected_salami','500 tk');
+const btn10=createButton('10 TK',()=>{});
+
+const btn50=createButton('50 TK',()=>{});
+
+const btn500=createButton('500 TK 😡',()=>{
+
+vibrate(150);
+
+launchConfetti();
+
 removeOptions();
-addMessage('500 tk 😭','right');
+
+addMessage('500 TK 😡','right');
+
+/* full screen overlay */
+
+const overlay=document.createElement('div');
+
+overlay.id='salamiOverlay';
+
+overlay.innerText='500 TK 😡';
+
+document.body.appendChild(overlay);
 
 setTimeout(()=>{
-startStep4();
-},1000);
-});
+overlay.classList.add('full');
+},200);
 
-btn10.classList.add('shrink');
-btn50.classList.add('shrink');
-btn500.classList.add('grow');
+/* click overlay */
+
+overlay.onclick=()=>{
+
+overlay.style.transition='0.2s';
+
+overlay.style.transform=
+'translate(-50%, -50%) scale(0.9)';
+
+setTimeout(()=>{
+
+overlay.remove();
+
+startStep4();
+
+},300);
+
+};
+
+/* auto expand */
+
+setTimeout(()=>{
+overlay.classList.add('full');
+},1200);
+
+setTimeout(()=>{
+
+overlay.remove();
+
+startStep4();
+
+},5000);
+
+});
 
 const wrap=addOptions([btn10,btn50,btn500]);
 
-let size=1;
-
-const interval=setInterval(()=>{
-size+=0.25;
-
-btn500.style.transform=`scale(${size})`;
-
-btn10.style.transform=`scale(${1/size})`;
-btn50.style.transform=`scale(${1/size})`;
-
-if(size>4){
-clearInterval(interval);
-}
-},1000);
 }
 
-/* STEP 4 */
+/* ================= STEP 4 ================= */
 
 function startStep4(){
+
 stepIndicator.innerText='Step 4/4';
-trackEvent('reached_step_4');
 
 chatBox.innerHTML=`
+
 <div class="final-screen">
+
 <div>
+
 Dhonnobad Dhonnobad 😭<br><br>
+
 DM e number dicchi 👍
+
 </div>
+
 </div>
+
 `;
+
 }
 
-function removeOptions(){
-const options=document.querySelectorAll('.options');
-options.forEach(o=>o.remove());
-}
-
-/* ================= ANALYTICS ================= */
-
-// Replace with your own Google Analytics ID later if needed
-// Example: G-XXXXXXXXXX
-const analyticsScript = document.createElement('script');
-analyticsScript.async = true;
-analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
-document.head.appendChild(analyticsScript);
-
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-XXXXXXXXXX');
-
-function trackEvent(action,label=''){
-try{
-gtag('event', action, {
-'event_category':'Eid Chat',
-'event_label':label
-});
-}catch(err){
-console.log('tracking offline');
-}
-}
-
-// Track total visit
-trackEvent('visit_opened');
-
-// Track time spent
-const startTime = Date.now();
-
-window.addEventListener('beforeunload',()=>{
-const seconds = Math.floor((Date.now()-startTime)/1000);
-trackEvent('time_spent', seconds+' seconds');
-});
+/* start */
 
 startStep1();
 
