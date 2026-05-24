@@ -56,7 +56,6 @@ align-items:center;
 justify-content:center;
 font-size:10px;
 font-weight:bold;
-text-align:center;
 margin-right:15px;
 }
 
@@ -116,20 +115,15 @@ border-radius:20px;
 }
 
 /* shake */
-.shake{
-animation:shake 0.25s;
-}
-
+.shake{animation:shake 0.25s;}
 @keyframes shake{
 0%{transform:translate(0,0);}
-20%{transform:translate(-5px,3px);}
-40%{transform:translate(5px,-3px);}
-60%{transform:translate(-5px,2px);}
-80%{transform:translate(5px,-2px);}
+25%{transform:translate(-4px,3px);}
+50%{transform:translate(4px,-3px);}
+75%{transform:translate(-3px,2px);}
 100%{transform:translate(0,0);}
 }
 
-/* flash */
 .flash{
 position:fixed;
 top:0;
@@ -138,8 +132,8 @@ width:100%;
 height:100%;
 background:red;
 opacity:0;
-z-index:99998;
 pointer-events:none;
+z-index:9999;
 }
 
 .flash.active{
@@ -148,15 +142,8 @@ animation:flash 0.3s;
 
 @keyframes flash{
 0%{opacity:0;}
-30%{opacity:0.4;}
+50%{opacity:0.4;}
 100%{opacity:0;}
-}
-
-@keyframes fall{
-to{
-transform:translateY(120vh) rotate(360deg);
-opacity:0;
-}
 }
 
 </style>
@@ -165,16 +152,13 @@ opacity:0;
 <body>
 
 <div class="chat-container">
-
 <div class="header">
 <div class="profile">💖</div>
 Eid Chat
 </div>
 
 <div class="chat-box" id="chatBox"></div>
-
 <div class="step" id="step">Step 1/4</div>
-
 </div>
 
 <script>
@@ -184,7 +168,6 @@ const flash=document.createElement("div");
 flash.className="flash";
 document.body.appendChild(flash);
 
-/* ELEMENTS */
 const chatBox=document.getElementById("chatBox");
 const step=document.getElementById("step");
 
@@ -226,10 +209,12 @@ function clearOptions(){
 document.querySelectorAll(".options").forEach(o=>o.remove());
 }
 
-/* RUNAWAY (FIXED SAFE ZONE) */
+/* SAFE RUNAWAY (NO OVERLAP ZONE) */
 function runAway(btn,success){
 
 btn.style.position="absolute";
+
+btn.onclick=success;
 
 btn.onmouseenter=move;
 btn.ontouchstart=move;
@@ -237,19 +222,19 @@ btn.ontouchstart=move;
 function move(){
 
 let x,y;
-let tries=0;
 
+/* SAFE AREA RULE:
+keeps button away from Eid Mubarak zone */
 do{
-x=Math.random()*240;
-y=Math.random()*120;
-tries++;
-}while(tries<8 && x<120 && y<80);
+x=Math.random()*260;
+y=Math.random()*140;
+}
+while(x < 130 && y < 90);
 
 btn.style.left=x+"px";
 btn.style.top=y+"px";
 }
 
-btn.onclick=success;
 }
 
 /* STEP 1 */
@@ -260,20 +245,24 @@ step.innerText="Step 1/4";
 msg("Assalamu alaikum Eid Mubarak","left");
 
 const b1=btn("Eid Mubarak",()=>{
-step1Reply("Eid Mubarak");
+step1Reply();
 });
+
 b1.style.background="#4d96ff";
 
-const b2=btn("Same to you",()=>runAway(b2));
+const b2=btn("Same to you",()=>{
+runAway(b2,step1Reply);
+});
+
 b2.style.background="#ff6b6b";
 
 addOptions([b1,b2]);
 }
 
-/* STEP 1 REPLY */
-function step1Reply(t){
+/* STEP 1 NEXT */
+function step1Reply(){
 
-msg(t,"right");
+msg("Eid Mubarak 😌","right");
 
 setTimeout(()=>{
 msg("Dhonnobad Dhonnobad. Ta Salami ta? 💁‍♂️","left");
@@ -301,7 +290,6 @@ b1.style.background="#ff6b6b";
 b2.style.background="#4d96ff";
 b3.style.background="#6bff95";
 
-/* runaway */
 makeRunaway(b1);
 makeRunaway(b2);
 
@@ -310,11 +298,9 @@ addOptions([b1,b2,b3]);
 
 /* STEP 2 RUNAWAY */
 function makeRunaway(btn){
-
 btn.onmouseenter=()=>{
-btn.style.transform=`translate(${(Math.random()-0.5)*200}px, ${(Math.random()-0.5)*120}px)`;
+btn.style.transform=`translate(${(Math.random()-0.5)*160}px, ${(Math.random()-0.5)*100}px)`;
 };
-
 btn.ontouchstart=btn.onmouseenter;
 }
 
@@ -332,7 +318,7 @@ const bNo=btn("No salami❌👎",wrong);
 const b500=btn("500 TK 😡",()=>{
 clearInterval(tkInterval);
 msg("500 TK 😡","right");
-confettiBurst();
+confetti();
 finalScreen();
 });
 
@@ -348,35 +334,35 @@ startGrow();
 
 function wrong(){
 flashFX();
-tkGrow+=0.7;
+tkGrow+=0.4; /* SLOWER + SMOOTHER */
 startGrow();
 }
 }
 
-/* GROW (SLOW FIXED) */
+/* SLOW GROW */
 function startGrow(){
 
 clearInterval(tkInterval);
 
 tkInterval=setInterval(()=>{
 
-tkGrow+=0.02;
+tkGrow += 0.015; /* MUCH SLOWER */
 
 tkBtn.style.transform=`scale(${tkGrow})`;
 tkBtn.style.zIndex=999;
 
 document.querySelectorAll(".option-btn").forEach(b=>{
 if(b!==tkBtn){
-b.style.opacity=Math.max(0.15,1-tkGrow/5);
-b.style.transform="scale(0.75)";
+b.style.opacity=Math.max(0.2,1-tkGrow/6);
+b.style.transform="scale(0.8)";
 }
 });
 
-},400);
+},500); /* slower timing */
 
 }
 
-/* FLASH + SHAKE */
+/* FLASH */
 function flashFX(){
 document.body.classList.add("shake");
 setTimeout(()=>document.body.classList.remove("shake"),250);
@@ -386,8 +372,8 @@ void flash.offsetWidth;
 flash.classList.add("active");
 }
 
-/* CONFETTI SIDE → CENTER */
-function confettiBurst(){
+/* CONFETTI */
+function confetti(){
 
 for(let i=0;i<80;i++){
 
@@ -395,24 +381,20 @@ const c=document.createElement("div");
 c.innerText="🎉";
 
 c.style.position="fixed";
-c.style.left=(Math.random()<0.5?-20:window.innerWidth+20)+"px";
-c.style.top=Math.random()*window.innerHeight+"px";
-
+c.style.left=Math.random()*100+"vw";
+c.style.top=Math.random()*100+"vh";
 c.style.fontSize="18px";
-c.style.zIndex=99999;
+c.style.zIndex="99999";
 
 document.body.appendChild(c);
 
 setTimeout(()=>{
-
-c.style.transition="2s ease";
-c.style.left="50%";
-c.style.top="40%";
+c.style.transition="1.5s ease";
+c.style.transform="scale(0.5)";
 c.style.opacity="0";
-
 },50);
 
-setTimeout(()=>c.remove(),2500);
+setTimeout(()=>c.remove(),2000);
 
 }
 
@@ -432,17 +414,14 @@ justify-content:center;
 align-items:center;
 background:#0b141a;
 color:white;
-text-align:center;
 font-size:28px;
+text-align:center;
 padding:20px;
 ">
 
 <div style="font-size:60px;">🥰</div>
-
-<div>
 Dhonnobad Dhonnobad<br>
 DM e Number dicchi 🥰👍
-</div>
 
 </div>
 `;
@@ -451,7 +430,6 @@ DM e Number dicchi 🥰👍
 
 }
 
-/* START */
 step1();
 
 </script>
