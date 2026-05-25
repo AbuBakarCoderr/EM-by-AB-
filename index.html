@@ -136,16 +136,6 @@ background-size:
 35px 35px;
 }
 
-.header::before{
-content:"";
-position:absolute;
-inset:0;
-background:
-url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cpath d='M20 90c20-30 40 30 60 0s40 30 60 0' stroke='rgba(255,255,255,0.05)' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-opacity:0.6;
-pointer-events:none;
-}
-
 .profile{
 width:50px;
 height:50px;
@@ -155,22 +145,17 @@ background:url("https://drive.google.com/thumbnail?id=1yTQLNM23xkL37yNq-Bb8eqliG
 background-size:cover;
 background-position:center;
 border:2px solid rgba(255,255,255,0.2);
-z-index:2;
 }
 
 .title{
 font-size:20px;
 font-weight:bold;
-z-index:2;
-position:relative;
 }
 
 .sub-title{
 font-size:12px;
 opacity:0.7;
 margin-top:2px;
-z-index:2;
-position:relative;
 }
 
 /* ================= CHAT ================= */
@@ -245,10 +230,6 @@ top 0.28s ease,
 transform 0.35s ease;
 color:white;
 box-shadow:0 4px 12px rgba(0,0,0,0.25);
-}
-
-.option-btn:active{
-transform:scale(0.95);
 }
 
 /* ================= STEP ================= */
@@ -450,8 +431,6 @@ transform:translateY(-2px);
 
 <body>
 
-<!-- ================= LOADING ================= -->
-
 <div id="loadingScreen">
 
 <div class="loader-circle"></div>
@@ -469,8 +448,6 @@ Tap / Click Screen To Start
 </div>
 
 </div>
-
-<!-- ================= CHAT ================= -->
 
 <div class="chat-container">
 
@@ -506,15 +483,11 @@ Step 1/4
 
 </div>
 
-<!-- ================= MUSIC ================= -->
-
 <audio id="bgMusic" loop>
 <source src="https://files.catbox.moe/sauxt7.mp3" type="audio/mp3">
 </audio>
 
 <script>
-
-/* ================= ELEMENTS ================= */
 
 const chatBox =
 document.getElementById("chatBox");
@@ -527,8 +500,6 @@ document.getElementById("progressFill");
 
 const music =
 document.getElementById("bgMusic");
-
-/* ================= AUDIO ================= */
 
 const ctx =
 new (window.AudioContext||window.webkitAudioContext)();
@@ -560,8 +531,6 @@ o.stop(ctx.currentTime+0.12);
 
 }
 
-/* ================= VIBRATION ================= */
-
 function vibrate(type){
 
 if(!navigator.vibrate) return;
@@ -580,8 +549,6 @@ navigator.vibrate([90,120,90]);
 
 }
 
-/* ================= STEP ================= */
-
 function setStep(num){
 
 step.innerText =
@@ -592,8 +559,6 @@ progressFill.style.width =
 
 }
 
-/* ================= TIME ================= */
-
 function now(){
 
 return new Date().toLocaleTimeString([],{
@@ -602,8 +567,6 @@ minute:"2-digit"
 });
 
 }
-
-/* ================= TOAST ================= */
 
 function toast(text){
 
@@ -621,8 +584,6 @@ t.remove();
 },1200);
 
 }
-
-/* ================= HEEHEE ================= */
 
 function heehee(){
 
@@ -651,8 +612,6 @@ h.remove();
 
 }
 
-/* ================= WRONG ================= */
-
 function wrongSoft(){
 
 toast("Wrong option 😡");
@@ -680,8 +639,6 @@ vibrate("wrongHard");
 playSound("buzz");
 
 }
-
-/* ================= MESSAGE ================= */
 
 function addMessage(text,side){
 
@@ -729,8 +686,6 @@ chatBox.scrollHeight;
 
 }
 
-/* ================= BUTTON ================= */
-
 function createButton(text,fn){
 
 const b =
@@ -754,8 +709,6 @@ return b;
 
 }
 
-/* ================= OPTIONS ================= */
-
 function addOptions(arr){
 
 const wrap =
@@ -767,9 +720,6 @@ arr.forEach(x=>wrap.appendChild(x));
 
 chatBox.appendChild(wrap);
 
-chatBox.scrollTop =
-chatBox.scrollHeight;
-
 }
 
 function clearOptions(){
@@ -779,8 +729,6 @@ document
 .forEach(e=>e.remove());
 
 }
-
-/* ================= TYPING ================= */
 
 function typing(cb){
 
@@ -814,8 +762,6 @@ cb();
 },950);
 
 }
-
-/* ================= STEP 1 ================= */
 
 function step1(){
 
@@ -923,8 +869,6 @@ chatBox.appendChild(wrap);
 
 }
 
-/* ================= STEP 2 ================= */
-
 function step2(){
 
 setStep(2);
@@ -1016,9 +960,7 @@ addMessage(
 clearOptions();
 
 typing(()=>{
-
 step3();
-
 });
 
 });
@@ -1035,8 +977,6 @@ addOptions([a,b,c]);
 
 }
 
-/* ================= STEP 3 ================= */
-
 function step3(){
 
 setStep(3);
@@ -1049,29 +989,17 @@ addMessage(
 const a =
 createButton(
 "10 TK",
-()=>{
-
-wrongHard();
-
-});
+()=>{ wrongHard(); });
 
 const b =
 createButton(
 "50 TK",
-()=>{
-
-wrongHard();
-
-});
+()=>{ wrongHard(); });
 
 const c =
 createButton(
 "No Salami ❌👎",
-()=>{
-
-wrongHard();
-
-});
+()=>{ wrongHard(); });
 
 const big =
 createButton(
@@ -1096,11 +1024,8 @@ confettiBlast();
 },1800);
 
 setTimeout(()=>{
-
 setStep(4);
-
 showEnd();
-
 },3500);
 
 });
@@ -1118,16 +1043,16 @@ big.style.background =
 "#ff0055";
 
 a.style.transform =
-"scale(2.2)";
+"scale(3.15)";
 
 b.style.transform =
-"scale(2.2)";
+"scale(3.15)";
 
 c.style.transform =
-"scale(2.2)";
+"scale(3.15)";
 
 big.style.transform =
-"scale(0.38)";
+"scale(0.23)";
 
 a.style.left = "15px";
 a.style.top = "25px";
@@ -1156,9 +1081,7 @@ growButton(big,a,b,c);
 
 }
 
-/* ================= GROW ================= */
-
-let growVal = 0.45;
+let growVal = 0.38;
 
 let growInterval;
 
@@ -1166,27 +1089,18 @@ function growButton(big,a,b,c){
 
 clearInterval(growInterval);
 
-growVal = 0.45;
+growVal = 0.38;
+
+const others = [a,b,c];
 
 growInterval = setInterval(()=>{
 
-growVal += 0.14;
+growVal += 0.17;
 
 big.style.transform =
 `scale(${growVal})`;
 
-big.style.zIndex = "999";
-
-[a,b,c].forEach((btn,index)=>{
-
-const shrink =
-Math.max(
-0.12,
-2.5 - growVal/1.4
-);
-
-btn.style.transform =
-`scale(${shrink})`;
+others.forEach((btn,index)=>{
 
 let currentX =
 parseFloat(btn.dataset.x);
@@ -1194,13 +1108,20 @@ parseFloat(btn.dataset.x);
 let currentY =
 parseFloat(btn.dataset.y);
 
-const direction =
-index===0 ? -1 :
-index===1 ? 1 : -0.4;
+const pushX =
+index===0
+? -5.2
+: index===1
+? 5.2
+: -1.2;
 
-currentX += direction*3.5;
+const pushY =
+index===2
+? 2.1
+: -0.2;
 
-currentY += index===2 ? 1.1 : -0.15;
+currentX += pushX;
+currentY += pushY;
 
 btn.dataset.x = currentX;
 btn.dataset.y = currentY;
@@ -1211,35 +1132,50 @@ currentX+"px";
 btn.style.top =
 currentY+"px";
 
+const shrink =
+Math.max(
+0.06,
+2.7 - growVal/1.1
+);
+
+btn.style.transform =
+`scale(${shrink})`;
+
 btn.style.opacity =
-Math.max(0.15,1-growVal/9);
+Math.max(
+0.22,
+1-growVal/13
+);
 
 });
 
-if(growVal>12){
+if(growVal > 12){
 
 big.style.position =
 "fixed";
 
 big.style.inset = "0";
 
-big.style.width = "100vw";
+big.style.width =
+"100vw";
 
-big.style.height = "100vh";
+big.style.height =
+"100vh";
 
-big.style.borderRadius = "0";
+big.style.borderRadius =
+"0";
 
-big.style.fontSize = "48px";
+big.style.fontSize =
+"52px";
 
-big.style.zIndex = "99999";
+big.style.zIndex =
+"99999";
 
 }
 
-},170);
+},145);
 
 }
-
-/* ================= CONFETTI ================= */
 
 function confettiBlast(){
 
@@ -1302,8 +1238,6 @@ d.remove();
 
 }
 
-/* ================= END ================= */
-
 function showEnd(){
 
 document.body.innerHTML = `
@@ -1335,15 +1269,18 @@ font-size:16px;
 
 <div style="
 position:fixed;
-bottom:18px;
-right:18px;
-font-size:13px;
-opacity:0.45;
+bottom:16px;
+right:10px;
+font-size:10px;
+opacity:0.35;
 font-style:italic;
 letter-spacing:1px;
+writing-mode:vertical-rl;
+text-orientation:mixed;
 animation:secretGlow 2.2s infinite alternate;
+z-index:999999;
 ">
-secret message — “Dishting Dishting” ✨
+Dishting<br>Dishting ✨
 </div>
 
 </div>
@@ -1351,8 +1288,6 @@ secret message — “Dishting Dishting” ✨
 `;
 
 }
-
-/* ================= START ================= */
 
 const loadingScreen =
 document.getElementById(
@@ -1375,24 +1310,7 @@ function startExperience(){
 
 music.volume = 0.38;
 
-const playPromise =
 music.play();
-
-if(playPromise !== undefined){
-
-playPromise.catch(()=>{
-
-document.body.addEventListener(
-"click",
-()=>{
-music.play();
-},
-{once:true}
-);
-
-});
-
-}
 
 loadingScreen.style.opacity =
 "0";
