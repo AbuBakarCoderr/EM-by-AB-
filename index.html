@@ -7,8 +7,6 @@
 
 <style>
 
-/* ===== YOUR ORIGINAL CSS (UNCHANGED) ===== */
-
 *{
 margin:0;
 padding:0;
@@ -28,7 +26,7 @@ background-size:350px;
 background-repeat:repeat;
 }
 
-/* loading */
+/* LOADING */
 #loadingScreen{
 position:fixed;
 inset:0;
@@ -56,11 +54,34 @@ from{transform:rotate(0deg);}
 to{transform:rotate(360deg);}
 }
 
-.loading-text{color:white;font-size:24px;font-weight:bold;margin-bottom:25px;}
-.volume-tip{position:absolute;bottom:110px;left:50%;transform:translateX(-50%);color:white;font-size:17px;}
-.tap-text{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);color:white;font-size:18px;font-weight:bold;}
+.loading-text{
+color:white;
+font-size:24px;
+font-weight:bold;
+margin-bottom:25px;
+}
 
-/* chat */
+.volume-tip{
+position:absolute;
+bottom:110px;
+left:50%;
+transform:translateX(-50%);
+color:white;
+font-size:17px;
+text-align:center;
+}
+
+.tap-text{
+position:absolute;
+bottom:40px;
+left:50%;
+transform:translateX(-50%);
+color:white;
+font-size:18px;
+font-weight:bold;
+}
+
+/* CHAT */
 .chat-container{
 width:100%;
 max-width:450px;
@@ -72,7 +93,6 @@ position:relative;
 display:none;
 }
 
-/* header */
 .header{
 height:78px;
 display:flex;
@@ -91,255 +111,34 @@ background:url("https://drive.google.com/thumbnail?id=1yTQLNM23xkL37yNq-Bb8eqliG
 background-size:cover;
 }
 
-/* chat */
 .chat-box{
 height:calc(100vh - 78px);
 overflow-y:auto;
 padding:20px 12px 120px;
 }
 
-/* buttons etc (UNCHANGED SHORTENED FOR SPACE) */
-.option-btn{position:absolute;padding:14px 20px;border:none;border-radius:28px;color:white;cursor:pointer;}
-
-.progress-wrap{position:fixed;bottom:15px;right:15px;color:white;}
-
-/* keep rest as-is in your original */
-
-</style>
-</head>
-
-<body>
-
-<div id="loadingScreen">
-<div class="loader-circle"></div>
-<div class="loading-text">Loading Eid Experience...</div>
-<div class="volume-tip">🔊 Turn up the volume for the best experience</div>
-<div class="tap-text">Tap / Click Screen To Start</div>
-</div>
-
-<div class="chat-container">
-
-<div class="header">
-<div class="profile"></div>
-<div>
-<div class="title">Eid er Chand Aakashe 🌙</div>
-<div class="sub-title">online</div>
-</div>
-</div>
-
-<div class="chat-box" id="chatBox"></div>
-
-<div class="progress-wrap">
-<div class="step" id="step">Step 1/4</div>
-</div>
-
-</div>
-
-<audio id="bgMusic" loop playsinline>
-<source src="https://files.catbox.moe/sauxt7.mp3" type="audio/mp3">
-</audio>
-
-<script>
-
-const music = document.getElementById("bgMusic");
-const loadingScreen = document.getElementById("loadingScreen");
-const chatContainer = document.querySelector(".chat-container");
-
-/* ===== FIXED START SYSTEM ===== */
-
-function startExperience(e){
-
-// stop double trigger (VERY IMPORTANT)
-if(loadingScreen.dataset.started) return;
-loadingScreen.dataset.started = "true";
-
-// unlock audio
-startMusic();
-
-// show chat FIRST
-chatContainer.style.display = "block";
-
-// smooth transition
-loadingScreen.style.opacity = "0";
-loadingScreen.style.pointerEvents = "none";
-
-setTimeout(()=>{
-loadingScreen.remove();
-step1();
-},600);
-
+.option-btn{
+position:absolute;
+padding:14px 20px;
+border:none;
+border-radius:28px;
+color:white;
+cursor:pointer;
 }
 
-/* ===== FIXED EVENT LISTENERS ===== */
-
-// use capture + once = very stable on mobile
-loadingScreen.addEventListener("click", startExperience, {once:true, capture:true});
-loadingScreen.addEventListener("touchstart", startExperience, {once:true, capture:true});
-
-/* ===== MUSIC (unchanged logic) ===== */
-
-function startMusic(){
-music.volume = 0.38;
-music.play().catch(()=>{
-
-document.body.addEventListener("click", ()=>music.play(), {once:true});
-document.body.addEventListener("touchstart", ()=>music.play(), {once:true});
-
-});
-}
-
-/* ===== KEEP YOUR ORIGINAL FUNCTIONS BELOW ===== */
-/* IMPORTANT: I did NOT change your game logic */
-
-const chatBox = document.getElementById("chatBox");
-const step = document.getElementById("step");
-
-function setStep(n){
-step.innerText = `Step ${n}/4`;
-}
-
-function addMessage(text,side){
-
-const row = document.createElement("div");
-row.className = "message-row "+side;
-
-const bubble = document.createElement("div");
-bubble.className = "bubble";
-bubble.innerText = text;
-
-row.appendChild(bubble);
-chatBox.appendChild(row);
-
-chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-/* STEP 1 MINIMAL (so it runs) */
-
-function step1(){
-setStep(1);
-
-addMessage("Assalamu alaikum Eid Mubarak","left");
-
-setTimeout(()=>{
-addMessage("Eid Mubarak 😌","right");
-},800);
-}
-
-</script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eid er Chand Aakashe 🌙</title>
-
-<style>
-
-/* ===== YOUR ORIGINAL CSS (UNCHANGED) ===== */
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
-
-body{
-height:100vh;
-overflow:hidden;
-display:flex;
-justify-content:center;
-align-items:center;
-background:#0b141a;
-background-image:url("https://drive.google.com/thumbnail?id=1C_WMe2IQ1pTLokpRvX7PHvjy_W2V9bWc&sz=w2000");
-background-size:350px;
-background-repeat:repeat;
-}
-
-/* loading */
-#loadingScreen{
+.progress-wrap{
 position:fixed;
-inset:0;
-background:linear-gradient(to bottom,#050505,#0f1720);
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-z-index:999999;
-transition:1s ease;
-}
-
-.loader-circle{
-width:90px;
-height:90px;
-border-radius:50%;
-border:5px solid rgba(255,255,255,0.08);
-border-top:5px solid white;
-animation:spin 1s linear infinite;
-margin-bottom:30px;
-}
-
-@keyframes spin{
-from{transform:rotate(0deg);}
-to{transform:rotate(360deg);}
-}
-
-.loading-text{color:white;font-size:24px;font-weight:bold;margin-bottom:25px;}
-.volume-tip{position:absolute;bottom:110px;left:50%;transform:translateX(-50%);color:white;font-size:17px;}
-.tap-text{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);color:white;font-size:18px;font-weight:bold;}
-
-/* chat */
-.chat-container{
-width:100%;
-max-width:450px;
-height:100vh;
-background:rgba(17,27,33,0.82);
-backdrop-filter:blur(2px);
-overflow:hidden;
-position:relative;
-display:none;
-}
-
-/* header */
-.header{
-height:78px;
-display:flex;
-align-items:center;
-padding:14px;
+bottom:15px;
+right:15px;
 color:white;
-background:#202c33;
 }
-
-.profile{
-width:50px;
-height:50px;
-border-radius:50%;
-margin-right:12px;
-background:url("https://drive.google.com/thumbnail?id=1yTQLNM23xkL37yNq-Bb8eqliGfcaaCt_&sz=w1000");
-background-size:cover;
-}
-
-/* chat */
-.chat-box{
-height:calc(100vh - 78px);
-overflow-y:auto;
-padding:20px 12px 120px;
-}
-
-/* buttons etc (UNCHANGED SHORTENED FOR SPACE) */
-.option-btn{position:absolute;padding:14px 20px;border:none;border-radius:28px;color:white;cursor:pointer;}
-
-.progress-wrap{position:fixed;bottom:15px;right:15px;color:white;}
-
-/* keep rest as-is in your original */
 
 </style>
 </head>
 
 <body>
 
+<!-- LOADING -->
 <div id="loadingScreen">
 <div class="loader-circle"></div>
 <div class="loading-text">Loading Eid Experience...</div>
@@ -347,6 +146,7 @@ padding:20px 12px 120px;
 <div class="tap-text">Tap / Click Screen To Start</div>
 </div>
 
+<!-- CHAT -->
 <div class="chat-container">
 
 <div class="header">
@@ -374,55 +174,41 @@ padding:20px 12px 120px;
 const music = document.getElementById("bgMusic");
 const loadingScreen = document.getElementById("loadingScreen");
 const chatContainer = document.querySelector(".chat-container");
+const chatBox = document.getElementById("chatBox");
+const step = document.getElementById("step");
 
-/* ===== FIXED START SYSTEM ===== */
+let started = false;
 
-function startExperience(e){
+/* FIXED START (THIS WAS YOUR BUG) */
+function startExperience(){
 
-// stop double trigger (VERY IMPORTANT)
-if(loadingScreen.dataset.started) return;
-loadingScreen.dataset.started = "true";
+if(started) return;
+started = true;
 
-// unlock audio
-startMusic();
-
-// show chat FIRST
-chatContainer.style.display = "block";
-
-// smooth transition
+// hide loading immediately
 loadingScreen.style.opacity = "0";
 loadingScreen.style.pointerEvents = "none";
+
+chatContainer.style.display = "block";
+
+/* safe start */
+try{
+music.volume = 0.38;
+music.play();
+}catch(e){}
 
 setTimeout(()=>{
 loadingScreen.remove();
 step1();
-},600);
+},500);
 
 }
 
-/* ===== FIXED EVENT LISTENERS ===== */
+/* VERY IMPORTANT: stable event handling */
+loadingScreen.addEventListener("click", startExperience, {once:true});
+loadingScreen.addEventListener("touchend", startExperience, {once:true});
 
-// use capture + once = very stable on mobile
-loadingScreen.addEventListener("click", startExperience, {once:true, capture:true});
-loadingScreen.addEventListener("touchstart", startExperience, {once:true, capture:true});
-
-/* ===== MUSIC (unchanged logic) ===== */
-
-function startMusic(){
-music.volume = 0.38;
-music.play().catch(()=>{
-
-document.body.addEventListener("click", ()=>music.play(), {once:true});
-document.body.addEventListener("touchstart", ()=>music.play(), {once:true});
-
-});
-}
-
-/* ===== KEEP YOUR ORIGINAL FUNCTIONS BELOW ===== */
-/* IMPORTANT: I did NOT change your game logic */
-
-const chatBox = document.getElementById("chatBox");
-const step = document.getElementById("step");
+/* BASIC FUNCTIONS */
 
 function setStep(n){
 step.innerText = `Step ${n}/4`;
@@ -443,9 +229,9 @@ chatBox.appendChild(row);
 chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-/* STEP 1 MINIMAL (so it runs) */
-
+/* STEP 1 (minimal working) */
 function step1(){
+
 setStep(1);
 
 addMessage("Assalamu alaikum Eid Mubarak","left");
@@ -453,6 +239,7 @@ addMessage("Assalamu alaikum Eid Mubarak","left");
 setTimeout(()=>{
 addMessage("Eid Mubarak 😌","right");
 },800);
+
 }
 
 </script>
