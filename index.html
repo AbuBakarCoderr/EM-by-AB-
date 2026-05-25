@@ -109,7 +109,7 @@ text-align:right;
 
 .options{
 position:relative;
-min-height:220px;
+height:240px;
 margin-top:18px;
 }
 
@@ -125,14 +125,13 @@ transition:
 left 0.22s ease,
 top 0.22s ease,
 transform 0.35s ease,
-opacity 0.35s ease,
-background 0.2s ease;
+opacity 0.35s ease;
 color:white;
 box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
 
 .option-btn:active{
-transform:scale(0.95);
+transform:scale(0.96);
 }
 
 .step{
@@ -145,7 +144,6 @@ padding:8px 14px;
 border-radius:20px;
 font-size:14px;
 z-index:999;
-backdrop-filter:blur(5px);
 }
 
 .toast{
@@ -160,7 +158,6 @@ border-radius:22px;
 font-weight:bold;
 z-index:999999;
 animation:toastAnim 1.2s ease;
-box-shadow:0 6px 20px rgba(255,0,0,0.35);
 }
 
 @keyframes toastAnim{
@@ -271,7 +268,7 @@ Step 1/4
 
 <script>
 
-/* ================= SONG ================= */
+/* ================= MUSIC ================= */
 
 const bgMusic = new Audio("https://files.catbox.moe/sauxt7.mp3");
 
@@ -286,7 +283,7 @@ document.body.addEventListener("click",()=>{
 bgMusic.play().catch(()=>{});
 },{once:true});
 
-/* ================= AUDIO ================= */
+/* ================= SOUNDS ================= */
 
 const ctx = new (window.AudioContext||window.webkitAudioContext)();
 
@@ -313,7 +310,6 @@ o.frequency.value = 120;
 g.gain.value = 0.05;
 
 o.start();
-
 o.stop(ctx.currentTime+0.12);
 
 }
@@ -328,7 +324,11 @@ if(type==="correct"){
 navigator.vibrate(18);
 }
 
-if(type==="wrong"){
+if(type==="wrongSoft"){
+navigator.vibrate(55);
+}
+
+if(type==="wrongHard"){
 navigator.vibrate([90,120,90]);
 }
 
@@ -365,7 +365,17 @@ t.remove();
 
 }
 
-function wrongFeedback(){
+function wrongSoft(){
+
+toast("Wrong option 😡");
+
+vibrate("wrongSoft");
+
+playSound("buzz");
+
+}
+
+function wrongHard(){
 
 toast("Wrong option 😡");
 
@@ -375,7 +385,7 @@ setTimeout(()=>{
 document.body.classList.remove("shake");
 },300);
 
-vibrate("wrong");
+vibrate("wrongHard");
 
 playSound("buzz");
 
@@ -432,15 +442,16 @@ function createButton(text,fn){
 const b = document.createElement("button");
 
 b.className = "option-btn";
+
 b.innerText = text;
 
-b.onclick = (e)=>{
+b.onclick = ()=>{
 
 vibrate("correct");
 
 playSound("woosh");
 
-fn(e);
+fn();
 
 };
 
@@ -528,13 +539,16 @@ step2();
 
 eid.style.background = "#4d96ff";
 eid.style.left = "20px";
-eid.style.top = "20px";
+eid.style.top = "30px";
 
-const same = createButton("Same to you",()=>{});
+const same = document.createElement("button");
+
+same.className = "option-btn";
+same.innerText = "Same to you";
 
 same.style.background = "#ff6b6b";
-same.style.left = "210px";
-same.style.top = "120px";
+same.style.left = "220px";
+same.style.top = "130px";
 
 /* RUNAWAY */
 
@@ -543,18 +557,20 @@ same.ontouchstart = runAway;
 
 function runAway(){
 
-wrongFeedback();
+wrongSoft();
 
-/* keep away from Eid button zone */
+/* NEVER overlap Eid button */
 
-let x,y,valid=false;
+let x,y,good=false;
 
-while(!valid){
+while(!good){
 
-x = Math.random()*260;
-y = Math.random()*150;
+x = Math.random()*240 + 120;
+y = Math.random()*140 + 40;
 
-valid = !(x<170 && y<90);
+if(!(x<190 && y<110)){
+good=true;
+}
 
 }
 
@@ -573,17 +589,63 @@ function step2(){
 
 step.innerText = "Step 2/4";
 
-const a = createButton("Kisher Salami?",()=>{
+const a = document.createElement("button");
+const b = document.createElement("button");
 
-wrongFeedback();
+a.className = "option-btn";
+b.className = "option-btn";
 
-});
+a.innerText = "Kisher Salami?";
+b.innerText = "Tumi Amare Diba";
 
-const b = createButton("Tumi Amare Diba",()=>{
+a.style.background = "#ff6b6b";
+b.style.background = "#4d96ff";
 
-wrongFeedback();
+a.style.left = "15px";
+a.style.top = "30px";
 
-});
+b.style.left = "220px";
+b.style.top = "30px";
+
+/* RUNAWAY */
+
+function move(btn){
+
+wrongSoft();
+
+let x,y,valid=false;
+
+while(!valid){
+
+x = Math.random()*250;
+y = Math.random()*90;
+
+/* avoid overlap zone */
+
+const tooCloseToCenter =
+(x>80 && x<210 && y>90);
+
+const tooCloseToOther =
+Math.abs(
+parseInt(btn===a?b.style.left:a.style.left)-x
+)<120;
+
+if(!tooCloseToCenter && !tooCloseToOther){
+valid=true;
+}
+
+}
+
+btn.style.left = x+"px";
+btn.style.top = y+"px";
+
+}
+
+a.onmouseenter = ()=>move(a);
+b.onmouseenter = ()=>move(b);
+
+a.ontouchstart = ()=>move(a);
+b.ontouchstart = ()=>move(b);
 
 const c = createButton("Accha Dicchi 😊👍",()=>{
 
@@ -599,51 +661,15 @@ step3();
 
 });
 
-a.style.background = "#ff6b6b";
-b.style.background = "#4d96ff";
+/* readable color */
 
-c.style.background = "#ffd166";
+c.style.background = "#f4f1de";
 c.style.color = "#222";
 
-a.style.left = "15px";
-a.style.top = "25px";
-
-b.style.left = "210px";
-b.style.top = "25px";
-
-c.style.left = "105px";
-c.style.top = "130px";
-
-/* smooth playful movement */
-
-makeRunaway(a);
-makeRunaway(b);
+c.style.left = "95px";
+c.style.top = "150px";
 
 addOptions([a,b,c]);
-
-}
-
-function makeRunaway(btn){
-
-btn.onmouseenter = move;
-btn.ontouchstart = move;
-
-function move(){
-
-wrongFeedback();
-
-const parent = btn.parentElement;
-
-const maxX = parent.offsetWidth - 140;
-const maxY = 140;
-
-const x = Math.random()*maxX;
-const y = Math.random()*maxY;
-
-btn.style.left = x+"px";
-btn.style.top = y+"px";
-
-}
 
 }
 
@@ -657,19 +683,19 @@ addMessage("Tahole kotto salami? 😌","left");
 
 const a = createButton("10 TK",()=>{
 
-wrongFeedback();
+wrongHard();
 
 });
 
 const b = createButton("50 TK",()=>{
 
-wrongFeedback();
+wrongHard();
 
 });
 
 const c = createButton("No salami❌👎",()=>{
 
-wrongFeedback();
+wrongHard();
 
 });
 
@@ -679,19 +705,36 @@ addMessage("500 TK 😡","right");
 
 clearOptions();
 
+/* multiple confetti */
+
 confettiBlast();
 
 setTimeout(()=>{
+confettiBlast();
+},900);
+
+setTimeout(()=>{
+confettiBlast();
+},1800);
+
+setTimeout(()=>{
 showEnd();
-},850);
+},3500);
 
 });
 
 a.style.background = "#ff6b6b";
 b.style.background = "#4d96ff";
 c.style.background = "#666";
-
 big.style.background = "#ff0055";
+
+/* starting size */
+
+a.style.transform = "scale(1.08)";
+b.style.transform = "scale(1.08)";
+c.style.transform = "scale(1.08)";
+
+big.style.transform = "scale(0.9)";
 
 a.style.left = "10px";
 a.style.top = "25px";
@@ -699,11 +742,11 @@ a.style.top = "25px";
 b.style.left = "155px";
 b.style.top = "25px";
 
-c.style.left = "90px";
+c.style.left = "80px";
 c.style.top = "95px";
 
-big.style.left = "115px";
-big.style.top = "165px";
+big.style.left = "110px";
+big.style.top = "170px";
 
 addOptions([a,b,c,big]);
 
@@ -711,20 +754,20 @@ growButton(big);
 
 }
 
-/* ================= 500 GROW ================= */
+/* ================= GROW ================= */
 
-let growVal = 1;
+let growVal = 0.9;
 let growInterval;
 
 function growButton(big){
 
 clearInterval(growInterval);
 
-growVal = 1;
+growVal = 0.9;
 
 growInterval = setInterval(()=>{
 
-growVal += 0.028;
+growVal += 0.032;
 
 big.style.transform = `scale(${growVal})`;
 
@@ -732,17 +775,20 @@ document.querySelectorAll(".option-btn").forEach(btn=>{
 
 if(btn!==big){
 
+const shrink =
+Math.max(0.28,1.08-growVal/3);
+
 btn.style.transform =
-`scale(${Math.max(0.35,1-growVal/4)})`;
+`scale(${shrink})`;
 
 btn.style.opacity =
-Math.max(0.08,1-growVal/5);
+Math.max(0.05,1-growVal/4);
 
 }
 
 });
 
-/* full takeover */
+/* FULL SCREEN */
 
 if(growVal>12){
 
@@ -764,7 +810,8 @@ big.style.zIndex = "99999";
 
 function confettiBlast(){
 
-const emojis = ["🎉","✨","🎊","💥","💫"];
+const emojis =
+["🎉","✨","🎊","💥","💫","🥳"];
 
 for(let i=0;i<220;i++){
 
@@ -776,6 +823,7 @@ emojis[Math.random()*emojis.length|0];
 d.style.position = "fixed";
 d.style.left = "50%";
 d.style.top = "50%";
+
 d.style.fontSize =
 (14+Math.random()*22)+"px";
 
@@ -785,7 +833,7 @@ document.body.appendChild(d);
 
 const angle = Math.random()*Math.PI*2;
 
-const radius = 260+Math.random()*500;
+const radius = 250+Math.random()*520;
 
 const x = Math.cos(angle)*radius;
 const y = Math.sin(angle)*radius;
@@ -797,7 +845,7 @@ d.style.transition =
 
 d.style.transform =
 `translate(${x}px,${y}px)
-rotate(${Math.random()*600}deg)
+rotate(${Math.random()*700}deg)
 scale(0.2)`;
 
 d.style.opacity = "0";
@@ -810,14 +858,6 @@ d.remove();
 
 }
 
-/* pop */
-
-document.body.style.transform="scale(1.02)";
-
-setTimeout(()=>{
-document.body.style.transform="scale(1)";
-},120);
-
 }
 
 /* ================= END ================= */
@@ -828,7 +868,7 @@ document.body.innerHTML = `
 
 <div class="end-screen">
 
-<div style="font-size:90px">
+<div style="font-size:95px">
 🥰
 </div>
 
