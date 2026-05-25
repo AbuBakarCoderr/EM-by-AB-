@@ -21,13 +21,13 @@ display:flex;
 justify-content:center;
 align-items:center;
 background:#0b141a;
+
 background-image:url("https://drive.google.com/thumbnail?id=1C_WMe2IQ1pTLokpRvX7PHvjy_W2V9bWc&sz=w2000");
 background-size:350px;
 background-repeat:repeat;
-transition:0.2s;
 }
 
-/* ================= LOADING SCREEN ================= */
+/* ================= LOADING ================= */
 
 #loadingScreen{
 position:fixed;
@@ -38,8 +38,7 @@ display:flex;
 justify-content:center;
 align-items:center;
 flex-direction:column;
-z-index:999999999;
-overflow:hidden;
+z-index:999999;
 transition:1s ease;
 }
 
@@ -54,12 +53,8 @@ margin-bottom:30px;
 }
 
 @keyframes spin{
-from{
-transform:rotate(0deg);
-}
-to{
-transform:rotate(360deg);
-}
+from{transform:rotate(0deg);}
+to{transform:rotate(360deg);}
 }
 
 .loading-text{
@@ -67,7 +62,6 @@ color:white;
 font-size:24px;
 font-weight:bold;
 margin-bottom:25px;
-opacity:0.9;
 }
 
 .volume-tip{
@@ -78,7 +72,6 @@ transform:translateX(-50%);
 color:white;
 font-size:17px;
 text-align:center;
-opacity:0.85;
 padding:12px 20px;
 border-radius:20px;
 background:rgba(255,255,255,0.05);
@@ -99,9 +92,7 @@ animation-delay:2s;
 }
 
 @keyframes tapAppear{
-to{
-opacity:1;
-}
+to{opacity:1;}
 }
 
 /* ================= CHAT ================= */
@@ -117,13 +108,44 @@ position:relative;
 display:none;
 }
 
+/* ================= HEADER ================= */
+
 .header{
 height:78px;
-background:#202c33;
 display:flex;
 align-items:center;
 padding:14px;
 color:white;
+position:relative;
+overflow:hidden;
+
+background:
+radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0 2px, transparent 3px),
+radial-gradient(circle at 70% 60%, rgba(255,255,255,0.04) 0 2px, transparent 3px),
+linear-gradient(135deg,
+rgba(255,255,255,0.03) 25%,
+transparent 25%,
+transparent 50%,
+rgba(255,255,255,0.03) 50%,
+rgba(255,255,255,0.03) 75%,
+transparent 75%,
+transparent),
+#202c33;
+
+background-size:
+120px 120px,
+180px 180px,
+35px 35px;
+}
+
+.header::before{
+content:"";
+position:absolute;
+inset:0;
+background:
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cpath d='M20 90c20-30 40 30 60 0s40 30 60 0' stroke='rgba(255,255,255,0.05)' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+opacity:0.6;
+pointer-events:none;
 }
 
 .profile{
@@ -135,18 +157,25 @@ background:url("https://drive.google.com/thumbnail?id=1yTQLNM23xkL37yNq-Bb8eqliG
 background-size:cover;
 background-position:center;
 border:2px solid rgba(255,255,255,0.2);
+z-index:2;
 }
 
 .title{
 font-size:20px;
 font-weight:bold;
+z-index:2;
+position:relative;
 }
 
 .sub-title{
 font-size:12px;
 opacity:0.7;
 margin-top:2px;
+z-index:2;
+position:relative;
 }
+
+/* ================= CHAT ================= */
 
 .chat-box{
 height:calc(100vh - 78px);
@@ -196,31 +225,32 @@ margin-top:4px;
 text-align:right;
 }
 
+/* ================= OPTIONS ================= */
+
 .options{
 position:relative;
-height:260px;
+height:280px;
 margin-top:18px;
 }
 
 .option-btn{
-padding:13px 18px;
+padding:14px 20px;
 border:none;
-border-radius:25px;
+border-radius:28px;
 font-size:16px;
 font-weight:bold;
 cursor:pointer;
 position:absolute;
 transition:
-left 0.25s ease,
-top 0.25s ease,
-transform 0.35s ease,
-opacity 0.35s ease;
+left 0.28s ease,
+top 0.28s ease,
+transform 0.35s ease;
 color:white;
-box-shadow:0 4px 10px rgba(0,0,0,0.2);
+box-shadow:0 4px 12px rgba(0,0,0,0.25);
 }
 
 .option-btn:active{
-transform:scale(0.96);
+transform:scale(0.95);
 }
 
 /* ================= STEP ================= */
@@ -228,11 +258,11 @@ transform:scale(0.96);
 .progress-wrap{
 position:fixed;
 bottom:15px;
-left:15px;
+right:15px;
 display:flex;
 align-items:center;
-gap:12px;
-z-index:99999;
+gap:10px;
+z-index:9999;
 }
 
 .step{
@@ -245,8 +275,8 @@ backdrop-filter:blur(5px);
 }
 
 .progress-bar{
-width:120px;
-height:10px;
+width:95px;
+height:9px;
 background:rgba(255,255,255,0.15);
 border-radius:20px;
 overflow:hidden;
@@ -257,7 +287,25 @@ height:100%;
 width:25%;
 background:#25d366;
 border-radius:20px;
-transition:0.5s ease;
+transition:0.4s ease;
+}
+
+/* ================= POINTER ================= */
+
+.pointer{
+position:absolute;
+font-size:34px;
+animation:pointerBounce 1s infinite;
+pointer-events:none;
+}
+
+@keyframes pointerBounce{
+0%,100%{
+transform:translateY(0px);
+}
+50%{
+transform:translateY(10px);
+}
 }
 
 /* ================= TOAST ================= */
@@ -293,7 +341,7 @@ transform:translate(-50%,-35px);
 /* ================= SHAKE ================= */
 
 .shake{
-animation:shake 0.28s;
+animation:shake 0.3s;
 }
 
 @keyframes shake{
@@ -415,7 +463,7 @@ online
 
 <div class="chat-box" id="chatBox"></div>
 
-<!-- ================= STEP ================= -->
+<!-- ================= STEP COUNTER ================= -->
 
 <div class="progress-wrap">
 
@@ -721,6 +769,8 @@ createButton(
 "Eid Mubarak",
 ()=>{
 
+pointer.remove();
+
 addMessage(
 "Eid Mubarak 😌",
 "right"
@@ -787,7 +837,28 @@ same.style.top = y+"px";
 
 }
 
-addOptions([eid,same]);
+/* pointer */
+
+const pointer =
+document.createElement("div");
+
+pointer.className = "pointer";
+
+pointer.innerHTML = "👇";
+
+pointer.style.left = "285px";
+pointer.style.top = "75px";
+
+const wrap =
+document.createElement("div");
+
+wrap.className = "options";
+
+wrap.appendChild(eid);
+wrap.appendChild(same);
+wrap.appendChild(pointer);
+
+chatBox.appendChild(wrap);
 
 }
 
@@ -973,14 +1044,16 @@ showEnd();
 
 });
 
+/* same colors */
+
 a.style.background =
-"#ff6b6b";
+"#6c63ff";
 
 b.style.background =
-"#4d96ff";
+"#6c63ff";
 
 c.style.background =
-"#666";
+"#6c63ff";
 
 big.style.background =
 "#ff0055";
@@ -988,80 +1061,75 @@ big.style.background =
 /* bigger initially */
 
 a.style.transform =
-"scale(1.42)";
+"scale(1.55)";
 
 b.style.transform =
-"scale(1.42)";
+"scale(1.55)";
 
 c.style.transform =
-"scale(1.42)";
+"scale(1.55)";
 
 big.style.transform =
-"scale(0.72)";
+"scale(0.65)";
 
 /* placement */
 
-a.style.left = "20px";
-a.style.top = "30px";
+a.style.left = "15px";
+a.style.top = "25px";
 
-b.style.left = "210px";
-b.style.top = "30px";
+b.style.left = "220px";
+b.style.top = "25px";
 
-c.style.left = "100px";
-c.style.top = "110px";
+c.style.left = "90px";
+c.style.top = "115px";
 
 big.style.left = "125px";
-big.style.top = "185px";
+big.style.top = "205px";
 
 addOptions([a,b,c,big]);
 
-growButton(big);
+growButton(big,a,b,c);
 
 }
 
 /* ================= GROW ================= */
 
-let growVal = 0.72;
+let growVal = 0.65;
 
 let growInterval;
 
-function growButton(big){
+function growButton(big,a,b,c){
 
 clearInterval(growInterval);
 
-growVal = 0.72;
+growVal = 0.65;
 
 growInterval = setInterval(()=>{
 
-growVal += 0.07;
+growVal += 0.085;
 
 big.style.transform =
 `scale(${growVal})`;
 
-document
-.querySelectorAll(".option-btn")
-.forEach(btn=>{
+big.style.zIndex = "999";
 
-if(btn!==big){
+[a,b,c].forEach((btn,index)=>{
 
 const shrink =
-Math.max(
-0.22,
-1.42-growVal/2.5
-);
+Math.max(0.3,1.55-growVal/2);
 
 btn.style.transform =
 `scale(${shrink})`;
 
-btn.style.opacity =
-Math.max(
-0.03,
-1-growVal/4
-);
+btn.style.left =
+(parseInt(btn.style.left)-(growVal*1.6))+"px";
 
-}
+btn.style.opacity =
+Math.max(0.25,1-growVal/7);
 
 });
+
+/* full takeover */
 
 if(growVal>12){
 
@@ -1082,7 +1150,7 @@ big.style.zIndex = "99999";
 
 }
 
-},260);
+},220);
 
 }
 
@@ -1206,6 +1274,8 @@ startExperience
 );
 
 function startExperience(){
+
+/* MUSIC STARTS HERE */
 
 bgMusic.play().catch(()=>{});
 
