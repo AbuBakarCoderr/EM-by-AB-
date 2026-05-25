@@ -212,7 +212,7 @@ text-align:right;
 
 .options{
 position:relative;
-height:320px;
+height:340px;
 margin-top:18px;
 }
 
@@ -225,9 +225,9 @@ font-weight:bold;
 cursor:pointer;
 position:absolute;
 transition:
-left 0.28s ease,
-top 0.28s ease,
-transform 0.35s ease;
+left 0.22s ease,
+top 0.22s ease,
+transform 0.25s linear;
 color:white;
 box-shadow:0 4px 12px rgba(0,0,0,0.25);
 }
@@ -415,6 +415,11 @@ transform:scale(1);
 }
 }
 
+@keyframes spin{
+from{transform:rotate(0deg);}
+to{transform:rotate(360deg);}
+}
+
 @keyframes secretGlow{
 from{
 opacity:0.25;
@@ -483,11 +488,43 @@ Step 1/4
 
 </div>
 
-<audio id="bgMusic" loop>
+<audio id="bgMusic" autoplay loop playsinline>
 <source src="https://files.catbox.moe/sauxt7.mp3" type="audio/mp3">
 </audio>
 
 <script>
+
+const music = document.getElementById("bgMusic");
+
+function forceMusic(){
+
+music.volume = 0.38;
+
+const p = music.play();
+
+if(p!==undefined){
+
+p.catch(()=>{
+
+document.body.addEventListener(
+"click",
+()=>music.play(),
+{once:true}
+);
+
+document.body.addEventListener(
+"touchstart",
+()=>music.play(),
+{once:true}
+);
+
+});
+
+}
+
+}
+
+forceMusic();
 
 const chatBox =
 document.getElementById("chatBox");
@@ -497,9 +534,6 @@ document.getElementById("step");
 
 const progressFill =
 document.getElementById("progressFill");
-
-const music =
-document.getElementById("bgMusic");
 
 const ctx =
 new (window.AudioContext||window.webkitAudioContext)();
@@ -1017,16 +1051,16 @@ confettiBlast();
 
 setTimeout(()=>{
 confettiBlast();
-},900);
+},1000);
 
 setTimeout(()=>{
 confettiBlast();
-},1800);
+},2000);
 
 setTimeout(()=>{
 setStep(4);
 showEnd();
-},3500);
+},4200);
 
 });
 
@@ -1042,38 +1076,32 @@ c.style.background =
 big.style.background =
 "#ff0055";
 
-a.style.transform =
-"scale(3.15)";
+a.style.transform = "scale(2.7)";
+b.style.transform = "scale(2.7)";
+c.style.transform = "scale(2.7)";
 
-b.style.transform =
-"scale(3.15)";
+big.style.transform = "scale(0.22)";
 
-c.style.transform =
-"scale(3.15)";
+a.style.left = "20px";
+a.style.top = "30px";
 
-big.style.transform =
-"scale(0.23)";
+b.style.left = "225px";
+b.style.top = "30px";
 
-a.style.left = "15px";
-a.style.top = "25px";
+c.style.left = "95px";
+c.style.top = "130px";
 
-b.style.left = "220px";
-b.style.top = "25px";
+big.style.left = "140px";
+big.style.top = "250px";
 
-c.style.left = "90px";
-c.style.top = "115px";
+a.dataset.x = 20;
+a.dataset.y = 30;
 
-big.style.left = "125px";
-big.style.top = "225px";
+b.dataset.x = 225;
+b.dataset.y = 30;
 
-a.dataset.x = 15;
-a.dataset.y = 25;
-
-b.dataset.x = 220;
-b.dataset.y = 25;
-
-c.dataset.x = 90;
-c.dataset.y = 115;
+c.dataset.x = 95;
+c.dataset.y = 130;
 
 addOptions([a,b,c,big]);
 
@@ -1081,7 +1109,7 @@ growButton(big,a,b,c);
 
 }
 
-let growVal = 0.38;
+let growVal = 0.22;
 
 let growInterval;
 
@@ -1089,13 +1117,13 @@ function growButton(big,a,b,c){
 
 clearInterval(growInterval);
 
-growVal = 0.38;
+growVal = 0.22;
 
 const others = [a,b,c];
 
 growInterval = setInterval(()=>{
 
-growVal += 0.17;
+growVal += 0.13;
 
 big.style.transform =
 `scale(${growVal})`;
@@ -1110,15 +1138,15 @@ parseFloat(btn.dataset.y);
 
 const pushX =
 index===0
-? -5.2
+? -4.8
 : index===1
-? 5.2
-: -1.2;
+? 4.8
+: 0;
 
 const pushY =
 index===2
-? 2.1
-: -0.2;
+? 2.2
+: 0;
 
 currentX += pushX;
 currentY += pushY;
@@ -1132,24 +1160,20 @@ currentX+"px";
 btn.style.top =
 currentY+"px";
 
-const shrink =
-Math.max(
-0.06,
-2.7 - growVal/1.1
-);
+/* THEY DON'T SHRINK NOW */
 
 btn.style.transform =
-`scale(${shrink})`;
+"scale(2.7)";
 
 btn.style.opacity =
 Math.max(
-0.22,
-1-growVal/13
+0.25,
+1-growVal/12
 );
 
 });
 
-if(growVal > 12){
+if(growVal > 11){
 
 big.style.position =
 "fixed";
@@ -1173,7 +1197,7 @@ big.style.zIndex =
 
 }
 
-},145);
+},120);
 
 }
 
@@ -1182,7 +1206,7 @@ function confettiBlast(){
 const emojis =
 ["🎉","✨","🎊","💥","💫","🥳"];
 
-for(let i=0;i<220;i++){
+for(let i=0;i<260;i++){
 
 const d =
 document.createElement("div");
@@ -1198,7 +1222,7 @@ d.style.left = "50%";
 d.style.top = "50%";
 
 d.style.fontSize =
-(14+Math.random()*22)+"px";
+(16+Math.random()*24)+"px";
 
 d.style.zIndex = "999999";
 
@@ -1219,7 +1243,7 @@ Math.sin(angle)*radius;
 setTimeout(()=>{
 
 d.style.transition =
-"1.7s cubic-bezier(.2,.8,.2,1)";
+"1.8s cubic-bezier(.2,.8,.2,1)";
 
 d.style.transform =
 `translate(${x}px,${y}px)
@@ -1232,7 +1256,7 @@ d.style.opacity = "0";
 
 setTimeout(()=>{
 d.remove();
-},1800);
+},1900);
 
 }
 
@@ -1260,11 +1284,13 @@ DM e Number dicchi 🥰👍
 </p>
 
 <p style="
-margin-top:12px;
-opacity:0.7;
-font-size:16px;
+margin-top:14px;
+opacity:0.78;
+font-size:17px;
+line-height:1.8;
 ">
-(You received dua 🥹)
+I receive — Salami 💸<br>
+You receive — Dua 🤲
 </p>
 
 <div style="
@@ -1308,9 +1334,7 @@ startExperience
 
 function startExperience(){
 
-music.volume = 0.38;
-
-music.play();
+forceMusic();
 
 loadingScreen.style.opacity =
 "0";
