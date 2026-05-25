@@ -467,7 +467,7 @@ online
 
 <div class="progress-wrap">
 <div class="step" id="step">
-Step 1/4
+Step 1 of 4
 </div>
 </div>
 
@@ -481,8 +481,6 @@ Step 1/4
 
 <script>
 
-/* ================= MUSIC ================= */
-
 const music =
 document.getElementById("bgMusic");
 
@@ -494,24 +492,18 @@ music.play().catch(()=>{});
 
 }
 
-/* ================= ELEMENTS ================= */
-
 const chatBox =
 document.getElementById("chatBox");
 
 const step =
 document.getElementById("step");
 
-/* ================= STEP ================= */
-
 function setStep(num){
 
 step.innerText =
-`Step ${num}/4`;
+`Step ${num} of 4`;
 
 }
-
-/* ================= TIME ================= */
 
 function now(){
 
@@ -521,8 +513,6 @@ minute:"2-digit"
 });
 
 }
-
-/* ================= TOAST ================= */
 
 function toast(text){
 
@@ -540,8 +530,6 @@ t.remove();
 },1200);
 
 }
-
-/* ================= HEEHEE ================= */
 
 function heehee(){
 
@@ -570,8 +558,6 @@ h.remove();
 
 }
 
-/* ================= SHAKE ================= */
-
 function shake(){
 
 document.body.classList.add("shake");
@@ -581,8 +567,6 @@ document.body.classList.remove("shake");
 },300);
 
 }
-
-/* ================= WRONG ================= */
 
 function wrongOption(){
 
@@ -597,8 +581,6 @@ navigator.vibrate(50);
 }
 
 }
-
-/* ================= MESSAGE ================= */
 
 function addMessage(text,side){
 
@@ -642,8 +624,6 @@ chatBox.scrollHeight;
 
 }
 
-/* ================= TYPING ================= */
-
 function typing(cb){
 
 const row =
@@ -676,8 +656,6 @@ cb();
 },1600);
 
 }
-
-/* ================= BUTTON ================= */
 
 function createButton(text,color,x,y,fn){
 
@@ -717,14 +695,12 @@ document.createElement("div");
 
 wrap.className = "options";
 
-/* CORRECT */
-
 const eid =
 createButton(
 "Eid Mubarak 👍",
 "#00a884",
 "25px",
-"160px",
+"170px",
 ()=>{
 
 pointer.remove();
@@ -750,8 +726,6 @@ step2();
 }
 );
 
-/* WRONG */
-
 const same =
 createButton(
 "Same to you",
@@ -773,9 +747,7 @@ while(!safe){
 x = Math.random()*180 + 180;
 y = Math.random()*120 + 20;
 
-if(
-!(x<170 && y>120)
-){
+if(!(x<170 && y>120)){
 safe = true;
 }
 
@@ -916,8 +888,8 @@ const a =
 createButton(
 "No Salami ❌",
 "#6c63ff",
-"20px",
-"30px",
+"25px",
+"35px",
 ()=>wrongOption()
 );
 
@@ -925,8 +897,8 @@ const b =
 createButton(
 "10 TK",
 "#6c63ff",
-"230px",
-"30px",
+"235px",
+"35px",
 ()=>wrongOption()
 );
 
@@ -934,17 +906,17 @@ const c =
 createButton(
 "30 TK",
 "#6c63ff",
-"90px",
-"130px",
+"105px",
+"145px",
 ()=>wrongOption()
 );
 
 const big =
 createButton(
-"500 TK 💸",
+"500 TK 😡",
 "#ff0055",
-"150px",
-"250px",
+"165px",
+"255px",
 ()=>{
 
 clearInterval(growInterval);
@@ -958,11 +930,21 @@ showEnd();
 }
 );
 
-a.style.transform = "scale(2.1)";
-b.style.transform = "scale(2.1)";
-c.style.transform = "scale(2.1)";
+a.style.transform = "scale(1.9)";
+b.style.transform = "scale(1.9)";
+c.style.transform = "scale(1.9)";
 
-big.style.transform = "scale(.28)";
+big.style.transform = "scale(0.12)";
+big.style.zIndex = "999";
+
+a.dataset.x = 25;
+a.dataset.y = 35;
+
+b.dataset.x = 235;
+b.dataset.y = 35;
+
+c.dataset.x = 105;
+c.dataset.y = 145;
 
 wrap.appendChild(a);
 wrap.appendChild(b);
@@ -971,30 +953,61 @@ wrap.appendChild(big);
 
 chatBox.appendChild(wrap);
 
-let grow = .28;
+let grow = 0.12;
 
 const growInterval =
 setInterval(()=>{
 
-grow += .08;
+grow += 0.07;
 
 big.style.transform =
 `scale(${grow})`;
 
-if(grow>1.4){
+if(grow > 0.5){
+
+a.dataset.x =
+parseFloat(a.dataset.x) - 4.5;
 
 a.style.left =
-(parseFloat(a.style.left)-4)+"px";
+a.dataset.x + "px";
+
+b.dataset.x =
+parseFloat(b.dataset.x) + 4.5;
 
 b.style.left =
-(parseFloat(b.style.left)+4)+"px";
+b.dataset.x + "px";
+
+c.dataset.y =
+parseFloat(c.dataset.y) + 4;
 
 c.style.top =
-(parseFloat(c.style.top)+3)+"px";
+c.dataset.y + "px";
 
 }
 
-if(grow>10){
+if(grow > 2){
+
+a.dataset.x =
+parseFloat(a.dataset.x) - 7;
+
+b.dataset.x =
+parseFloat(b.dataset.x) + 7;
+
+c.dataset.y =
+parseFloat(c.dataset.y) + 6;
+
+a.style.left =
+a.dataset.x + "px";
+
+b.style.left =
+b.dataset.x + "px";
+
+c.style.top =
+c.dataset.y + "px";
+
+}
+
+if(grow > 10){
 
 big.style.position = "fixed";
 big.style.inset = "0";
@@ -1002,7 +1015,20 @@ big.style.width = "100vw";
 big.style.height = "100vh";
 big.style.borderRadius = "0";
 big.style.zIndex = "999999";
+big.style.fontSize = "60px";
 
+}
+
+if(parseFloat(a.dataset.x) < -220){
+a.style.opacity = "0";
+}
+
+if(parseFloat(b.dataset.x) > 500){
+b.style.opacity = "0";
+}
+
+if(parseFloat(c.dataset.y) > 520){
+c.style.opacity = "0";
 }
 
 },140);
@@ -1076,9 +1102,14 @@ d.remove();
 
 function showEnd(){
 
-document.body.innerHTML = `
+setStep(4);
 
-<div class="end-screen">
+const end =
+document.createElement("div");
+
+end.className = "end-screen";
+
+end.innerHTML = `
 
 <div style="font-size:95px">
 🥰
@@ -1118,13 +1149,9 @@ z-index:999999;
 Dishting<br>Dishting ✨
 </div>
 
-</div>
-
 `;
 
-document.body.appendChild(music);
-
-music.play();
+document.body.appendChild(end);
 
 }
 
