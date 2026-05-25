@@ -25,8 +25,7 @@ background-size:350px;
 background-repeat:repeat;
 }
 
-/* ================= LOADING ================= */
-
+/* LOADING */
 #loadingScreen{
 position:fixed;
 inset:0;
@@ -36,6 +35,7 @@ justify-content:center;
 align-items:center;
 flex-direction:column;
 z-index:999999;
+transition:1s ease;
 }
 
 .loader-circle{
@@ -49,6 +49,7 @@ margin-bottom:30px;
 }
 
 @keyframes spin{
+from{transform:rotate(0deg);}
 to{transform:rotate(360deg);}
 }
 
@@ -56,32 +57,48 @@ to{transform:rotate(360deg);}
 color:white;
 font-size:24px;
 font-weight:bold;
+margin-bottom:25px;
+}
+
+.volume-tip{
+position:absolute;
+bottom:110px;
+left:50%;
+transform:translateX(-50%);
+color:white;
+font-size:17px;
+text-align:center;
 }
 
 .tap-text{
-margin-top:20px;
+position:absolute;
+bottom:40px;
+left:50%;
+transform:translateX(-50%);
 color:white;
-opacity:0.8;
+font-size:18px;
+font-weight:bold;
 }
 
-/* ================= CHAT ================= */
-
+/* CHAT */
 .chat-container{
-display:none;
 width:100%;
 max-width:450px;
 height:100vh;
-background:rgba(17,27,33,0.85);
-backdrop-filter:blur(4px);
+background:rgba(17,27,33,0.82);
+backdrop-filter:blur(2px);
 overflow:hidden;
+position:relative;
+display:none;
 }
 
 .header{
+height:78px;
 display:flex;
 align-items:center;
 padding:14px;
-background:#202c33;
 color:white;
+background:#202c33;
 }
 
 .profile{
@@ -89,64 +106,30 @@ width:50px;
 height:50px;
 border-radius:50%;
 margin-right:12px;
-background:url("https://drive.google.com/thumbnail?id=1yTQLNM23xkL37yNq-Bb8eqliGfcaaCt_");
+background:url("https://drive.google.com/thumbnail?id=1yTQLNM23xkL37yNq-Bb8eqliGfcaaCt_&sz=w1000");
 background-size:cover;
 }
 
 .chat-box{
-height:calc(100vh - 80px);
+height:calc(100vh - 78px);
 overflow-y:auto;
-padding:15px;
-}
-
-.message-row{
-margin:10px 0;
-display:flex;
-flex-direction:column;
-}
-
-.left{align-items:flex-start;}
-.right{align-items:flex-end;}
-
-.bubble{
-padding:12px 16px;
-border-radius:18px;
-max-width:75%;
-color:white;
-}
-
-.left .bubble{background:#202c33;}
-.right .bubble{background:#005c4b;}
-
-/* ================= OPTIONS ================= */
-
-.options{
-position:relative;
-height:360px;
-margin-top:20px;
+padding:20px 12px 120px;
 }
 
 .option-btn{
 position:absolute;
 padding:14px 20px;
 border:none;
-border-radius:25px;
-font-weight:bold;
-cursor:pointer;
-transition:0.2s;
+border-radius:28px;
 color:white;
+cursor:pointer;
 }
 
-/* ================= UI ================= */
-
-.step{
+.progress-wrap{
 position:fixed;
-bottom:12px;
-right:12px;
-background:rgba(0,0,0,0.4);
+bottom:15px;
+right:15px;
 color:white;
-padding:8px 12px;
-border-radius:20px;
 }
 
 .toast{
@@ -154,18 +137,30 @@ position:fixed;
 top:20px;
 left:50%;
 transform:translateX(-50%);
-background:red;
+background:#ff3b3b;
 color:white;
-padding:10px 15px;
+padding:10px 16px;
 border-radius:20px;
 z-index:999999;
-animation:fade 1.2s ease;
+animation:drop 1.2s ease;
 }
 
-@keyframes fade{
-0%{opacity:0;transform:translate(-50%,-10px);}
+@keyframes drop{
+0%{transform:translate(-50%,-20px);opacity:0;}
 20%{opacity:1;}
-100%{opacity:0;transform:translate(-50%,-40px);}
+100%{transform:translate(-50%,0px);opacity:0;}
+}
+
+.heehee{
+position:fixed;
+bottom:-40px;
+left:50%;
+transform:translateX(-50%);
+background:rgba(255,255,255,0.1);
+padding:10px 18px;
+border-radius:20px;
+color:white;
+transition:0.4s;
 }
 
 .shake{
@@ -173,260 +168,248 @@ animation:shake 0.3s;
 }
 
 @keyframes shake{
-0%{transform:translate(0)}
-25%{transform:translate(-6px,4px)}
-50%{transform:translate(6px,-4px)}
-75%{transform:translate(-4px,2px)}
-100%{transform:translate(0)}
-}
-
-.heehee{
-position:fixed;
-bottom:-50px;
-left:50%;
-transform:translateX(-50%);
-background:rgba(255,255,255,0.1);
-color:white;
-padding:10px 18px;
-border-radius:20px;
-transition:0.4s;
-}
-
-/* pointer */
-.pointer{
-position:absolute;
-color:white;
-font-size:24px;
-animation:bounce 1s infinite;
-}
-
-@keyframes bounce{
-50%{transform:translateY(10px);}
+0%{transform:translate(0,0);}
+25%{transform:translate(-6px,3px);}
+50%{transform:translate(6px,-3px);}
+75%{transform:translate(-4px,2px);}
+100%{transform:translate(0,0);}
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOADING -->
 <div id="loadingScreen">
 <div class="loader-circle"></div>
 <div class="loading-text">Loading Eid Experience...</div>
-<div class="tap-text">Tap / Click to Start</div>
+<div class="volume-tip">🔊 Increase volume for better experience</div>
+<div class="tap-text">Tap / Click To Start</div>
 </div>
 
-<!-- CHAT -->
 <div class="chat-container">
-
 <div class="header">
 <div class="profile"></div>
 <div>
-<div><b>Eid er Chand Aakashe 🌙</b></div>
-<div style="font-size:12px;opacity:0.7">online</div>
+<div class="title">Eid er Chand Aakashe 🌙</div>
+<div class="sub-title">online</div>
 </div>
 </div>
 
 <div class="chat-box" id="chatBox"></div>
 
-<div class="step" id="step">Step 1</div>
-
+<div class="progress-wrap">
+<div class="step" id="step">Step 1/4</div>
+</div>
 </div>
 
-<audio id="music" loop>
-<source src="https://files.catbox.moe/sauxt7.mp3">
+<audio id="bgMusic" loop playsinline>
+<source src="https://files.catbox.moe/sauxt7.mp3" type="audio/mp3">
 </audio>
 
 <script>
 
-/* ================= CORE ================= */
-
-const loading = document.getElementById("loadingScreen");
-const chat = document.querySelector(".chat-container");
-const box = document.getElementById("chatBox");
+const music = document.getElementById("bgMusic");
+const loadingScreen = document.getElementById("loadingScreen");
+const chatContainer = document.querySelector(".chat-container");
+const chatBox = document.getElementById("chatBox");
 const step = document.getElementById("step");
-const music = document.getElementById("music");
 
 let started = false;
 
-/* FIXED START (THIS WAS YOUR MAIN ISSUE) */
-function start(){
+/* FIX (IMPORTANT) */
+function startExperience(){
 if(started) return;
 started = true;
 
-loading.style.pointerEvents="none";
-loading.style.opacity="0";
+loadingScreen.style.opacity = "0";
+loadingScreen.style.pointerEvents = "none";
 
-setTimeout(()=>loading.remove(),400);
+chatContainer.style.display = "block";
 
-chat.style.display="block";
-
-music.volume=0.4;
+music.volume = 0.4;
 music.play().catch(()=>{});
 
+setTimeout(()=>{
+loadingScreen.remove();
 step1();
+},500);
 }
 
-/* RELIABLE INPUT (FIXED PROPERLY) */
-loading.addEventListener("pointerdown",start);
-loading.addEventListener("touchend",start);
-loading.addEventListener("click",start);
+/* FIXED EVENT HANDLING */
+loadingScreen.addEventListener("pointerdown", startExperience);
+loadingScreen.addEventListener("click", startExperience);
+loadingScreen.addEventListener("touchstart", startExperience);
 
-/* ================= HELPERS ================= */
+function setStep(n){
+step.innerText = `Step ${n}/4`;
+}
 
-function msg(text,side){
-const r=document.createElement("div");
-r.className="message-row "+side;
+function addMessage(text,side){
+const row = document.createElement("div");
+row.className = "message-row "+side;
 
-const b=document.createElement("div");
-b.className="bubble";
+const bubble = document.createElement("div");
+bubble.className = "bubble";
+bubble.innerHTML = text;
+
+row.appendChild(bubble);
+chatBox.appendChild(row);
+chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+/* STEP 1 */
+function step1(){
+setStep(1);
+
+addMessage("Assalamu Alaikum Eid Mubarak","left");
+
+const a = document.createElement("button");
+a.className = "option-btn";
+a.innerText = "Eid Mubarak";
+a.style.background = "#4d96ff";
+a.style.left = "20px";
+a.style.top = "120px";
+
+const b = document.createElement("button");
+b.className = "option-btn";
+b.innerText = "Same to you";
+b.style.background = "#ff6b6b";
+b.style.left = "200px";
+b.style.top = "220px";
+
+const pointer = document.createElement("div");
+pointer.innerText = "👇 Press Here";
+pointer.className = "option-btn";
+pointer.style.background = "transparent";
+pointer.style.left = "210px";
+pointer.style.top = "170px";
+
+function runAway(){
+toast("Wrong option");
+heehee();
+document.body.classList.add("shake");
+setTimeout(()=>document.body.classList.remove("shake"),300);
+
+let x = Math.random()*220;
+let y = Math.random()*200;
+b.style.left = x+"px";
+b.style.top = y+"px";
+}
+
+b.onmouseenter = runAway;
+b.ontouchstart = runAway;
+
+a.onclick = ()=>{
+addMessage("Eid Mubarak 😌","right");
+clearOptions();
+setTimeout(step2,700);
+};
+
+chatBox.appendChild(a);
+chatBox.appendChild(b);
+chatBox.appendChild(pointer);
+}
+
+function clearOptions(){
+document.querySelectorAll(".option-btn").forEach(e=>e.remove());
+}
+
+/* STEP 2 */
+function step2(){
+setStep(2);
+
+addMessage("Dhonnobad Dhonnobad. Salamita 💁‍♂️","left");
+
+const a = createBtn("Amare tumi diba", runAwayBtn);
+const b = createBtn("Kisher salami 😡", runAwayBtn);
+const c = createBtn("Accha dicchi", ()=>{
+addMessage("Accha dicchi 😊","right");
+clearOptions();
+setTimeout(step3,700);
+});
+
+chatBox.appendChild(a);
+chatBox.appendChild(b);
+chatBox.appendChild(c);
+}
+
+function createBtn(text,fn){
+const b = document.createElement("button");
+b.className="option-btn";
 b.innerText=text;
+b.style.background="#4d96ff";
 
-r.appendChild(b);
-box.appendChild(r);
-box.scrollTop=box.scrollHeight;
+b.onmouseenter=fn;
+b.ontouchstart=fn;
+
+return b;
 }
 
-function toast(t){
-const d=document.createElement("div");
-d.className="toast";
-d.innerText=t;
-document.body.appendChild(d);
-setTimeout(()=>d.remove(),1200);
+function runAwayBtn(){
+toast("Wrong option");
+heehee();
+document.body.classList.add("shake");
+setTimeout(()=>document.body.classList.remove("shake"),300);
+}
+
+/* STEP 3 */
+function step3(){
+setStep(3);
+
+addMessage("Dhonnobad Dhonnobad","left");
+
+const a = createBtn("No Salami", runAwayBtn);
+const b = createBtn("10 Taka", runAwayBtn);
+
+const big = document.createElement("button");
+big.className="option-btn";
+big.innerText="500 Taka 😡";
+big.style.background="red";
+big.style.left="120px";
+big.style.top="300px";
+big.style.transform="scale(0.5)";
+
+big.onclick=()=>{
+clearOptions();
+showEnd();
+};
+
+setInterval(()=>{
+let scale = parseFloat(big.style.transform.replace(/[^0-9.]/g,"")) || 0.5;
+scale += 0.05;
+big.style.transform = `scale(${scale})`;
+},300);
+
+chatBox.appendChild(a);
+chatBox.appendChild(b);
+chatBox.appendChild(big);
+}
+
+/* END */
+function showEnd(){
+document.body.innerHTML = `
+<div style="color:white;display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column">
+<h1>🥰 Dhonnobad</h1>
+<p>I receive — Salami 💸<br>You receive — Dua 🤲</p>
+</div>
+`;
+}
+
+/* UI */
+function toast(msg){
+const t=document.createElement("div");
+t.className="toast";
+t.innerText=msg;
+document.body.appendChild(t);
+setTimeout(()=>t.remove(),1200);
 }
 
 function heehee(){
 const h=document.createElement("div");
 h.className="heehee";
-h.innerText="Hee Hee 🤭";
+h.innerText="HeeHee 🤭";
 document.body.appendChild(h);
-setTimeout(()=>h.style.bottom="40px",50);
-setTimeout(()=>h.remove(),1000);
-}
-
-/* ================= STEP 1 ================= */
-
-function step1(){
-
-step.innerText="Step 1";
-
-msg("Assalamu Alaikum Eid Mubarak","left");
-
-setTimeout(()=>{
-
-const ok=createBtn("Eid Mubarak","#4d96ff",()=>{
-msg("Eid Mubarak 😌","right");
-step2();
-});
-
-const run=createBtn("Same to you","#ff6b6b");
-
-run.onmouseenter=runAway;
-run.ontouchstart=runAway;
-
-function runAway(){
-toast("Wrong option 😡");
-heehee();
-document.body.classList.add("shake");
-setTimeout(()=>document.body.classList.remove("shake"),300);
-
-run.style.left=Math.random()*250+"px";
-run.style.top=Math.random()*300+"px";
-}
-
-const pointer=document.createElement("div");
-pointer.className="pointer";
-pointer.innerText="👇 Press Here";
-pointer.style.left="230px";
-pointer.style.top="80px";
-
-wrap([ok,run,pointer]);
-
-},800);
-}
-
-/* ================= STEP 2 ================= */
-
-function step2(){
-
-step.innerText="Step 2";
-
-msg("Dhonnobad Dhonnobad. Salami ta?","left");
-
-setTimeout(()=>{
-
-const a=createBtn("Acha Dicchi","#f4f1de",step3,"#222");
-const b=createBtn("Kisa Salamai","#4d96ff",wrongMove);
-const c=createBtn("Amare Tumhi Diba","#ff6b6b",wrongMove);
-
-wrap([a,b,c]);
-
-function wrongMove(btn){
-toast("Wrong option 😡");
-heehee();
-btn.style.left=Math.random()*250+"px";
-btn.style.top=Math.random()*250+"px";
-}
-
-},800);
-}
-
-/* ================= STEP 3 ================= */
-
-function step3(){
-
-step.innerText="Step 3";
-
-msg("Ok. Koto koto?","left");
-
-setTimeout(()=>{
-
-const a=createBtn("10 TK","#6c63ff",wrong);
-const b=createBtn("15 TK","#6c63ff",wrong);
-const c=createBtn("No Salami","#6c63ff",wrong);
-
-const big=createBtn("500 TK","#ff0055",win);
-
-big.style.transform="scale(0.3)";
-
-wrap([a,b,c,big]);
-
-let scale=0.3;
-
-setInterval(()=>{
-scale+=0.08;
-big.style.transform=`scale(${scale})`;
-},200);
-
-function wrong(){
-toast("Wrong option 😡");
-heehee();
-}
-
-function win(){
-msg("500 TK 😡","right");
-setTimeout(()=>alert("END: Salami Accepted 🎉"),500);
-}
-
-},800);
-}
-
-/* ================= UTIL ================= */
-
-function createBtn(text,color,fn,textColor="white"){
-const b=document.createElement("button");
-b.className="option-btn";
-b.innerText=text;
-b.style.background=color;
-b.style.color=textColor;
-b.onclick=fn;
-return b;
-}
-
-function wrap(items){
-const w=document.createElement("div");
-w.className="options";
-items.forEach(i=>w.appendChild(i));
-box.appendChild(w);
+setTimeout(()=>h.remove(),1200);
 }
 
 </script>
