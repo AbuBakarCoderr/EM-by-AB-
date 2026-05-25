@@ -227,7 +227,7 @@ text-align:right;
 
 .options{
 position:relative;
-height:290px;
+height:320px;
 margin-top:18px;
 }
 
@@ -337,6 +337,23 @@ opacity:1;
 opacity:0;
 transform:translate(-50%,-35px);
 }
+}
+
+/* ================= HEEHEE ================= */
+
+.heehee{
+position:fixed;
+bottom:-60px;
+left:50%;
+transform:translateX(-50%);
+padding:12px 20px;
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(8px);
+color:white;
+border-radius:25px;
+font-weight:bold;
+z-index:999999;
+transition:0.5s ease;
 }
 
 /* ================= SHAKE ================= */
@@ -475,8 +492,6 @@ online
 
 <div class="chat-box" id="chatBox"></div>
 
-<!-- ================= STEP COUNTER ================= -->
-
 <div class="progress-wrap">
 
 <div class="step" id="step">
@@ -491,15 +506,27 @@ Step 1/4
 
 </div>
 
+<!-- ================= MUSIC ================= -->
+
+<audio id="bgMusic" loop>
+<source src="https://files.catbox.moe/sauxt7.mp3" type="audio/mp3">
+</audio>
+
 <script>
 
-/* ================= MUSIC ================= */
+/* ================= ELEMENTS ================= */
 
-const bgMusic =
-new Audio("https://files.catbox.moe/sauxt7.mp3");
+const chatBox =
+document.getElementById("chatBox");
 
-bgMusic.loop = true;
-bgMusic.volume = 0.38;
+const step =
+document.getElementById("step");
+
+const progressFill =
+document.getElementById("progressFill");
+
+const music =
+document.getElementById("bgMusic");
 
 /* ================= AUDIO ================= */
 
@@ -553,22 +580,12 @@ navigator.vibrate([90,120,90]);
 
 }
 
-/* ================= ELEMENTS ================= */
-
-const chatBox =
-document.getElementById("chatBox");
-
-const step =
-document.getElementById("step");
-
-const progressFill =
-document.getElementById("progressFill");
-
 /* ================= STEP ================= */
 
 function setStep(num){
 
-step.innerText = `Step ${num}/4`;
+step.innerText =
+`Step ${num}/4`;
 
 progressFill.style.width =
 (num*25)+"%";
@@ -594,6 +611,7 @@ const t =
 document.createElement("div");
 
 t.className = "toast";
+
 t.innerText = text;
 
 document.body.appendChild(t);
@@ -604,11 +622,42 @@ t.remove();
 
 }
 
+/* ================= HEEHEE ================= */
+
+function heehee(){
+
+const h =
+document.createElement("div");
+
+h.className = "heehee";
+
+h.innerText =
+"Hee Hee Hee 🤭";
+
+document.body.appendChild(h);
+
+setTimeout(()=>{
+h.style.bottom = "35px";
+},20);
+
+setTimeout(()=>{
+h.style.opacity = "0";
+h.style.bottom = "70px";
+},850);
+
+setTimeout(()=>{
+h.remove();
+},1400);
+
+}
+
 /* ================= WRONG ================= */
 
 function wrongSoft(){
 
 toast("Wrong option 😡");
+
+heehee();
 
 vibrate("wrongSoft");
 
@@ -688,6 +737,7 @@ const b =
 document.createElement("button");
 
 b.className = "option-btn";
+
 b.innerText = text;
 
 b.onclick = ()=>{
@@ -854,7 +904,8 @@ document.createElement("div");
 
 pointer.className = "pointer";
 
-pointer.innerHTML = "👇 Press Here";
+pointer.innerHTML =
+"👇 Press Here";
 
 pointer.style.left = "235px";
 pointer.style.top = "70px";
@@ -1015,7 +1066,7 @@ wrongHard();
 
 const c =
 createButton(
-"No salami❌👎",
+"No Salami ❌👎",
 ()=>{
 
 wrongHard();
@@ -1067,16 +1118,16 @@ big.style.background =
 "#ff0055";
 
 a.style.transform =
-"scale(1.55)";
+"scale(2.2)";
 
 b.style.transform =
-"scale(1.55)";
+"scale(2.2)";
 
 c.style.transform =
-"scale(1.55)";
+"scale(2.2)";
 
 big.style.transform =
-"scale(0.65)";
+"scale(0.38)";
 
 a.style.left = "15px";
 a.style.top = "25px";
@@ -1088,7 +1139,16 @@ c.style.left = "90px";
 c.style.top = "115px";
 
 big.style.left = "125px";
-big.style.top = "205px";
+big.style.top = "225px";
+
+a.dataset.x = 15;
+a.dataset.y = 25;
+
+b.dataset.x = 220;
+b.dataset.y = 25;
+
+c.dataset.x = 90;
+c.dataset.y = 115;
 
 addOptions([a,b,c,big]);
 
@@ -1098,7 +1158,7 @@ growButton(big,a,b,c);
 
 /* ================= GROW ================= */
 
-let growVal = 0.65;
+let growVal = 0.45;
 
 let growInterval;
 
@@ -1106,11 +1166,11 @@ function growButton(big,a,b,c){
 
 clearInterval(growInterval);
 
-growVal = 0.65;
+growVal = 0.45;
 
 growInterval = setInterval(()=>{
 
-growVal += 0.095;
+growVal += 0.14;
 
 big.style.transform =
 `scale(${growVal})`;
@@ -1121,23 +1181,38 @@ big.style.zIndex = "999";
 
 const shrink =
 Math.max(
-0.15,
-1.55 - growVal/1.8
+0.12,
+2.5 - growVal/1.4
 );
 
 btn.style.transform =
 `scale(${shrink})`;
 
+let currentX =
+parseFloat(btn.dataset.x);
+
+let currentY =
+parseFloat(btn.dataset.y);
+
+const direction =
+index===0 ? -1 :
+index===1 ? 1 : -0.4;
+
+currentX += direction*3.5;
+
+currentY += index===2 ? 1.1 : -0.15;
+
+btn.dataset.x = currentX;
+btn.dataset.y = currentY;
+
 btn.style.left =
-(parseInt(btn.style.left) - (growVal*2.6))
-+"px";
+currentX+"px";
 
 btn.style.top =
-(parseInt(btn.style.top) - (growVal*0.7))
-+"px";
+currentY+"px";
 
 btn.style.opacity =
-Math.max(0.12,1-growVal/8);
+Math.max(0.15,1-growVal/9);
 
 });
 
@@ -1154,13 +1229,13 @@ big.style.height = "100vh";
 
 big.style.borderRadius = "0";
 
-big.style.fontSize = "42px";
+big.style.fontSize = "48px";
 
 big.style.zIndex = "99999";
 
 }
 
-},180);
+},170);
 
 }
 
@@ -1298,22 +1373,21 @@ startExperience
 
 function startExperience(){
 
-bgMusic.currentTime = 0;
+music.volume = 0.38;
 
-const playPromise = bgMusic.play();
+const playPromise =
+music.play();
 
 if(playPromise !== undefined){
 
-playPromise
-.then(()=>{})
-.catch(()=>{
+playPromise.catch(()=>{
 
 document.body.addEventListener(
 "click",
 ()=>{
-bgMusic.play();
+music.play();
 },
-{ once:true }
+{once:true}
 );
 
 });
