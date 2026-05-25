@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eid er Chand Akashe🌙</title>
+<title>Eid er Chand Aakashe 🌙</title>
 
 <style>
 *{
@@ -38,7 +38,8 @@ z-index:999999;
 }
 
 .loader-circle{
-width:90px;height:90px;
+width:90px;
+height:90px;
 border-radius:50%;
 border:5px solid rgba(255,255,255,0.08);
 border-top:5px solid white;
@@ -46,40 +47,40 @@ animation:spin 1s linear infinite;
 margin-bottom:30px;
 }
 
-@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-.loading-text{color:white;font-size:24px;font-weight:bold;margin-bottom:25px;}
+.loading-text{
+color:white;
+font-size:22px;
+font-weight:bold;
+margin-bottom:20px;
+}
 
 .volume-tip{
-position:absolute;
-bottom:110px;
-left:50%;
-transform:translateX(-50%);
 color:white;
-font-size:17px;
+font-size:14px;
+opacity:0.8;
+margin-bottom:30px;
 text-align:center;
 }
 
 .tap-text{
-position:absolute;
-bottom:40px;
-left:50%;
-transform:translateX(-50%);
 color:white;
 font-size:18px;
 font-weight:bold;
+animation:blink 1.2s infinite;
 }
+
+@keyframes blink{50%{opacity:0.4}}
 
 /* CHAT */
 .chat-container{
 width:100%;
 max-width:450px;
 height:100vh;
-background:rgba(17,27,33,0.82);
-backdrop-filter:blur(2px);
-overflow:hidden;
+background:rgba(17,27,33,0.85);
 display:none;
-position:relative;
+flex-direction:column;
 }
 
 .header{
@@ -92,29 +93,68 @@ background:#202c33;
 }
 
 .profile{
-width:50px;height:50px;border-radius:50%;
+width:50px;
+height:50px;
+border-radius:50%;
 margin-right:12px;
 background:url("https://drive.google.com/thumbnail?id=1yTQLNM23xkL37yNq-Bb8eqliGfcaaCt_&sz=w1000");
 background-size:cover;
 }
 
+.title{font-size:18px;font-weight:bold}
+.sub-title{font-size:12px;opacity:0.7}
+
 .chat-box{
-height:calc(100vh - 78px);
+flex:1;
 overflow-y:auto;
-padding:20px 12px 120px;
+padding:15px;
 }
 
-/* UI */
-.option-btn{
+/* messages */
+.message{
+margin:10px 0;
+max-width:80%;
+padding:10px 14px;
+border-radius:12px;
+color:white;
+font-size:14px;
+}
+
+.left{background:#202c33;border-bottom-left-radius:4px}
+.right{background:#005c4b;margin-left:auto;border-bottom-right-radius:4px}
+
+.time{
+font-size:10px;
+opacity:0.7;
+margin-top:5px;
+}
+
+/* options */
+.options{position:relative;height:220px;margin-top:10px}
+
+.btn{
 position:absolute;
-padding:14px 20px;
+padding:12px 16px;
+border-radius:20px;
 border:none;
-border-radius:28px;
 color:white;
 cursor:pointer;
-transition:top .2s,left .2s;
+transition:0.15s;
 }
 
+/* step */
+.step{
+position:fixed;
+bottom:12px;
+right:12px;
+color:white;
+font-size:13px;
+background:rgba(0,0,0,0.4);
+padding:6px 10px;
+border-radius:12px;
+}
+
+/* toast */
 .toast{
 position:fixed;
 top:20px;
@@ -124,62 +164,33 @@ background:#ff3b3b;
 color:white;
 padding:10px 16px;
 border-radius:20px;
-z-index:999999;
-animation:drop 1.2s ease;
+font-weight:bold;
 }
 
-@keyframes drop{
-0%{transform:translate(-50%,-20px);opacity:0}
-20%{opacity:1}
-100%{transform:translate(-50%,0);opacity:0}
-}
-
-.heehee{
+.hehe{
 position:fixed;
-bottom:-50px;
+bottom:20px;
 left:50%;
 transform:translateX(-50%);
-background:rgba(255,255,255,0.12);
-padding:10px 18px;
-border-radius:20px;
 color:white;
-transition:.3s;
-}
-
-.shake{animation:shake .25s}
-
-@keyframes shake{
-0%{transform:translate(0,0)}
-25%{transform:translate(-6px,3px)}
-50%{transform:translate(6px,-3px)}
-75%{transform:translate(-4px,2px)}
-100%{transform:translate(0,0)}
-}
-
-.typing{display:flex;gap:5px}
-.dot{width:7px;height:7px;border-radius:50%;background:white;animation:bounce 1s infinite}
-@keyframes bounce{
-0%,80%,100%{transform:scale(.6);opacity:.5}
-40%{transform:scale(1);opacity:1}
-}
-
-/* IMPORTANT FIX */
-.pointer{
-pointer-events:none;
-user-select:none;
+background:rgba(255,255,255,0.1);
+padding:8px 14px;
+border-radius:20px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- LOADING -->
 <div id="loadingScreen">
 <div class="loader-circle"></div>
 <div class="loading-text">Loading Eid Experience...</div>
 <div class="volume-tip">🔊 Increase volume for better experience</div>
-<div class="tap-text">Tap / Click To Start</div>
+<div class="tap-text">Tap / Click to Start</div>
 </div>
 
+<!-- CHAT -->
 <div class="chat-container">
 <div class="header">
 <div class="profile"></div>
@@ -190,6 +201,7 @@ user-select:none;
 </div>
 
 <div class="chat-box" id="chatBox"></div>
+<div class="step" id="step">Step 1/4</div>
 </div>
 
 <audio id="bgMusic" loop>
@@ -198,193 +210,156 @@ user-select:none;
 
 <script>
 
-const music=document.getElementById("bgMusic");
-const loading=document.getElementById("loadingScreen");
-const chat=document.getElementById("chatBox");
+const loading = document.getElementById("loadingScreen");
+const chat = document.querySelector(".chat-container");
+const chatBox = document.getElementById("chatBox");
+const step = document.getElementById("step");
+const music = document.getElementById("bgMusic");
 
-let started=false;
+let started = false;
 
-/* FIXED START */
+/* FIXED START (ROBUST) */
 function start(){
 if(started) return;
-started=true;
+started = true;
 
-loading.style.opacity="0";
-loading.style.pointerEvents="none";
+loading.style.display="none";
+chat.style.display="flex";
 
-document.querySelector(".chat-container").style.display="block";
-
-/* IMPORTANT: audio MUST be inside user gesture */
-music.volume=0.4;
+music.volume = 0.4;
 music.play().catch(()=>{});
 
-setTimeout(()=>{
-loading.remove();
 step1();
+}
+
+/* IMPORTANT: works everywhere */
+document.addEventListener("pointerdown", start, {once:true});
+
+/* CHAT HELPERS */
+function msg(text, side){
+const div = document.createElement("div");
+div.className = "message "+side;
+div.innerHTML = text + `<div class="time">${new Date().toLocaleTimeString()}</div>`;
+chatBox.appendChild(div);
+chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+/* STEP 1 */
+function step1(){
+step.innerText="Step 1/4";
+
+msg("Assalamu Alaikum Eid Mubarak","left");
+
+setTimeout(()=>{
+msg("Eid Mubarak 😌","right");
+step2();
+},800);
+}
+
+/* STEP 2 */
+function step2(){
+step.innerText="Step 2/4";
+
+msg("Dhonnobad Dhonnobad. Salamita? 💁‍♂️","left");
+
+const wrap = document.createElement("div");
+wrap.className="options";
+
+const a = btn("Eid Mubarak","#4d96ff",120,30,()=>{
+msg("Eid Mubarak","right");
+wrap.remove();
+step3();
+});
+
+const b = btn("Same to you","#ff6b6b",20,80,runAway);
+
+wrap.appendChild(a);
+wrap.appendChild(b);
+chatBox.appendChild(wrap);
+
+/* runaway logic bounded */
+function runAway(){
+toast("Wrong option");
+hehe();
+
+let x = Math.random()*200+20;
+let y = Math.random()*100+20;
+
+b.style.left=x+"px";
+b.style.top=y+"px";
+}
+}
+
+/* STEP 3 */
+function step3(){
+step.innerText="Step 3/4";
+
+msg("Dhonnobad Dhonnobad","left");
+
+const wrap=document.createElement("div");
+wrap.className="options";
+
+const a=btn("10 Taka","#6c63ff",20,30,wrong);
+const b=btn("No Salami","#6c63ff",160,30,wrong);
+
+const big=btn("500 Taka","#ff0055",80,120,()=>{
+msg("500 Taka 😌","right");
+wrap.remove();
+end();
+});
+
+let scale=0.5;
+
+setInterval(()=>{
+scale+=0.1;
+big.style.transform=`scale(${scale})`;
 },400);
+
+wrap.append(a,b,big);
+chatBox.appendChild(wrap);
+
+function wrong(){
+toast("Wrong option");
+hehe();
+}
 }
 
-/* FIX: best mobile support */
-loading.addEventListener("pointerdown",start);
-
-/* CHAT */
-function msg(text,side){
-const r=document.createElement("div");
-r.style.margin="10px 0";
-r.style.textAlign=side==="right"?"right":"left";
-
-r.innerHTML=`
-<div style="display:inline-block;background:${side==="right"?"#005c4b":"#202c33"};color:white;padding:10px 14px;border-radius:18px;max-width:75%">
-${text}
-<div style="font-size:10px;opacity:.7;margin-top:4px">${new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</div>
-</div>
-`;
-
-chat.appendChild(r);
-chat.scrollTop=chat.scrollHeight;
+/* END */
+function end(){
+step.innerText="Done";
+msg("I received Salami 💸 You received Dua 🤲","left");
 }
 
-/* TOAST */
+/* BUTTON */
+function btn(text,color,x,y,fn){
+const b=document.createElement("button");
+b.className="btn";
+b.innerText=text;
+b.style.background=color;
+b.style.left=x+"px";
+b.style.top=y+"px";
+b.onclick=fn;
+return b;
+}
+
+/* UI FEEDBACK */
 function toast(t){
 const d=document.createElement("div");
 d.className="toast";
 d.innerText=t;
 document.body.appendChild(d);
-setTimeout(()=>d.remove(),1200);
+setTimeout(()=>d.remove(),1000);
 }
 
-/* HEEHEE */
-function hee(){
-const h=document.createElement("div");
-h.className="heehee";
-h.innerText="HeeHee 🤭";
-document.body.appendChild(h);
-setTimeout(()=>h.remove(),1200);
-}
-
-/* STEP 1 */
-function step1(){
-
-msg("Assalamu Alaikum Eid Mubarak","left");
-
-const a=document.createElement("button");
-a.className="option-btn";
-a.innerText="Eid Mubarak";
-a.style.left="20px";
-a.style.top="120px";
-a.style.background="#4d96ff";
-
-const b=document.createElement("button");
-b.className="option-btn pointer";
-b.innerText="Same to you";
-b.style.left="200px";
-b.style.top="220px";
-b.style.background="#ff6b6b";
-
-/* RUN AWAY FIXED (less jitter) */
-b.onmouseenter=()=>{
-toast("Wrong option");
-hee();
-document.body.classList.add("shake");
-setTimeout(()=>document.body.classList.remove("shake"),200);
-
-b.style.left=Math.random()*220+"px";
-b.style.top=Math.random()*250+"px";
-};
-
-a.onclick=()=>{
-msg("Eid Mubarak 😌","right");
-clear();
-setTimeout(step2,700);
-};
-
-chat.appendChild(a);
-chat.appendChild(b);
-}
-
-/* CLEAR */
-function clear(){
-document.querySelectorAll(".option-btn").forEach(e=>e.remove());
-}
-
-/* STEP 2 */
-function step2(){
-
-msg("Dhonnobad Dhonnobad. Salamita 💁‍♂️","left");
-
-const a=btn("Amare tumi diba",run);
-const b=btn("Kisher salami 😡",run);
-const c=btn("Accha dicchi",()=>{
-msg("Accha dicchi 😊","right");
-clear();
-setTimeout(step3,600);
-});
-
-chat.appendChild(a);
-chat.appendChild(b);
-chat.appendChild(c);
-}
-
-function btn(t,fn){
-const b=document.createElement("button");
-b.className="option-btn";
-b.innerText=t;
-b.style.background="#4d96ff";
-b.onmouseenter=fn;
-b.ontouchstart=fn;
-return b;
-}
-
-function run(){
-toast("Wrong option");
-hee();
-document.body.classList.add("shake");
-setTimeout(()=>document.body.classList.remove("shake"),200);
-}
-
-/* STEP 3 */
-function step3(){
-
-msg("Dhonnobad Dhonnobad","left");
-
-const a=btn("No Salami",run);
-const b=btn("10 Taka",run);
-
-const big=document.createElement("button");
-big.className="option-btn";
-big.innerText="500 Taka 😡";
-big.style.background="red";
-big.style.left="120px";
-big.style.top="300px";
-big.style.transform="scale(.5)";
-
-let scale=.5;
-
-setInterval(()=>{
-scale+=0.03;
-big.style.transform=`scale(${scale})`;
-},250);
-
-big.onclick=()=>{
-clear();
-showEnd();
-};
-
-chat.appendChild(a);
-chat.appendChild(b);
-chat.appendChild(big);
-}
-
-/* END */
-function showEnd(){
-document.body.innerHTML=`
-<div style="height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;color:white">
-<h1>🥰 Dhonnobad Dhonnobad</h1>
-<p>I receive — Salami 💸<br>You receive — Dua 🤲</p>
-</div>
-`;
+function hehe(){
+const d=document.createElement("div");
+d.className="hehe";
+d.innerText="HeeHee 🤭";
+document.body.appendChild(d);
+setTimeout(()=>d.remove(),1000);
 }
 
 </script>
+
 </body>
 </html>
