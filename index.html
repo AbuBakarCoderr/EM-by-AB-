@@ -21,18 +21,100 @@ display:flex;
 justify-content:center;
 align-items:center;
 background:#0b141a;
-background-image:url("https://i.imgur.com/7v5ASc8.png");
-background-size:420px;
+background-image:url("YOUR_BACKGROUND_IMAGE_LINK_HERE");
+background-size:350px;
+background-repeat:repeat;
 transition:0.2s;
 }
+
+/* ================= LOADING SCREEN ================= */
+
+#loadingScreen{
+position:fixed;
+inset:0;
+background:
+linear-gradient(to bottom,#050505,#0f1720);
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:999999999;
+overflow:hidden;
+transition:1s ease;
+}
+
+.loader-circle{
+width:90px;
+height:90px;
+border-radius:50%;
+border:5px solid rgba(255,255,255,0.08);
+border-top:5px solid white;
+animation:spin 1s linear infinite;
+margin-bottom:30px;
+}
+
+@keyframes spin{
+from{
+transform:rotate(0deg);
+}
+to{
+transform:rotate(360deg);
+}
+}
+
+.loading-text{
+color:white;
+font-size:24px;
+font-weight:bold;
+margin-bottom:25px;
+opacity:0.9;
+}
+
+.volume-tip{
+position:absolute;
+bottom:110px;
+left:50%;
+transform:translateX(-50%);
+color:white;
+font-size:17px;
+text-align:center;
+opacity:0.85;
+padding:12px 20px;
+border-radius:20px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(8px);
+}
+
+.tap-text{
+position:absolute;
+bottom:40px;
+left:50%;
+transform:translateX(-50%);
+color:white;
+font-size:18px;
+font-weight:bold;
+opacity:0;
+animation:tapAppear 1s forwards;
+animation-delay:2s;
+}
+
+@keyframes tapAppear{
+to{
+opacity:1;
+}
+}
+
+/* ================= CHAT ================= */
 
 .chat-container{
 width:100%;
 max-width:450px;
 height:100vh;
-background:linear-gradient(to bottom,#111b21,#0b141a);
+background:rgba(17,27,33,0.85);
+backdrop-filter:blur(2px);
 overflow:hidden;
 position:relative;
+display:none;
 }
 
 .header{
@@ -44,7 +126,6 @@ padding:14px;
 color:white;
 font-size:20px;
 font-weight:bold;
-box-shadow:0 2px 10px rgba(0,0,0,0.3);
 }
 
 .profile{
@@ -86,7 +167,6 @@ border-radius:18px;
 font-size:15px;
 line-height:1.4;
 color:white;
-position:relative;
 word-wrap:break-word;
 }
 
@@ -109,12 +189,12 @@ text-align:right;
 
 .options{
 position:relative;
-height:240px;
+height:250px;
 margin-top:18px;
 }
 
 .option-btn{
-padding:12px 18px;
+padding:13px 18px;
 border:none;
 border-radius:25px;
 font-size:16px;
@@ -122,8 +202,8 @@ font-weight:bold;
 cursor:pointer;
 position:absolute;
 transition:
-left 0.22s ease,
-top 0.22s ease,
+left 0.25s ease,
+top 0.25s ease,
 transform 0.35s ease,
 opacity 0.35s ease;
 color:white;
@@ -251,6 +331,28 @@ transform:scale(1);
 
 <body>
 
+<!-- ================= LOADING ================= -->
+
+<div id="loadingScreen">
+
+<div class="loader-circle"></div>
+
+<div class="loading-text">
+Loading Eid Experience...
+</div>
+
+<div class="volume-tip">
+🔊 Turn up the volume for the best experience
+</div>
+
+<div class="tap-text" id="tapText">
+Tap / Click Screen To Start
+</div>
+
+</div>
+
+<!-- ================= CHAT ================= -->
+
 <div class="chat-container">
 
 <div class="header">
@@ -274,14 +376,6 @@ const bgMusic = new Audio("https://files.catbox.moe/sauxt7.mp3");
 
 bgMusic.loop = true;
 bgMusic.volume = 0.35;
-
-window.addEventListener("load",()=>{
-bgMusic.play().catch(()=>{});
-});
-
-document.body.addEventListener("click",()=>{
-bgMusic.play().catch(()=>{});
-},{once:true});
 
 /* ================= SOUNDS ================= */
 
@@ -442,7 +536,6 @@ function createButton(text,fn){
 const b = document.createElement("button");
 
 b.className = "option-btn";
-
 b.innerText = text;
 
 b.onclick = ()=>{
@@ -550,16 +643,12 @@ same.style.background = "#ff6b6b";
 same.style.left = "220px";
 same.style.top = "130px";
 
-/* RUNAWAY */
-
 same.onmouseenter = runAway;
 same.ontouchstart = runAway;
 
 function runAway(){
 
 wrongSoft();
-
-/* NEVER overlap Eid button */
 
 let x,y,good=false;
 
@@ -607,8 +696,6 @@ a.style.top = "30px";
 b.style.left = "220px";
 b.style.top = "30px";
 
-/* RUNAWAY */
-
 function move(btn){
 
 wrongSoft();
@@ -620,17 +707,23 @@ while(!valid){
 x = Math.random()*250;
 y = Math.random()*90;
 
-/* avoid overlap zone */
-
 const tooCloseToCenter =
 (x>80 && x<210 && y>90);
 
-const tooCloseToOther =
-Math.abs(
-parseInt(btn===a?b.style.left:a.style.left)-x
-)<120;
+const otherBtn =
+btn===a?b:a;
 
-if(!tooCloseToCenter && !tooCloseToOther){
+const otherX =
+parseInt(otherBtn.style.left);
+
+const otherY =
+parseInt(otherBtn.style.top);
+
+const overlap =
+Math.abs(otherX-x)<120 &&
+Math.abs(otherY-y)<60;
+
+if(!tooCloseToCenter && !overlap){
 valid=true;
 }
 
@@ -660,8 +753,6 @@ step3();
 });
 
 });
-
-/* readable color */
 
 c.style.background = "#f4f1de";
 c.style.color = "#222";
@@ -705,8 +796,6 @@ addMessage("500 TK 😡","right");
 
 clearOptions();
 
-/* multiple confetti */
-
 confettiBlast();
 
 setTimeout(()=>{
@@ -728,7 +817,7 @@ b.style.background = "#4d96ff";
 c.style.background = "#666";
 big.style.background = "#ff0055";
 
-/* starting size */
+/* Bigger initially */
 
 a.style.transform = "scale(1.08)";
 b.style.transform = "scale(1.08)";
@@ -736,17 +825,19 @@ c.style.transform = "scale(1.08)";
 
 big.style.transform = "scale(0.9)";
 
-a.style.left = "10px";
-a.style.top = "25px";
+/* Better placement */
 
-b.style.left = "155px";
-b.style.top = "25px";
+a.style.left = "20px";
+a.style.top = "30px";
 
-c.style.left = "80px";
-c.style.top = "95px";
+b.style.left = "210px";
+b.style.top = "30px";
 
-big.style.left = "110px";
-big.style.top = "170px";
+c.style.left = "100px";
+c.style.top = "110px";
+
+big.style.left = "125px";
+big.style.top = "185px";
 
 addOptions([a,b,c,big]);
 
@@ -767,7 +858,7 @@ growVal = 0.9;
 
 growInterval = setInterval(()=>{
 
-growVal += 0.032;
+growVal += 0.04;
 
 big.style.transform = `scale(${growVal})`;
 
@@ -787,8 +878,6 @@ Math.max(0.05,1-growVal/4);
 }
 
 });
-
-/* FULL SCREEN */
 
 if(growVal>12){
 
@@ -897,9 +986,35 @@ font-size:16px;
 
 }
 
-/* ================= START ================= */
+/* ================= START EXPERIENCE ================= */
+
+const loadingScreen =
+document.getElementById("loadingScreen");
+
+loadingScreen.addEventListener("click",startExperience);
+
+loadingScreen.addEventListener("touchstart",startExperience);
+
+function startExperience(){
+
+bgMusic.play().catch(()=>{});
+
+loadingScreen.style.opacity = "0";
+
+loadingScreen.style.pointerEvents = "none";
+
+document.querySelector(".chat-container")
+.style.display = "block";
+
+setTimeout(()=>{
+
+loadingScreen.remove();
 
 step1();
+
+},1000);
+
+}
 
 </script>
 
