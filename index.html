@@ -6,13 +6,7 @@
 <title>Eid er Chand Aakashe 🌙</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
 body{
 height:100vh;
@@ -33,144 +27,112 @@ position:fixed;
 inset:0;
 background:linear-gradient(to bottom,#050505,#0f1720);
 display:flex;
+flex-direction:column;
 justify-content:center;
 align-items:center;
-flex-direction:column;
 z-index:999999;
-transition:0.8s ease;
 }
 
 .loader-circle{
-width:90px;
-height:90px;
+width:90px;height:90px;
 border-radius:50%;
-border:5px solid rgba(255,255,255,0.08);
+border:5px solid rgba(255,255,255,0.1);
 border-top:5px solid white;
 animation:spin 1s linear infinite;
-margin-bottom:30px;
+margin-bottom:20px;
 }
 
-@keyframes spin{
-from{transform:rotate(0deg);}
-to{transform:rotate(360deg);}
-}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-.loading-text{
-color:white;
-font-size:24px;
-font-weight:bold;
-margin-bottom:25px;
-}
+.loading-text{font-size:22px;margin-bottom:10px}
+.tap-text{margin-top:20px;opacity:0.8}
 
-.tap-text{
-position:absolute;
-bottom:40px;
-left:50%;
-transform:translateX(-50%);
-color:white;
-font-size:18px;
-font-weight:bold;
-}
-
-/* CHAT BASE FIX */
+/* CHAT */
 .chat-container{
 width:100%;
 max-width:450px;
 height:100vh;
 background:rgba(17,27,33,0.92);
 backdrop-filter:blur(6px);
-overflow:hidden;
-position:relative;
 display:none;
+overflow:hidden;
 }
 
 .header{
-height:78px;
 display:flex;
 align-items:center;
-padding:14px;
-color:white;
+padding:12px;
 background:#202c33;
 }
 
 .profile{
-width:50px;
-height:50px;
+width:45px;height:45px;
 border-radius:50%;
-margin-right:12px;
-background:url("https://drive.google.com/thumbnail?id=1yTQLNM23xkL37yNq-Bb8eqliGfcaaCt_&sz=w1000");
+background:url("https://drive.google.com/thumbnail?id=1yTQLNM23xkL37yNq-Bb8eqliGfcaaCt_");
 background-size:cover;
+margin-right:10px;
 }
 
-.title{font-size:20px;font-weight:bold;}
-.sub-title{font-size:12px;opacity:0.7;}
+.title{font-weight:bold}
+.sub{font-size:12px;opacity:0.7}
 
 .chat-box{
-height:calc(100vh - 78px);
+height:calc(100vh - 70px);
 overflow-y:auto;
-padding:20px 12px 120px;
+padding:15px;
 }
 
-.message-row{
-display:flex;
-flex-direction:column;
-margin:10px 0;
-}
-
-.left{align-items:flex-start;}
-.right{align-items:flex-end;}
+.message-row{margin:10px 0;display:flex;flex-direction:column}
+.left{align-items:flex-start}
+.right{align-items:flex-end}
 
 .bubble{
-max-width:75%;
 padding:12px 16px;
 border-radius:18px;
-font-size:15px;
-line-height:1.4;
-color:white;
-word-wrap:break-word;
+max-width:75%;
 }
 
-.left .bubble{background:#202c33;border-bottom-left-radius:6px;}
-.right .bubble{background:#005c4b;border-bottom-right-radius:6px;}
-
-.time{font-size:10px;opacity:0.7;margin-top:4px;text-align:right;}
-
-/* OPTIONS FIX */
-.options{
-position:relative;
-height:340px;
-margin-top:18px;
-}
+.left .bubble{background:#202c33}
+.right .bubble{background:#005c4b}
 
 .option-btn{
+position:absolute;
 padding:14px 20px;
 border:none;
-border-radius:28px;
-font-size:16px;
+border-radius:25px;
+color:white;
 font-weight:bold;
 cursor:pointer;
-position:absolute;
-transition:all 0.2s ease;
-color:white;
-box-shadow:0 4px 12px rgba(0,0,0,0.25);
-}
-
-/* STEP */
-.progress-wrap{
-position:fixed;
-bottom:15px;
-right:15px;
-display:flex;
-align-items:center;
-gap:10px;
+transition:0.2s;
 }
 
 .step{
-background:rgba(0,0,0,0.45);
-color:white;
-padding:8px 14px;
+position:fixed;
+bottom:10px;
+right:10px;
+background:rgba(0,0,0,0.4);
+padding:8px 12px;
 border-radius:20px;
-font-size:14px;
+}
+
+.toast{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+background:red;
+padding:10px 15px;
+border-radius:20px;
+z-index:999999;
+}
+
+.shake{animation:shake 0.3s}
+@keyframes shake{
+0%{transform:translate(0)}
+25%{transform:translate(-5px)}
+50%{transform:translate(5px)}
+75%{transform:translate(-5px)}
+100%{transform:translate(0)}
 }
 
 </style>
@@ -181,7 +143,8 @@ font-size:14px;
 <div id="loadingScreen">
 <div class="loader-circle"></div>
 <div class="loading-text">Loading Eid Experience...</div>
-<div class="tap-text">Tap / Click Screen To Start</div>
+<div>🔊 Increase volume for better experience</div>
+<div class="tap-text">Tap to start</div>
 </div>
 
 <div class="chat-container">
@@ -190,84 +153,105 @@ font-size:14px;
 <div class="profile"></div>
 <div>
 <div class="title">Eid er Chand Aakashe 🌙</div>
-<div class="sub-title">online</div>
+<div class="sub">online</div>
 </div>
 </div>
 
 <div class="chat-box" id="chatBox"></div>
 
-<div class="progress-wrap">
-<div class="step" id="step">Step 1/4</div>
-</div>
+<div class="step" id="step">Step 1</div>
 
 </div>
 
-<audio id="bgMusic" loop playsinline>
+<audio id="music" loop>
 <source src="https://files.catbox.moe/sauxt7.mp3">
 </audio>
 
 <script>
 
-const loadingScreen = document.getElementById("loadingScreen");
-const chatContainer = document.querySelector(".chat-container");
-const chatBox = document.getElementById("chatBox");
+const loading = document.getElementById("loadingScreen");
+const chat = document.querySelector(".chat-container");
+const box = document.getElementById("chatBox");
 const step = document.getElementById("step");
-const music = document.getElementById("bgMusic");
+const music = document.getElementById("music");
 
-let started = false;
+let started=false;
 
-/* FIXED START (IMPORTANT) */
-function startExperience(){
-
+/* START */
+function start(){
 if(started) return;
-started = true;
+started=true;
 
-loadingScreen.style.opacity = "0";
-loadingScreen.style.pointerEvents = "none";
+loading.style.display="none";
+chat.style.display="block";
 
-chatContainer.style.display = "block";
+music.volume=0.4;
+music.play();
 
-music.volume = 0.38;
-music.play().catch(()=>{});
-
-setTimeout(()=>{
-loadingScreen.remove();
 step1();
-},500);
-
 }
 
-/* ONLY RELIABLE EVENT */
-loadingScreen.addEventListener("pointerdown", startExperience, {once:true});
+/* ONLY SAFE TRIGGER */
+loading.addEventListener("pointerdown",start,{once:true});
 
-function setStep(n){
-step.innerText = `Step ${n}/4`;
+/* CHAT */
+function msg(text,side){
+const r=document.createElement("div");
+r.className="message-row "+side;
+
+const b=document.createElement("div");
+b.className="bubble";
+b.innerText=text;
+
+r.appendChild(b);
+box.appendChild(r);
+box.scrollTop=box.scrollHeight;
 }
 
-function addMessage(text,side){
-
-const row = document.createElement("div");
-row.className = "message-row "+side;
-
-const bubble = document.createElement("div");
-bubble.className = "bubble";
-bubble.innerText = text;
-
-row.appendChild(bubble);
-chatBox.appendChild(row);
-
-chatBox.scrollTop = chatBox.scrollHeight;
-}
-
+/* STEP 1 */
 function step1(){
-setStep(1);
+step.innerText="Step 1";
 
-addMessage("Assalamu alaikum Eid Mubarak","left");
+msg("Assalamu Alaikum Eid Mubarak","left");
 
 setTimeout(()=>{
-addMessage("Eid Mubarak 😌","right");
+
+const btn=document.createElement("button");
+btn.innerText="Eid Mubarak";
+btn.className="option-btn";
+btn.style.left="20px";
+btn.style.top="200px";
+btn.style.background="#4d96ff";
+
+const run=document.createElement("button");
+run.innerText="Same to you";
+run.className="option-btn";
+run.style.left="200px";
+run.style.top="250px";
+run.style.background="#ff6b6b";
+
+run.onmouseenter=()=>{run.style.left=Math.random()*200+"px";run.style.top=Math.random()*300+"px"};
+
+btn.onclick=()=>{
+msg("Eid Mubarak 😌","right");
+step2();
+};
+
+document.body.appendChild(btn);
+document.body.appendChild(run);
+
 },800);
 }
+
+/* STEP 2 */
+function step2(){
+step.innerText="Step 2";
+
+msg("Kisher Salami?","left");
+
+}
+
+/* (rest steps you already had — can expand later) */
 
 </script>
 
