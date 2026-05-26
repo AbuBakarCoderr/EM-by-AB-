@@ -25,7 +25,7 @@ body{
   align-items:center;
   background:#0b141a;
 
-  /* CHAT BACKGROUND (Kept your original one here) */
+  /* CHAT BACKGROUND */
   background-image:url("https://drive.google.com/thumbnail?id=1C_WMe2IQ1pTLokpRvX7PHvjy_W2V9bWc&sz=w2000");
   background-size:350px;
   background-repeat:repeat;
@@ -105,8 +105,6 @@ body{
   border-left:1px solid rgba(255,255,255,.05);
   border-right:1px solid rgba(255,255,255,.05);
 }
-
-/* RESTORED CHAT BACKGROUND */
 
 .chat-container::before{
   content:"";
@@ -385,17 +383,18 @@ body{
   padding:20px;
 }
 
-/* NEW BACKGROUND APPLIED HERE */
+/* UPDATED BACKGROUND APPLIED HERE: Smaller and Clearer */
 .end-screen::before{
   content:"";
   position:absolute;
   inset:0;
 
   background-image:url("https://drive.google.com/thumbnail?id=1DM4WvCa29d5M_EdbJcx_X3ADKbUgCrzb&sz=w2000");
-  background-size:cover;
+  background-size:contain; /* Keeps it entirely inside the screen, making it smaller */
+  background-repeat:no-repeat; /* Prevents tiling */
   background-position:center;
 
-  opacity:.15; /* Slightly increased opacity so it's easier to see */
+  opacity:.5; /* Noticeably increased opacity to make it clearer */
   pointer-events:none;
 }
 
@@ -463,7 +462,7 @@ function startExperience(){
 
   music.volume=.55;
 
-music.load();
+  // music.load() REMOVED here to prevent audio interruption
 
   const playPromise=music.play();
 
