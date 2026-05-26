@@ -383,18 +383,18 @@ body{
   padding:20px;
 }
 
-/* UPDATED BACKGROUND APPLIED HERE: Smaller and Clearer */
 .end-screen::before{
   content:"";
   position:absolute;
   inset:0;
 
   background-image:url("https://drive.google.com/thumbnail?id=1DM4WvCa29d5M_EdbJcx_X3ADKbUgCrzb&sz=w2000");
-  background-size:contain; /* Keeps it entirely inside the screen, making it smaller */
-  background-repeat:no-repeat; /* Prevents tiling */
-  background-position:center;
+  background-size:contain;
+  background-repeat:no-repeat;
+  /* Moved image up to make space for text below */
+  background-position:center 20%; 
 
-  opacity:.5; /* Noticeably increased opacity to make it clearer */
+  opacity:.5;
   pointer-events:none;
 }
 
@@ -461,8 +461,6 @@ function startExperience(){
   loadingScreen.removeEventListener("touchstart",startExperience);
 
   music.volume=.55;
-
-  // music.load() REMOVED here to prevent audio interruption
 
   const playPromise=music.play();
 
