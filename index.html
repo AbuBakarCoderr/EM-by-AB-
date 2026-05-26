@@ -101,6 +101,17 @@ body {
   border-right: 1px solid rgba(255,255,255,0.05);
 }
 
+/* WhatsApp Pattern Chat Background restored */
+.chat-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
+  background-repeat: repeat;
+  pointer-events: none;
+}
+
 .header {
   height: 70px;
   display: flex;
@@ -132,6 +143,8 @@ body {
   overflow-y: auto;
   padding: 15px 12px 140px;
   scroll-behavior: smooth;
+  position: relative;
+  z-index: 2;
 }
 
 .message-row {
@@ -208,7 +221,7 @@ body {
 .end-screen {
   position: fixed;
   inset: 0;
-  background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(2, 6, 23, 0.98) 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -219,6 +232,20 @@ body {
   animation: endFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   padding: 20px;
 }
+
+/* Added background graphic for final screen */
+.end-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=1000&auto=format&fit=crop");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
 @keyframes endFade { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 </style>
 </head>
@@ -226,7 +253,7 @@ body {
 <body>
 
 <audio id="bgMusic" loop playsinline>
-  <source src="https://files.catbox.moe/sauxt7.mp3" type="audio/mp3">
+  <source src="https://scummbar.com/mi2/MI1-CD/01%20-%20Opening%20Themes%20-%20Introduction.mp3" type="audio/mp3">
 </audio>
 
 <div id="loadingScreen">
@@ -263,8 +290,7 @@ loadingScreen.addEventListener("click", startExperience);
 loadingScreen.addEventListener("touchstart", startExperience, {passive: true});
 
 function startExperience() {
-  // Set volume and play right away so it runs through the whole session
-  music.volume = 0.4;
+  music.volume = 0.55;
   music.play().catch(err => console.log("Audio play blocked or interrupted:", err));
 
   // Visual transitions
@@ -409,7 +435,7 @@ function step1() {
     pointer.className = "pointer";
     pointer.innerHTML = "👇 Press Here";
     
-    // UPDATED: Arrow now points directly to the "Same to you" button trap
+    // Arrow pointing to the "Same to you" bait
     pointer.style.left = "215px"; 
     pointer.style.top = "15px";   
 
@@ -472,7 +498,7 @@ function step3() {
 
   const big = createButton("500 TK 😡", "#ff0055", "165px", "235px", () => {
     clearInterval(growInterval);
-    big.remove(); // Removes the fullscreen blocking layout instantly
+    big.remove(); 
     confettiBlast();
     setTimeout(() => { showEnd(); }, 1800);
   });
@@ -555,11 +581,11 @@ function showEnd() {
   const end = document.createElement("div");
   end.className = "end-screen";
   end.innerHTML = `
-    <div style="font-size:80px; margin-bottom: 10px;">🥰</div>
-    <h1 style="font-size: 28px; font-weight: bold;">Dhonnobad Dhonnobad!</h1>
-    <p style="margin-top: 20px; font-size: 22px; color: #00a884; font-weight: bold;">I receive — Salami 💸</p>
-    <p style="margin-top: 10px; font-size: 20px; color: #e9edef;">You receive — Dua 🤲</p>
-    <div style="position: fixed; bottom: 20px; right: 15px; font-size: 11px; opacity: 0.4; font-style: italic; letter-spacing: 1px;">
+    <div style="font-size:80px; margin-bottom: 10px; position: relative; z-index: 5;">🥰</div>
+    <h1 style="font-size: 28px; font-weight: bold; position: relative; z-index: 5;">Dhonnobad Dhonnobad!</h1>
+    <p style="margin-top: 20px; font-size: 22px; color: #00a884; font-weight: bold; position: relative; z-index: 5;">I receive — Salami 💸</p>
+    <p style="margin-top: 10px; font-size: 20px; color: #e9edef; position: relative; z-index: 5;">You receive — Dua 🤲</p>
+    <div style="position: fixed; bottom: 20px; right: 15px; font-size: 11px; opacity: 0.4; font-style: italic; letter-spacing: 1px; z-index: 5;">
       Dishting Dishting ✨
     </div>
   `;
