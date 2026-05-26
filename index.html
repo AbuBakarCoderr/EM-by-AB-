@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,1193 +6,565 @@
 <title>Eid er Chand Aakashe 🌙</title>
 
 <style>
-
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-body{
-height:100vh;
-overflow:hidden;
-background:#0b141a;
-display:flex;
-justify-content:center;
-align-items:center;
-
-background-image:url("https://drive.google.com/thumbnail?id=1C_WMe2IQ1pTLokpRvX7PHvjy_W2V9bWc&sz=w2000");
-background-size:350px;
-background-repeat:repeat;
+body {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #0b141a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0b141a;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+  background-size: 24px 24px;
 }
 
-/* ================= LOADING ================= */
-
-#loadingScreen{
-position:fixed;
-inset:0;
-background:linear-gradient(to bottom,#050505,#0f1720);
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-z-index:999999;
-transition:1s ease;
+/* ================= LOADING SCREEN ================= */
+#loadingScreen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(to bottom, #050505, #0f1720);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 999999;
+  transition: opacity 0.8s ease;
+  cursor: pointer;
 }
 
-.loader-circle{
-width:90px;
-height:90px;
-border-radius:50%;
-border:5px solid rgba(255,255,255,0.08);
-border-top:5px solid white;
-animation:spin 1s linear infinite;
-margin-bottom:30px;
+.loader-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.08);
+  border-top: 4px solid #00a884;
+  animation: spin 1s linear infinite;
+  margin-bottom: 30px;
 }
 
-@keyframes spin{
-from{transform:rotate(0deg);}
-to{transform:rotate(360deg);}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.loading-text{
-color:white;
-font-size:25px;
-font-weight:bold;
-margin-bottom:18px;
+.loading-text {
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 12px;
 }
 
-.volume-tip{
-color:white;
-font-size:16px;
-opacity:0;
-animation:fadeIn 1s forwards;
-animation-delay:1.2s;
-margin-top:10px;
+.volume-tip {
+  color: #8696a0;
+  font-size: 14px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+  animation-delay: 0.5s;
+  margin-top: 5px;
 }
 
-.tap-text{
-margin-top:25px;
-font-size:18px;
-font-weight:bold;
-color:white;
-opacity:0;
-animation:fadeIn 1s forwards;
-animation-delay:2.5s;
+.tap-text {
+  margin-top: 35px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #00a884;
+  opacity: 0;
+  animation: fadeIn 1s infinite alternate;
+  animation-delay: 1.2s;
 }
 
-@keyframes fadeIn{
-to{
-opacity:1;
-}
+@keyframes fadeIn {
+  to { opacity: 1; }
 }
 
-/* ================= CHAT ================= */
-
-.chat-container{
-width:100%;
-max-width:450px;
-height:100vh;
-background:rgba(17,27,33,0.84);
-backdrop-filter:none;
-overflow:hidden;
-position:relative;
-display:none;
+/* ================= CHAT CONTAINER ================= */
+.chat-container {
+  width: 100%;
+  max-width: 450px;
+  height: 100vh;
+  height: 100dvh;
+  background: rgba(11, 20, 26, 0.95);
+  overflow: hidden;
+  position: relative;
+  display: none;
+  border-left: 1px solid rgba(255,255,255,0.05);
+  border-right: 1px solid rgba(255,255,255,0.05);
 }
 
-/* ================= HEADER ================= */
-
-.header{
-height:78px;
-display:flex;
-align-items:center;
-padding:14px;
-color:white;
-position:relative;
-overflow:hidden;
-
-background:
-radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0 2px, transparent 3px),
-radial-gradient(circle at 70% 60%, rgba(255,255,255,0.04) 0 2px, transparent 3px),
-linear-gradient(135deg,
-rgba(255,255,255,0.03) 25%,
-transparent 25%,
-transparent 50%,
-rgba(255,255,255,0.03) 50%,
-rgba(255,255,255,0.03) 75%,
-transparent 75%,
-transparent),
-#202c33;
-
-background-size:
-120px 120px,
-180px 180px,
-35px 35px;
+.header {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  color: white;
+  background: #202c33;
+  z-index: 10;
+  position: relative;
 }
 
-.profile{
-width:50px;
-height:50px;
-border-radius:50%;
-margin-right:12px;
-background:url("https://drive.google.com/thumbnail?id=1yTQLNM23xkL37yNq-Bb8eqliGfcaaCt_&sz=w1000");
-background-size:cover;
-background-position:center;
-border:2px solid rgba(255,255,255,0.2);
+.profile {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  margin-right: 12px;
+  background: #00a884;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
 }
 
-.title{
-font-size:20px;
-font-weight:bold;
+.title { font-size: 16px; font-weight: bold; }
+.sub-title { font-size: 12px; color: #8696a0; margin-top: 2px; }
+
+.chat-box {
+  height: calc(100% - 70px);
+  overflow-y: auto;
+  padding: 15px 12px 140px;
+  scroll-behavior: smooth;
 }
 
-.sub-title{
-font-size:12px;
-opacity:0.7;
-margin-top:2px;
+.message-row {
+  display: flex;
+  margin: 8px 0;
+  animation: messageIn .25s ease forwards;
 }
 
-/* ================= CHAT ================= */
+.left { justify-content: flex-start; }
+.right { justify-content: flex-end; }
 
-.chat-box{
-height:calc(100vh - 78px);
-overflow-y:auto;
-padding:20px 12px 120px;
-scroll-behavior:smooth;
-}
-
-.message-row{
-display:flex;
-margin:10px 0;
-animation:messageIn .25s ease;
+@keyframes messageIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.left{
-justify-content:flex-start;
+.bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #e9edef;
+  word-wrap: break-word;
 }
 
-.right{
-justify-content:flex-end;
+.left .bubble { background: #202c33; border-top-left-radius: 0; }
+.right .bubble { background: #005c4b; border-top-right-radius: 0; }
+.time { font-size: 10px; color: #8696a0; margin-top: 4px; text-align: right; }
+
+/* ================= OPTIONS AREA ================= */
+.options {
+  position: relative;
+  height: 280px;
+  margin-top: 15px;
+  width: 100%;
 }
 
-@keyframes messageIn{
-from{
-opacity:0;
-transform:translateY(10px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-.bubble{
-max-width:78%;
-padding:12px 16px;
-border-radius:18px;
-font-size:15px;
-line-height:1.5;
-color:white;
-word-wrap:break-word;
-position:relative;
+.option-btn {
+  position: absolute;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: left .15s ease, top .15s ease, transform .1s ease;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 5;
+  touch-action: none;
 }
 
-.left .bubble{
-background:#202c33;
-border-bottom-left-radius:6px;
-}
+.progress-wrap { position: absolute; bottom: 15px; right: 15px; z-index: 99; }
+.step { background: rgba(32, 44, 51, 0.9); color: #00a884; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+.pointer { position: absolute; font-size: 14px; font-weight: bold; color: white; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 4px; animation: pointerBounce 0.8s infinite alternate; pointer-events: none; z-index: 99; }
 
-.right .bubble{
-background:#005c4b;
-border-bottom-right-radius:6px;
-}
+@keyframes pointerBounce { from { transform: translateY(0); } to { transform: translateY(-8px); } }
 
-.time{
-font-size:10px;
-opacity:0.7;
-margin-top:6px;
-text-align:right;
-}
+.toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #ea0038; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold; z-index: 999999; font-size: 14px; animation: toastAnim 1s ease forwards; }
+@keyframes toastAnim { 0% { opacity: 0; transform: translate(-50%, -20px); } 15%, 85% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -20px); } }
 
-/* ================= OPTIONS ================= */
+.heehee { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); padding: 10px 20px; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: white; border-radius: 25px; font-weight: bold; z-index: 999999; transition: 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+.shake { animation: shake 0.25s linear; }
+@keyframes shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-8px, 2px); } 40% { transform: translate(6px, -2px); } 60% { transform: translate(-4px, 1px); } 80% { transform: translate(4px, -1px); } }
 
-.options{
-position:relative;
-height:340px;
-margin-top:20px;
-}
+.typing { display: flex; align-items: center; gap: 4px; padding: 4px 0; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: #8696a0; animation: bounce 1.2s infinite; }
+.dot:nth-child(2) { animation-delay: 0.15s; }
+.dot:nth-child(3) { animation-delay: 0.3s; }
+@keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1.2); opacity: 1; } }
 
-.option-btn{
-position:absolute;
-padding:14px 20px;
-border:none;
-border-radius:28px;
-font-size:15px;
-font-weight:bold;
-cursor:pointer;
-transition:
-left .18s ease,
-top .18s ease,
-transform .18s ease;
-color:white;
-box-shadow:0 4px 12px rgba(0,0,0,0.25);
-z-index:5;
+/* ================= END SCREEN ================= */
+.end-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  text-align: center;
+  z-index: 999999;
+  animation: endFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  padding: 20px;
 }
-
-/* ================= STEP ================= */
-
-.progress-wrap{
-position:fixed;
-bottom:15px;
-right:15px;
-z-index:9999;
-}
-
-.step{
-background:rgba(0,0,0,0.65);
-color:white;
-padding:8px 14px;
-border-radius:20px;
-font-size:14px;
-backdrop-filter:blur(5px);
-}
-
-/* ================= POINTER ================= */
-
-.pointer{
-position:absolute;
-font-size:24px;
-font-weight:bold;
-color:white;
-animation:pointerBounce 1s infinite;
-pointer-events:none;
-z-index:99;
-text-shadow:0 2px 10px rgba(0,0,0,0.6);
-}
-
-@keyframes pointerBounce{
-0%,100%{
-transform:translateY(0px);
-}
-50%{
-transform:translateY(10px);
-}
-}
-
-/* ================= TOAST ================= */
-
-.toast{
-position:fixed;
-top:18px;
-left:50%;
-transform:translateX(-50%);
-background:#ff2d2d;
-color:white;
-padding:12px 18px;
-border-radius:22px;
-font-weight:bold;
-z-index:999999;
-animation:toastAnim 1.2s ease;
-}
-
-@keyframes toastAnim{
-0%{
-opacity:0;
-transform:translate(-50%,-15px);
-}
-20%{
-opacity:1;
-}
-100%{
-opacity:0;
-transform:translate(-50%,-35px);
-}
-}
-
-/* ================= HEEHEE ================= */
-
-.heehee{
-position:fixed;
-bottom:-60px;
-left:50%;
-transform:translateX(-50%);
-padding:12px 20px;
-background:rgba(255,255,255,0.1);
-backdrop-filter:blur(8px);
-color:white;
-border-radius:25px;
-font-weight:bold;
-z-index:999999;
-transition:0.5s ease;
-}
-
-/* ================= SHAKE ================= */
-
-.shake{
-animation:shake 0.3s;
-}
-
-@keyframes shake{
-0%{transform:translate(0,0);}
-20%{transform:translate(-6px,4px);}
-40%{transform:translate(6px,-4px);}
-60%{transform:translate(-5px,3px);}
-80%{transform:translate(5px,-3px);}
-100%{transform:translate(0,0);}
-}
-
-/* ================= TYPING ================= */
-
-.typing{
-display:flex;
-align-items:center;
-gap:5px;
-}
-
-.dot{
-width:7px;
-height:7px;
-border-radius:50%;
-background:white;
-animation:bounce 1s infinite;
-}
-
-.dot:nth-child(2){
-animation-delay:0.15s;
-}
-
-.dot:nth-child(3){
-animation-delay:0.3s;
-}
-
-@keyframes bounce{
-0%,80%,100%{
-transform:scale(0.6);
-opacity:0.5;
-}
-40%{
-transform:scale(1);
-opacity:1;
-}
-}
-
-/* ================= END ================= */
-
-.end-screen{
-position:fixed;
-inset:0;
-background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.55)), url("mashallah.jpg");
-background-size: cover;
-background-position: center;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-color:white;
-text-align:center;
-z-index:999999;
-animation:endFade 0.6s ease;
-}
-
-@keyframes endFade{
-from{
-opacity:0;
-transform:scale(0.92);
-}
-to{
-opacity:1;
-transform:scale(1);
-}
-}
-
-@keyframes secretGlow{
-from{
-opacity:0.25;
-transform:translateY(0px);
-}
-to{
-opacity:0.65;
-transform:translateY(-2px);
-}
-}
-
+@keyframes endFade { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 </style>
 </head>
 
 <body>
 
+<audio id="bgMusic" loop playsinline>
+  <source src="https://files.catbox.moe/sauxt7.mp3" type="audio/mp3">
+</audio>
+
 <div id="loadingScreen">
-
-<div class="loader-circle"></div>
-
-<div class="loading-text">
-Loading Eid Experience...
-</div>
-
-<div class="volume-tip">
-🔊 Increase volume for better experience
-</div>
-
-<div class="tap-text">
-Tap anywhere to start
-</div>
-
+  <div class="loader-circle"></div>
+  <div class="loading-text">Loading Eid Experience...</div>
+  <div class="volume-tip">🔊 Increase volume for a better experience</div>
+  <div class="tap-text">Tap anywhere to start</div>
 </div>
 
 <div class="chat-container">
+  <div class="header">
+    <div class="profile">🌙</div>
+    <div>
+      <div class="title">Eid er Chand Aakashe 🌙</div>
+      <div class="sub-title">online</div>
+    </div>
+  </div>
 
-<div class="header">
+  <div class="chat-box" id="chatBox"></div>
 
-<div class="profile"></div>
-
-<div>
-
-<div class="title">
-Eid er Chand Aakashe 🌙
+  <div class="progress-wrap">
+    <div class="step" id="step">Step 1/4</div>
+  </div>
 </div>
-
-<div class="sub-title">
-online
-</div>
-
-</div>
-
-</div>
-
-<div class="chat-box" id="chatBox"></div>
-
-<div class="progress-wrap">
-<div class="step" id="step">
-Step 1/4
-</div>
-</div>
-
-</div>
-
-<audio id="bgMusic" loop playsinline>
-<source src="https://files.catbox.moe/sauxt7.mp3" type="audio/mp3">
-</audio>
 
 <script>
+const music = document.getElementById("bgMusic");
+const chatBox = document.getElementById("chatBox");
+const step = document.getElementById("step");
+const loadingScreen = document.getElementById("loadingScreen");
 
-const music =
-document.getElementById("bgMusic");
+// Trigger music immediately on user's first tap
+loadingScreen.addEventListener("click", startExperience);
+loadingScreen.addEventListener("touchstart", startExperience, {passive: true});
 
-function startMusic(){
+function startExperience() {
+  // Set volume and play right away so it runs through the whole session
+  music.volume = 0.4;
+  music.play().catch(err => console.log("Audio play blocked or interrupted:", err));
 
-music.volume = 0.4;
-
-music.play().catch(()=>{});
-
+  // Visual transitions
+  loadingScreen.style.opacity = "0";
+  loadingScreen.style.pointerEvents = "none";
+  document.querySelector(".chat-container").style.display = "block";
+  
+  setTimeout(() => {
+    loadingScreen.remove();
+    step1();
+  }, 700);
 }
 
-const chatBox =
-document.getElementById("chatBox");
-
-const step =
-document.getElementById("step");
-
-function setStep(num){
-
-step.innerText =
-`Step ${num}/4`;
-
+function setStep(num) {
+  step.innerText = `Step ${num}/4`;
 }
 
-function now(){
-
-return new Date().toLocaleTimeString([],{
-hour:"2-digit",
-minute:"2-digit"
-});
-
+function now() {
+  return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
-function toast(text){
-
-const t =
-document.createElement("div");
-
-t.className = "toast";
-
-t.innerText = text;
-
-document.body.appendChild(t);
-
-setTimeout(()=>{
-t.remove();
-},1200);
-
+function toast(text) {
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.innerText = text;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 1000);
 }
 
-function heehee(){
-
-const h =
-document.createElement("div");
-
-h.className = "heehee";
-
-h.innerText =
-"HeeHee🤭";
-
-document.body.appendChild(h);
-
-setTimeout(()=>{
-h.style.bottom = "35px";
-},20);
-
-setTimeout(()=>{
-h.style.opacity = "0";
-h.style.bottom = "70px";
-},850);
-
-setTimeout(()=>{
-h.remove();
-},1400);
-
+function heehee() {
+  const h = document.createElement("div");
+  h.className = "heehee";
+  h.innerText = "HeeHee 🤭";
+  document.body.appendChild(h);
+  setTimeout(() => { h.style.bottom = "35px"; }, 20);
+  setTimeout(() => {
+    h.style.opacity = "0";
+    h.style.bottom = "70px";
+  }, 850);
+  setTimeout(() => h.remove(), 1300);
 }
 
-function shake(){
-
-document.body.classList.add("shake");
-
-setTimeout(()=>{
-document.body.classList.remove("shake");
-},300);
-
+function shake() {
+  document.body.classList.add("shake");
+  setTimeout(() => document.body.classList.remove("shake"), 250);
 }
 
-function wrongOption(){
+function wrongOption() {
+  wrongOption.lastTrigger = wrongOption.lastTrigger || 0;
+  if(Date.now() - wrongOption.lastTrigger < 200) return;
+  wrongOption.lastTrigger = Date.now();
 
-toast("Wrong option 😡");
-
-heehee();
-
-shake();
-
-if(navigator.vibrate){
-navigator.vibrate(50);
+  toast("Wrong option 😡");
+  heehee();
+  shake();
+  if (navigator.vibrate) { navigator.vibrate(40); }
 }
 
+function addMessage(text, side) {
+  const row = document.createElement("div");
+  row.className = `message-row ${side}`;
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+
+  if (side === "right") {
+    bubble.innerHTML = `${text} <div class="time">${now()} ✓✓</div>`;
+  } else {
+    bubble.innerHTML = `${text} <div class="time">${now()}</div>`;
+  }
+
+  row.appendChild(bubble);
+  chatBox.appendChild(row);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-function addMessage(text,side){
+function typing(cb) {
+  const row = document.createElement("div");
+  row.className = "message-row left";
+  row.innerHTML = `
+    <div class="bubble">
+      <div class="typing">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+  `;
+  chatBox.appendChild(row);
+  chatBox.scrollTop = chatBox.scrollHeight;
 
-const row =
-document.createElement("div");
-
-row.className =
-`message-row ${side}`;
-
-const bubble =
-document.createElement("div");
-
-bubble.className = "bubble";
-
-if(side==="right"){
-
-bubble.innerHTML = `
-${text}
-<div class="time">
-${now()} ✓✓
-</div>
-`;
-
-}else{
-
-bubble.innerHTML = `
-${text}
-<div class="time">
-${now()}
-</div>
-`;
-
+  setTimeout(() => {
+    row.remove();
+    cb();
+  }, 1300);
 }
 
-row.appendChild(bubble);
-
-chatBox.appendChild(row);
-
-chatBox.scrollTop =
-chatBox.scrollHeight;
-
-}
-
-function typing(cb){
-
-const row =
-document.createElement("div");
-
-row.className =
-"message-row left";
-
-row.innerHTML = `
-<div class="bubble">
-<div class="typing">
-<div class="dot"></div>
-<div class="dot"></div>
-<div class="dot"></div>
-</div>
-</div>
-`;
-
-chatBox.appendChild(row);
-
-chatBox.scrollTop =
-chatBox.scrollHeight;
-
-setTimeout(()=>{
-
-row.remove();
-
-cb();
-
-},1600);
-
-}
-
-function createButton(text,color,x,y,fn){
-
-const b =
-document.createElement("button");
-
-b.className = "option-btn";
-
-b.innerText = text;
-
-b.style.background = color;
-
-b.style.left = x;
-b.style.top = y;
-
-b.onclick = fn;
-
-return b;
-
+function createButton(text, color, x, y, fn) {
+  const b = document.createElement("button");
+  b.className = "option-btn";
+  b.innerText = text;
+  b.style.background = color;
+  b.style.left = x;
+  b.style.top = y;
+  b.onclick = fn;
+  return b;
 }
 
 /* ================= STEP 1 ================= */
+function step1() {
+  setStep(1);
+  typing(() => {
+    addMessage("Assalamu Alaikum Eid Mubarak 🌙", "left");
+    const wrap = document.createElement("div");
+    wrap.className = "options";
 
-function step1(){
+    const eid = createButton("Eid Mubarak 👍", "#00a884", "25px", "140px", () => {
+      pointer.remove();
+      addMessage("Eid Mubarak 👍", "right");
+      wrap.remove();
+      typing(() => {
+        addMessage("Dhonnobad Dhonnobad, ta salamita? 💁‍♂️", "left");
+        step2();
+      });
+    });
 
-setStep(1);
+    const same = createButton("Same to you", "#ff6b6b", "210px", "60px", () => {});
 
-typing(()=>{
+    function moveSame(e) {
+      if(e) e.preventDefault();
+      pointer.remove();
+      wrongOption();
+      let x = Math.random() * 160 + 100;
+      let y = Math.random() * 140;
+      same.style.left = x + "px";
+      same.style.top = y + "px";
+    }
 
-addMessage(
-"Assalamu Alaikum Eid Mubarak 🌙",
-"left"
-);
+    same.addEventListener("mouseenter", moveSame);
+    same.addEventListener("touchstart", moveSame, {passive: false});
 
-const wrap =
-document.createElement("div");
+    const pointer = document.createElement("div");
+    pointer.className = "pointer";
+    pointer.innerHTML = "👇 Press Here";
+    
+    // UPDATED: Arrow now points directly to the "Same to you" button trap
+    pointer.style.left = "215px"; 
+    pointer.style.top = "15px";   
 
-wrap.className = "options";
-
-const eid =
-createButton(
-"Eid Mubarak 👍",
-"#00a884",
-"25px",
-"170px",
-()=>{
-
-pointer.remove();
-
-addMessage(
-"Eid Mubarak 👍",
-"right"
-);
-
-wrap.remove();
-
-typing(()=>{
-
-addMessage(
-"Dhonnobad Dhonnobad, ta salamita?💁‍♂️",
-"left"
-);
-
-step2();
-
-});
-
-}
-);
-
-const same =
-createButton(
-"Same to you",
-"#ff6b6b",
-"220px",
-"70px",
-()=>{}
-);
-
-function moveSame(){
-
-pointer.remove();
-
-wrongOption();
-
-let x,y;
-let safe = false;
-
-while(!safe){
-
-x = Math.random()*180 + 180;
-y = Math.random()*120 + 20;
-
-if(!(x<170 && y>120)){
-safe = true;
-}
-
-}
-
-same.style.left = x+"px";
-same.style.top = y+"px";
-
-}
-
-same.addEventListener("mouseenter",moveSame);
-same.addEventListener("touchstart",moveSame);
-same.addEventListener("click",moveSame);
-
-const pointer =
-document.createElement("div");
-
-pointer.className = "pointer";
-
-pointer.innerHTML =
-"👇 Press Here";
-
-pointer.style.left = "230px";
-pointer.style.top = "20px";
-
-wrap.appendChild(eid);
-wrap.appendChild(same);
-wrap.appendChild(pointer);
-
-chatBox.appendChild(wrap);
-
-});
-
+    wrap.appendChild(eid);
+    wrap.appendChild(same);
+    wrap.appendChild(pointer);
+    chatBox.appendChild(wrap);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
 }
 
 /* ================= STEP 2 ================= */
+function step2() {
+  setStep(2);
+  const wrap = document.createElement("div");
+  wrap.className = "options";
 
-function step2(){
+  const good = createButton("Accha Dicchi 👍", "#00a884", "95px", "160px", () => {
+    addMessage("Accha Dicchi 👍", "right");
+    wrap.remove();
+    typing(() => {
+      addMessage("Dhonnobad Dhonnobad, ta koto? 😌", "left");
+      step3();
+    });
+  });
 
-setStep(2);
+  const bad1 = createButton("Kisher salami ❌", "#ff6b6b", "15px", "30px", () => {});
+  const bad2 = createButton("Amare Tumi diba 👎", "#4d96ff", "20px", "90px", () => {});
 
-const wrap =
-document.createElement("div");
+  function move(btn, e) {
+    if(e) e.preventDefault();
+    wrongOption();
+    let x = Math.random() * 200;
+    let y = Math.random() * 160;
+    btn.style.left = x + "px";
+    btn.style.top = y + "px";
+  }
 
-wrap.className = "options";
+  bad1.addEventListener("mouseenter", (e) => move(bad1, e));
+  bad2.addEventListener("mouseenter", (e) => move(bad2, e));
+  bad1.addEventListener("touchstart", (e) => move(bad1, e), {passive: false});
+  bad2.addEventListener("touchstart", (e) => move(bad2, e), {passive: false});
 
-const good =
-createButton(
-"Accha Dicchi 👍",
-"#00a884",
-"95px",
-"200px",
-()=>{
-
-addMessage(
-"Accha Dicchi 👍",
-"right"
-);
-
-wrap.remove();
-
-typing(()=>{
-
-addMessage(
-"Dhonnobad Dhonnobad, ta koto? 😌",
-"left"
-);
-
-step3();
-
-});
-
-}
-);
-
-const bad1 =
-createButton(
-"Kisher salami❌",
-"#ff6b6b",
-"15px",
-"40px",
-()=>{}
-);
-
-const bad2 =
-createButton(
-"Amare Tumi diba👎",
-"#4d96ff",
-"210px",
-"100px",
-()=>{}
-);
-
-function move(btn){
-
-wrongOption();
-
-let x =
-Math.random()*220;
-
-let y =
-Math.random()*140;
-
-btn.style.left = x+"px";
-btn.style.top = y+"px";
-
-}
-
-bad1.addEventListener("mouseenter",()=>move(bad1));
-bad2.addEventListener("mouseenter",()=>move(bad2));
-
-bad1.addEventListener("touchstart",()=>move(bad1));
-bad2.addEventListener("touchstart",()=>move(bad2));
-
-bad1.addEventListener("click",()=>move(bad1));
-bad2.addEventListener("click",()=>move(bad2));
-
-wrap.appendChild(bad1);
-wrap.appendChild(bad2);
-wrap.appendChild(good);
-
-chatBox.appendChild(wrap);
-
+  wrap.appendChild(bad1);
+  wrap.appendChild(bad2);
+  wrap.appendChild(good);
+  chatBox.appendChild(wrap);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 /* ================= STEP 3 ================= */
+function step3() {
+  setStep(3);
+  const wrap = document.createElement("div");
+  wrap.className = "options";
 
-function step3(){
+  const a = createButton("No Salami ❌", "#6c63ff", "25px", "35px", () => wrongOption());
+  const b = createButton("10 TK", "#6c63ff", "235px", "35px", () => wrongOption());
+  const c = createButton("30 TK", "#6c63ff", "105px", "145px", () => wrongOption());
 
-setStep(3);
+  const big = createButton("500 TK 😡", "#ff0055", "165px", "235px", () => {
+    clearInterval(growInterval);
+    big.remove(); // Removes the fullscreen blocking layout instantly
+    confettiBlast();
+    setTimeout(() => { showEnd(); }, 1800);
+  });
 
-const wrap =
-document.createElement("div");
+  a.style.transform = "scale(1.5)";
+  b.style.transform = "scale(1.5)";
+  c.style.transform = "scale(1.5)";
+  big.style.transform = "scale(0.2)";
+  big.style.zIndex = "999";
 
-wrap.className = "options";
+  a.dataset.x = 25; a.dataset.y = 35;
+  b.dataset.x = 235; b.dataset.y = 35;
+  c.dataset.x = 105; c.dataset.y = 145;
 
-const a =
-createButton(
-"No Salami ❌",
-"#6c63ff",
-"25px",
-"35px",
-()=>wrongOption()
-);
+  wrap.appendChild(a); wrap.appendChild(b); wrap.appendChild(c); wrap.appendChild(big);
+  chatBox.appendChild(wrap);
+  chatBox.scrollTop = chatBox.scrollHeight;
 
-const b =
-createButton(
-"10 TK",
-"#6c63ff",
-"235px",
-"35px",
-()=>wrongOption()
-);
+  let grow = 0.2;
+  const growInterval = setInterval(() => {
+    grow += 0.08;
+    big.style.transform = `scale(${grow})`;
 
-const c =
-createButton(
-"30 TK",
-"#6c63ff",
-"105px",
-"145px",
-()=>wrongOption()
-);
+    if (grow > 0.5) {
+      a.dataset.x = parseFloat(a.dataset.x) - 5;
+      a.style.left = a.dataset.x + "px";
+      b.dataset.x = parseFloat(b.dataset.x) + 5;
+      b.style.left = b.dataset.x + "px";
+      c.dataset.y = parseFloat(c.dataset.y) + 4;
+      c.style.top = c.dataset.y + "px";
+    }
 
-const big =
-createButton(
-"500 TK 😡",
-"#ff0055",
-"165px",
-"255px",
-()=>{
+    if (grow > 10) {
+      big.style.position = "fixed";
+      big.style.inset = "0";
+      big.style.width = "100vw";
+      big.style.height = "100vh";
+      big.style.borderRadius = "0";
+      big.style.zIndex = "99999";
+      big.style.fontSize = "50px";
+    }
 
-clearInterval(growInterval);
-
-confettiBlast();
-
-setTimeout(()=>{
-showEnd();
-},2000);
-
-}
-);
-
-a.style.transform = "scale(1.9)";
-b.style.transform = "scale(1.9)";
-c.style.transform = "scale(1.9)";
-
-big.style.transform = "scale(0.12)";
-big.style.zIndex = "999";
-
-a.dataset.x = 25;
-a.dataset.y = 35;
-
-b.dataset.x = 235;
-b.dataset.y = 35;
-
-c.dataset.x = 105;
-c.dataset.y = 145;
-
-wrap.appendChild(a);
-wrap.appendChild(b);
-wrap.appendChild(c);
-wrap.appendChild(big);
-
-chatBox.appendChild(wrap);
-
-let grow = 0.12;
-
-const growInterval =
-setInterval(()=>{
-
-grow += 0.07;
-
-big.style.transform =
-`scale(${grow})`;
-
-if(grow > 0.5){
-
-a.dataset.x =
-parseFloat(a.dataset.x) - 4.5;
-
-a.style.left =
-a.dataset.x + "px";
-
-b.dataset.x =
-parseFloat(b.dataset.x) + 4.5;
-
-b.style.left =
-b.dataset.x + "px";
-
-c.dataset.y =
-parseFloat(c.dataset.y) + 4;
-
-c.style.top =
-c.dataset.y + "px";
-
+    if (parseFloat(a.dataset.x) < -200) a.style.opacity = "0";
+    if (parseFloat(b.dataset.x) > 450) b.style.opacity = "0";
+    if (parseFloat(c.dataset.y) > 450) c.style.opacity = "0";
+  }, 130);
 }
 
-if(grow > 2){
+/* ================= CONFETTI BLAST ================= */
+function confettiBlast() {
+  const emojis = ["🎉", "✨", "🎊", "💵", "💫", "🥳", "💰"];
+  for (let i = 0; i < 120; i++) {
+    const d = document.createElement("div");
+    d.innerText = emojis[Math.random() * emojis.length | 0];
+    d.style.position = "fixed";
+    d.style.left = "50%";
+    d.style.top = "50%";
+    d.style.fontSize = (20 + Math.random() * 20) + "px";
+    d.style.zIndex = "999999";
+    document.body.appendChild(d);
 
-a.dataset.x =
-parseFloat(a.dataset.x) - 7;
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 150 + Math.random() * 350;
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
 
-b.dataset.x =
-parseFloat(b.dataset.x) + 7;
+    setTimeout(() => {
+      d.style.transition = "1.5s cubic-bezier(.1, .8, .3, 1)";
+      d.style.transform = `translate(${x}px, ${y}px) rotate(${Math.random() * 360}deg) scale(0.2)`;
+      d.style.opacity = "0";
+    }, 20);
 
-c.dataset.y =
-parseFloat(c.dataset.y) + 6;
-
-a.style.left =
-a.dataset.x + "px";
-
-b.style.left =
-b.dataset.x + "px";
-
-c.style.top =
-c.dataset.y + "px";
-
+    setTimeout(() => d.remove(), 1500);
+  }
 }
 
-if(grow > 10){
-
-big.style.position = "fixed";
-big.style.inset = "0";
-big.style.width = "100vw";
-big.style.height = "100vh";
-big.style.borderRadius = "0";
-big.style.zIndex = "999999";
-big.style.fontSize = "60px";
-
+/* ================= END SCREEN ================= */
+function showEnd() {
+  setStep(4);
+  const end = document.createElement("div");
+  end.className = "end-screen";
+  end.innerHTML = `
+    <div style="font-size:80px; margin-bottom: 10px;">🥰</div>
+    <h1 style="font-size: 28px; font-weight: bold;">Dhonnobad Dhonnobad!</h1>
+    <p style="margin-top: 20px; font-size: 22px; color: #00a884; font-weight: bold;">I receive — Salami 💸</p>
+    <p style="margin-top: 10px; font-size: 20px; color: #e9edef;">You receive — Dua 🤲</p>
+    <div style="position: fixed; bottom: 20px; right: 15px; font-size: 11px; opacity: 0.4; font-style: italic; letter-spacing: 1px;">
+      Dishting Dishting ✨
+    </div>
+  `;
+  document.body.appendChild(end);
 }
-
-if(parseFloat(a.dataset.x) < -220){
-a.style.opacity = "0";
-}
-
-if(parseFloat(b.dataset.x) > 500){
-b.style.opacity = "0";
-}
-
-if(parseFloat(c.dataset.y) > 520){
-c.style.opacity = "0";
-}
-
-},140);
-
-}
-
-/* ================= CONFETTI ================= */
-
-function confettiBlast(){
-
-const emojis =
-["🎉","✨","🎊","💥","💫","🥳"];
-
-for(let i=0;i<180;i++){
-
-const d =
-document.createElement("div");
-
-d.innerText =
-emojis[
-Math.random()*emojis.length|0
-];
-
-d.style.position = "fixed";
-
-d.style.left = "50%";
-d.style.top = "50%";
-
-d.style.fontSize =
-(16+Math.random()*24)+"px";
-
-d.style.zIndex = "999999";
-
-document.body.appendChild(d);
-
-const angle =
-Math.random()*Math.PI*2;
-
-const radius =
-250+Math.random()*520;
-
-const x =
-Math.cos(angle)*radius;
-
-const y =
-Math.sin(angle)*radius;
-
-setTimeout(()=>{
-
-d.style.transition =
-"1.8s cubic-bezier(.2,.8,.2,1)";
-
-d.style.transform =
-`translate(${x}px,${y}px)
-rotate(${Math.random()*700}deg)
-scale(0.2)`;
-
-d.style.opacity = "0";
-
-},20);
-
-setTimeout(()=>{
-d.remove();
-},1900);
-
-}
-
-}
-
-/* ================= END ================= */
-
-function showEnd(){
-
-setStep(4);
-
-const end =
-document.createElement("div");
-
-end.className = "end-screen";
-
-end.innerHTML = `
-
-<div style="font-size:95px">
-🥰
-</div>
-
-<h1 style="margin-top:14px">
-Dhonnobad Dhonnobad
-</h1>
-
-<p style="
-margin-top:15px;
-font-size:23px;
-">
-I receive — Salami 💸
-</p>
-
-<p style="
-margin-top:12px;
-font-size:22px;
-">
-You receive — Dua 🤲
-</p>
-
-<div style="
-position:fixed;
-bottom:16px;
-right:10px;
-font-size:10px;
-opacity:0.35;
-font-style:italic;
-letter-spacing:1px;
-writing-mode:vertical-rl;
-text-orientation:mixed;
-animation:secretGlow 2.2s infinite alternate;
-z-index:999999;
-">
-Dishting<br>Dishting ✨
-</div>
-
-`;
-
-document.body.appendChild(end);
-
-}
-
-/* ================= START ================= */
-
-const loadingScreen =
-document.getElementById(
-"loadingScreen"
-);
-
-loadingScreen.addEventListener(
-"click",
-startExperience
-);
-
-loadingScreen.addEventListener(
-"touchstart",
-startExperience
-);
-
-function startExperience(){
-
-startMusic();
-
-loadingScreen.style.opacity =
-"0";
-
-loadingScreen.style.pointerEvents =
-"none";
-
-document
-.querySelector(".chat-container")
-.style.display = "block";
-
-setTimeout(()=>{
-
-loadingScreen.remove();
-
-step1();
-
-},900);
-
-}
-
 </script>
 
 </body>
