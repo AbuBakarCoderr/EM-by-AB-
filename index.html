@@ -25,7 +25,7 @@ body{
   align-items:center;
   background:#0b141a;
 
-  /* RESTORED BACKGROUND */
+  /* CHAT BACKGROUND (Kept your original one here) */
   background-image:url("https://drive.google.com/thumbnail?id=1C_WMe2IQ1pTLokpRvX7PHvjy_W2V9bWc&sz=w2000");
   background-size:350px;
   background-repeat:repeat;
@@ -385,16 +385,17 @@ body{
   padding:20px;
 }
 
+/* NEW BACKGROUND APPLIED HERE */
 .end-screen::before{
   content:"";
   position:absolute;
   inset:0;
 
-  background-image:url("https://drive.google.com/thumbnail?id=1C_WMe2IQ1pTLokpRvX7PHvjy_W2V9bWc&sz=w2000");
+  background-image:url("https://drive.google.com/thumbnail?id=1DM4WvCa29d5M_EdbJcx_X3ADKbUgCrzb&sz=w2000");
   background-size:cover;
   background-position:center;
 
-  opacity:.12;
+  opacity:.15; /* Slightly increased opacity so it's easier to see */
   pointer-events:none;
 }
 
@@ -414,21 +415,15 @@ body{
 
 <body>
 
-<!-- RESTORED MUSIC -->
-
 <audio id="bgMusic" loop playsinline preload="auto">
   <source src="https://github.com/AbuBakarCoderr/EM-by-AB-/raw/main/Mubarak_Eid_Mubarak_Full_Video_Jeet_Nusrat_Faria_Baba_Yadav_Akassh_Badsha_Bengali_Movie.mp3" type="audio/mpeg">
 </audio>
-<!-- LOADING -->
-
 <div id="loadingScreen">
   <div class="loader-circle"></div>
   <div class="loading-text">Loading Eid Experience...</div>
   <div class="volume-tip">🔊 Increase volume for a better experience</div>
   <div class="tap-text">Tap anywhere to start</div>
 </div>
-
-<!-- CHAT -->
 
 <div class="chat-container">
 
