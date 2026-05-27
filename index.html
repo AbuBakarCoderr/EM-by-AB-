@@ -88,13 +88,14 @@ body{
 }
 
 .tap-text{
-  margin-top:25px; /* Adjusted slightly to balance the new line */
+  margin-top:25px; 
   font-size:18px;
   font-weight:bold;
   color:#00a884;
   opacity:0;
   animation:fadeIn 1s infinite alternate;
-  animation-delay:1.2s;
+  /* CHANGED: Increased delay from 1.2s to 2.5s so it appears a tad later */
+  animation-delay:2.5s;
 }
 
 @keyframes fadeIn{
@@ -403,7 +404,7 @@ body{
   background-repeat:no-repeat;
   background-position:center 20%; 
 
-  opacity:.85; /* CHANGED: Increased from .5 to .85 for higher clarity */
+  opacity:.85; 
   pointer-events:none;
 }
 
@@ -963,6 +964,7 @@ function showEnd(){
   <div style="
   font-size:80px;
   margin-bottom:10px;
+  margin-top:140px; /* CHANGED: Added margin-top to push all the text lower */
   position:relative;
   z-index:5;
   ">
