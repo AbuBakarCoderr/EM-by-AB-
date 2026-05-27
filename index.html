@@ -77,7 +77,6 @@ body{
   margin-top:5px;
 }
 
-/* Added style for the browser audio block warning */
 .audio-warn {
   color: #ff6b6b;
   font-size: 13px;
@@ -94,7 +93,6 @@ body{
   color:#00a884;
   opacity:0;
   animation:fadeIn 1s infinite alternate;
-  /* CHANGED: Increased delay from 1.2s to 2.5s so it appears a tad later */
   animation-delay:2.5s;
 }
 
@@ -839,15 +837,6 @@ function step3(){
   big.style.transform="scale(.2)";
   big.style.zIndex="999";
 
-  a.dataset.x=25;
-  a.dataset.y=35;
-
-  b.dataset.x=235;
-  b.dataset.y=35;
-
-  c.dataset.x=105;
-  c.dataset.y=145;
-
   wrap.appendChild(a);
   wrap.appendChild(b);
   wrap.appendChild(c);
@@ -865,17 +854,8 @@ function step3(){
 
     big.style.transform=`scale(${grow})`;
 
-    if(grow>.5){
-
-      a.dataset.x=parseFloat(a.dataset.x)-5;
-      a.style.left=a.dataset.x+"px";
-
-      b.dataset.x=parseFloat(b.dataset.x)+5;
-      b.style.left=b.dataset.x+"px";
-
-      c.dataset.y=parseFloat(c.dataset.y)+4;
-      c.style.top=c.dataset.y+"px";
-    }
+    /* CHANGED: Removed the logic that made buttons a, b, and c move/fade out. 
+       Now only the 500 TK button does its scaling animation! */
 
     if(grow>10){
 
@@ -886,18 +866,6 @@ function step3(){
       big.style.borderRadius="0";
       big.style.zIndex="99999";
       big.style.fontSize="50px";
-    }
-
-    if(parseFloat(a.dataset.x)<-200){
-      a.style.opacity="0";
-    }
-
-    if(parseFloat(b.dataset.x)>450){
-      b.style.opacity="0";
-    }
-
-    if(parseFloat(c.dataset.y)>450){
-      c.style.opacity="0";
     }
 
   },130);
@@ -964,7 +932,7 @@ function showEnd(){
   <div style="
   font-size:80px;
   margin-bottom:10px;
-  margin-top:140px; /* CHANGED: Added margin-top to push all the text lower */
+  margin-top:140px; 
   position:relative;
   z-index:5;
   ">
