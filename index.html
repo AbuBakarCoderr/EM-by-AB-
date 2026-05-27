@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Eid er Chand Aakashe 🌙</title>
 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G2BC5CB4J7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G2BC5CB4J7');
+</script>
+
 <style>
 
 *{
@@ -466,6 +475,8 @@ loadingScreen.addEventListener("touchstart",startExperience,{passive:true});
 
 function startExperience(){
 
+  gtag('event', 'started_prank');
+
   loadingScreen.removeEventListener("click",startExperience);
   loadingScreen.removeEventListener("touchstart",startExperience);
 
@@ -554,6 +565,8 @@ function wrongOption(){
 
   wrongOption.lastTrigger=Date.now();
 
+  gtag('event', 'clicked_wrong_option');
+
   toast("Wrong option 😡");
   heehee();
   shake();
@@ -631,6 +644,7 @@ function createButton(text,color,x,y,fn){
 function step1(){
 
   setStep(1);
+  gtag('event', 'reached_step_1');
 
   typing(()=>{
 
@@ -710,6 +724,7 @@ function step1(){
 function step2(){
 
   setStep(2);
+  gtag('event', 'reached_step_2');
 
   const wrap=document.createElement("div");
   wrap.className="options";
@@ -782,6 +797,7 @@ function step2(){
 function step3(){
 
   setStep(3);
+  gtag('event', 'reached_step_3');
 
   const wrap=document.createElement("div");
   wrap.className="options";
@@ -919,6 +935,7 @@ function confettiBlast(){
 function showEnd(){
 
   setStep(4);
+  gtag('event', 'completed_prank');
 
   const end=document.createElement("div");
 
