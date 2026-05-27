@@ -77,8 +77,18 @@ body{
   margin-top:5px;
 }
 
+/* Added style for the browser audio block warning */
+.audio-warn {
+  color: #ff6b6b;
+  font-size: 13px;
+  margin-top: 8px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+  animation-delay: .8s;
+}
+
 .tap-text{
-  margin-top:35px;
+  margin-top:25px; /* Adjusted slightly to balance the new line */
   font-size:18px;
   font-weight:bold;
   color:#00a884;
@@ -391,10 +401,9 @@ body{
   background-image:url("https://drive.google.com/thumbnail?id=1DM4WvCa29d5M_EdbJcx_X3ADKbUgCrzb&sz=w2000");
   background-size:contain;
   background-repeat:no-repeat;
-  /* Moved image up to make space for text below */
   background-position:center 20%; 
 
-  opacity:.5;
+  opacity:.85; /* CHANGED: Increased from .5 to .85 for higher clarity */
   pointer-events:none;
 }
 
@@ -421,6 +430,7 @@ body{
   <div class="loader-circle"></div>
   <div class="loading-text">Loading Eid Experience...</div>
   <div class="volume-tip">🔊 Increase volume for a better experience</div>
+  <div class="audio-warn">Browser may block the audio😔</div>
   <div class="tap-text">Tap anywhere to start</div>
 </div>
 
@@ -1002,7 +1012,7 @@ function showEnd(){
   transform:rotate(180deg);
   z-index:5;
   ">
-  Dishting Dishting ✨
+  Dishting Dishting -by AB ✨
   </div>
 
   `;
